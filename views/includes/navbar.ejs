@@ -1,0 +1,94 @@
+<style>
+  .btn-search{
+    background-color: #fe424d;
+    color: #fff;
+    border: none;
+    border-radius: 1.5rem;
+    padding: 0 1rem 0 1rem;
+  }
+  .btn-search:hover{
+    background-color: #fe424d;
+    color: #fff;
+    border: none;
+    border-radius: 1.5rem;
+    opacity: 0.7;
+  }
+  .btn-search i {
+    display: inline;
+    margin-right: 0.5rem;
+  }
+
+  .search-inp{
+    border-radius: 1.5rem;
+    padding: 0.5rem 3rem 0.5rem 3rem;
+  }
+
+  .signup{
+    background-color: #31ffdd;
+    border-radius: 20px;
+  }
+  .signup:hover{
+    background-color: #31ffdd;
+    border-radius: 20px;
+    opacity: 0.7;
+  }
+
+  .listing-property{
+    background-color: rgb(47, 219, 70);
+    margin-right: 0.8rem;
+    border-radius: 12px;
+    transition: transform 0.2s cubic-bezier(.4,2,.6,1), box-shadow 0.2s;
+  }
+  .listing-property:hover {
+    transform: scale(1.08) translateY(-6px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  }
+
+  .explore-btn{
+    border: 0.7px solid black;
+    border-radius: 20px;
+    padding: 0.5rem 5.5rem 0.5rem 5.5rem;
+  }
+  .explore-btn:hover{
+    background-color: #f700ad;   /* Dark background */
+    color: #fff !important;              /* White text */
+    border: 0.7px solid #f700ad; /* Match border to background */
+    border-radius: 20px;
+    padding: 0.5rem 5.5rem 0.5rem 5.5rem;
+  }
+</style>
+
+
+<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/listings"><i class="fa-solid fa-compass"></i> &nbsp;&nbsp; &nbsp;&nbsp;</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+      <div class="navbar-nav">
+        <a class="nav-link explore-btn" href="/listings">Explore</a>
+      </div>
+
+      <div class="navbar-nav ms-auto">
+        <form class="d-flex" role="search" method="GET" action="/listings">
+          <input class="form-control me-2 search-inp" type="search" name="search" placeholder="Search destinations"/>
+          <button class="btn btn-search" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+        </form>
+      </div>
+
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link listing-property" href="/listings/new"><b><u>List Your Property</u></b></a>
+        <% if(!currUser) { %>
+        <a class="nav-link signup" href="/signup"><b>SignUp</b></a>
+        <a class="nav-link" href="/login"><b>Login</b></a>
+        <% } %>
+        <% if(currUser) { %>
+        <a class="nav-link" href="/logout"><b>Logout</b></a>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+</nav>

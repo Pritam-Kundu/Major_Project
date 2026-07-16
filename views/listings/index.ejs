@@ -1,0 +1,291 @@
+<% layout("layouts/boilerplate") %>
+<body>
+  <!-- <h3>All Listings</h3> -->
+
+  <style>
+    #filters-bar {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      margin-top: 1.5rem;
+      background: #f8f9fa;
+      border-radius: 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      padding: 1rem 1.5rem;
+    }
+
+    #filters-scroll {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      overflow-x: auto;
+      gap: 1.5rem;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
+      flex: 1 1 auto;
+    }
+    #filters-scroll::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+
+    .filters-arrow {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 0.5rem;
+      cursor: pointer;
+      font-size: 1.2rem;
+      z-index: 2;
+    }
+
+    .filter {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 80px;
+      min-height: 48px;
+      padding: 0.3rem 1rem;
+      background: #fff;
+      border-radius: 2rem;
+      border: 1.5px solid #e0e0e0;
+      color: #333;
+      font-weight: 500;
+      font-size: 0.92rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      transition: 
+        background 0.2s,
+        color 0.2s,
+        border 0.2s,
+        box-shadow 0.2s,
+        transform 0.15s;
+      opacity: 0.85;
+      text-decoration: none;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .active-filter {
+      background: #007bff;
+      color: #fff !important;
+      border: 1.5px solid #007bff;
+      box-shadow: 0 4px 16px rgba(0,123,255,0.12);
+      opacity: 1;
+      transform: translateY(-2px) scale(1.06);
+    }
+
+    .filter:hover {
+      background: #e6f7ff;
+      color: #007bff;
+      border: 1.5px solid #b3e0ff;
+      box-shadow: 0 4px 16px rgba(0,123,255,0.08);
+      opacity: 1;
+      transform: translateY(-2px) scale(1.04);
+      text-decoration: none;
+    }
+
+    .filter i {
+      font-size: 1.2rem;
+      margin-bottom: 0.1rem;
+    }
+
+    .tax-info {
+      display: none;
+      background-color: rgba(255, 255, 0, 0.904);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 0, 0.904);
+      text-align: center;
+      
+    }
+
+    .tax-toggle {
+      margin-left: auto; /* Push to rightmost */
+      border: 1px solid black;
+      border-radius: 1rem;
+      height: 3.5rem;
+      padding: 1rem;
+      display: flex;
+      flex: 0 0 auto;
+      background: #fff;
+      min-width: 250px;
+      align-items: center;
+      margin-left: 1rem;
+    }
+  </style>
+
+
+<% if (listings.length === 0) { %>
+  <div class="alert alert-warning mt-4">No listings found for your search.</div>
+<% } %>
+
+
+  <div id="filters-bar">
+    <button id="filters-left" class="filters-arrow">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <div id="filters-scroll">
+      <a
+        href="/listings"
+        class="filter <%= !selectedCategory ? 'active-filter' : '' %>"
+      >
+        <div><i class="fa-solid fa-fire"></i></div>
+        <p>All</p>
+      </a>
+      <a
+        href="/listings?category=Trending"
+        class="filter <%= selectedCategory === 'Trending' ? 'active-filter' : '' %>"
+      >
+        <div><i class="fa-solid fa-fire"></i></div>
+        <p>Trending</p>
+      </a>
+      <a
+        href="/listings?category=Beaches"
+        class="filter <%= selectedCategory === 'Beaches' ? 'active-filter' : '' %>"
+      >
+        <div><i class="fa-solid fa-umbrella-beach"></i></div>
+        <p>Beaches</p>
+      </a>
+      <a
+        href="/listings?category=Mountains"
+        class="filter <%= selectedCategory === 'Mountains' ? 'active-filter' : '' %>"
+      >
+        <div><i class="fa-solid fa-mountain-sun"></i></div>
+        <p>Mountains</p>
+      </a>
+      <a
+        href="/listings?category=Forests"
+        class="filter <%= selectedCategory === 'Forests' ? 'active-filter' : '' %>"
+      >
+        <div><i class="fa-solid fa-tree"></i></div>
+        <p>Forests</p>
+      </a>
+      <a
+        href="/listings?category=Castles"
+        class="filter <%= selectedCategory === 'Castles' ? 'active-filter' : '' %>"
+      >
+        <div><i class="fa-solid fa-chess-rook"></i></div>
+        <p>Castles</p>
+      </a>
+      <a
+        href="/listings?category=Pools"
+        class="filter <%= selectedCategory === 'Pools' ? 'active-filter' : '' %>"
+      >
+        <div><i class="fa-solid fa-person-swimming"></i></div>
+        <p>Pools</p>
+      </a>
+      <a
+        href="/listings?category=Campings"
+        class="filter <%= selectedCategory === 'Campings' ? 'active-filter' : '' %>"
+      >
+        <div><i class="fa-solid fa-campground"></i></div>
+        <p>Campings</p>
+      </a>
+      <a
+        href="/listings?category=Farms"
+        class="filter <%= selectedCategory === 'Farms' ? 'active-filter' : '' %>"
+      >
+        <div><i class="fa-solid fa-cow"></i></div>
+        <p>Farms</p>
+      </a>
+      <a
+        href="/listings?category=Arctic"
+        class="filter <%= selectedCategory === 'Arctic' ? 'active-filter' : '' %>"
+      >
+        <div><i class="fa-solid fa-snowflake"></i></div>
+        <p>Arctic</p>
+      </a>
+      <a
+        href="/listings?category=House Boats"
+        class="filter <%= selectedCategory === 'House Boats' ? 'active-filter' : '' %>"
+      >
+        <div><i class="fa-solid fa-ship"></i></div>
+        <p>House Boats</p>
+      </a>
+      <a
+        href="/listings?category=Domes"
+        class="filter <%= selectedCategory === 'Domes' ? 'active-filter' : '' %>"
+      >
+        <div><i class="fa-solid fa-igloo"></i></div>
+        <p>Domes</p>
+      </a>
+    </div>
+    <button id="filters-right" class="filters-arrow">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+
+    <div class="tax-toggle">
+      <div class="form-check-reverse form-switch">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="switchCheckDefault"
+        />
+        <label class="form-check-label" for="switchCheckDefault"
+          >Display Total After Taxes</label
+        >
+      </div>
+    </div>
+  </div>
+
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+    <% for(let listing of listings){ %>
+    <a href="/listings/<%= listing._id %>" class="listing-link">
+      <div class="card col listing-card" style="width: 20rem; height: 20rem">
+        <img
+          src="<%= listing.image.url %>"
+          class="card-img-top"
+          onclick="return false"
+          height="520"
+          width="236"
+          frameborder="0"
+          scrolling="no"
+          style="height: 220px; width: 100%; object-fit: cover; border-radius: 1rem 1rem 0 0;"
+          alt="listing_image"
+        >
+        <div class="card-img-overlay"></div>
+        <div class="card-body">
+          <p class="card-text">
+            <b><%= listing.title %></b> <br />
+            &#8377;<%= listing.price.toLocaleString("en-IN") %> /night
+            &nbsp; &nbsp;
+            <i class="tax-info">
+               After Tax: &#8377;<%= (listing.price *
+              1.18).toLocaleString("en-IN", {maximumFractionDigits: 2}) %>
+              /night
+            </i>
+          </p>
+        </div>
+      </div>
+    </a>
+    <% } %>
+  </div>
+</body>
+
+<script>
+  const filtersScroll = document.getElementById("filters-scroll");
+  document.getElementById("filters-left").onclick = () => {
+    filtersScroll.scrollBy({ left: -150, behavior: "smooth" });
+  };
+  document.getElementById("filters-right").onclick = () => {
+    filtersScroll.scrollBy({ left: 150, behavior: "smooth" });
+  };
+
+  let taxSwitch = document.getElementById("switchCheckDefault");
+  taxSwitch.addEventListener("click", () => {
+    let taxInfo = document.getElementsByClassName("tax-info");
+    for (info of taxInfo) {
+      if (info.style.display != "inline") {
+        info.style.display = "inline";
+      } else {
+        info.style.display = "none";
+      }
+    }
+  });
+</script>
