@@ -1,58 +1,66 @@
 <style>
-  .btn-search{
+  .btn-search {
     background-color: #fe424d;
     color: #fff;
     border: none;
     border-radius: 1.5rem;
     padding: 0 1rem 0 1rem;
   }
-  .btn-search:hover{
+
+  .btn-search:hover {
     background-color: #fe424d;
     color: #fff;
     border: none;
     border-radius: 1.5rem;
     opacity: 0.7;
   }
+
   .btn-search i {
     display: inline;
     margin-right: 0.5rem;
   }
 
-  .search-inp{
+  .search-inp {
     border-radius: 1.5rem;
     padding: 0.5rem 3rem 0.5rem 3rem;
   }
 
-  .signup{
+  .signup {
     background-color: #31ffdd;
     border-radius: 20px;
   }
-  .signup:hover{
+
+  .signup:hover {
     background-color: #31ffdd;
     border-radius: 20px;
     opacity: 0.7;
   }
 
-  .listing-property{
+  .listing-property {
     background-color: rgb(47, 219, 70);
     margin-right: 0.8rem;
     border-radius: 12px;
-    transition: transform 0.2s cubic-bezier(.4,2,.6,1), box-shadow 0.2s;
-  }
-  .listing-property:hover {
-    transform: scale(1.08) translateY(-6px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    transition: transform 0.2s cubic-bezier(.4, 2, .6, 1), box-shadow 0.2s;
   }
 
-  .explore-btn{
+  .listing-property:hover {
+    transform: scale(1.08) translateY(-6px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .explore-btn {
     border: 0.7px solid black;
     border-radius: 20px;
     padding: 0.5rem 5.5rem 0.5rem 5.5rem;
   }
-  .explore-btn:hover{
-    background-color: #f700ad;   /* Dark background */
-    color: #fff !important;              /* White text */
-    border: 0.7px solid #f700ad; /* Match border to background */
+
+  .explore-btn:hover {
+    background-color: #f700ad;
+    /* Dark background */
+    color: #fff !important;
+    /* White text */
+    border: 0.7px solid #f700ad;
+    /* Match border to background */
     border-radius: 20px;
     padding: 0.5rem 5.5rem 0.5rem 5.5rem;
   }
@@ -71,22 +79,102 @@
         <a class="nav-link explore-btn" href="/listings">Explore</a>
       </div>
 
-      <div class="navbar-nav ms-auto">
+      <!-- <div class="navbar-nav ms-auto">
         <form class="d-flex" role="search" method="GET" action="/listings">
           <input class="form-control me-2 search-inp" type="search" name="search" placeholder="Search destinations"/>
           <button class="btn btn-search" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
         </form>
+      </div> -->
+
+      <div class="navbar-nav ms-auto">
+        <form class="d-flex align-items-center search-bar" role="search" method="GET" action="/listings">
+
+          <!-- Destination -->
+          <div class="search-item">
+            <label for="search" class="search-label">Where</label>
+            <input class="form-control search-inp" type="search" id="search" name="search"
+              placeholder="Search destinations" value="<%= typeof search !== 'undefined' ? search : '' %>">
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Check In -->
+          <div class="search-item">
+            <label for="checkIn" class="search-label">Check In</label>
+            <input class="form-control border-0" type="date" id="checkIn" name="checkIn"
+              value="<%= typeof checkIn !== 'undefined' ? checkIn : '' %>">
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Check Out -->
+          <div class="search-item">
+            <label for="checkOut" class="search-label">Check Out</label>
+            <input class="form-control border-0" type="date" id="checkOut" name="checkOut"
+              value="<%= typeof checkOut !== 'undefined' ? checkOut : '' %>">
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Guests -->
+          <div class="search-item">
+            <label for="guests" class="search-label">Guests</label>
+            <select class="form-select border-0" id="guests" name="guests">
+              <option value="1">1 Guest</option>
+              <option value="2">2 Guests</option>
+              <option value="3">3 Guests</option>
+              <option value="4">4 Guests</option>
+              <option value="5">5 Guests</option>
+              <option value="6">6+ Guests</option>
+            </select>
+          </div>
+
+          <!-- Search Button -->
+          <button class="btn btn-search ms-2" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Search
+          </button>
+
+        </form>
       </div>
 
       <div class="navbar-nav ms-auto">
-        <a class="nav-link listing-property" href="/listings/new"><b><u>List Your Property</u></b></a>
-        <% if(!currUser) { %>
-        <a class="nav-link signup" href="/signup"><b>SignUp</b></a>
-        <a class="nav-link" href="/login"><b>Login</b></a>
-        <% } %>
-        <% if(currUser) { %>
-        <a class="nav-link" href="/logout"><b>Logout</b></a>
-        <% } %>
+        <% if(currUser){ %>
+
+          <a class="nav-link listing-property" href="/listings/new">
+            <b><u>List Your Property</u></b>
+          </a>
+
+          <% } %>
+            <% if(!currUser) { %>
+              <a class="nav-link signup" href="/signup"><b>SignUp</b></a>
+              <a class="nav-link" href="/login"><b>Login</b></a>
+              <% } %>
+                <% if(currUser) { %>
+                  <a class="nav-link" href="/logout"><b>Logout</b></a>
+                  <% } %>
+
+                    <% if(currUser){ %>
+                      <li class="nav-item">
+                        <a class="nav-link" href="/bookings">
+                          <i class="fa-solid fa-calendar-check"></i>
+                          My Bookings
+                        </a>
+                      </li>
+                      <% } %>
+                        <% if(currUser){ %>
+
+                          <li class="nav-item">
+
+                            <a class="nav-link" href="/bookings/dashboard">
+
+                              Host Dashboard
+
+                            </a>
+
+                          </li>
+
+                          <% } %>
       </div>
 
     </div>

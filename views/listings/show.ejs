@@ -1,87 +1,200 @@
 <% layout("layouts/boilerplate") %>
 
-<style>
-  .review-card {
-    transition: box-shadow 0.2s, transform 0.2s;
-  }
-  .review-card:hover {
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.13);
-    transform: translateY(-3px) scale(1.02);
-    background: #fff;
-  }
-  .review-card .card-title {
-    color: #007bff;
-  }
-  .review-card .btn-outline-danger {
-    margin-top: 0.5rem;
-  }
-  .review-card .card-text::-webkit-scrollbar {
-    width: 6px;
-  }
-  .review-card .card-text::-webkit-scrollbar-thumb {
-    background: #e0e0e0;
-    border-radius: 4px;
-  }
-</style>
+  <style>
+    .review-card {
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
 
-<body>
-  <div class="row mt-3">
-    <div class="col-8 offset-3">
-      <h3><%= listing.title %></h3>
-    </div>
+    .review-card:hover {
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.13);
+      transform: translateY(-3px) scale(1.02);
+      background: #fff;
+    }
 
-    <div class="card col-6 offset-3 show-card listing-card">
-      <img
-        src="<%= listing.image.url %>"
-        class="card-img-top show-img"
-        alt="listing_image"
-        frameborder="0"
-        style="
+    .review-card .card-title {
+      color: #007bff;
+    }
+
+    .review-card .btn-outline-danger {
+      margin-top: 0.5rem;
+    }
+
+    .review-card .card-text::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .review-card .card-text::-webkit-scrollbar-thumb {
+      background: #e0e0e0;
+      border-radius: 4px;
+    }
+
+    .booking-card {
+      border: 1px solid #ddd;
+      padding: 25px;
+      border-radius: 15px;
+      background: white;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, .08);
+    }
+
+    .booking-card h4 {
+      font-weight: 700;
+    }
+
+    .booking-card button {
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 18px;
+    }
+
+    .booking-summary {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+
+    .booking-summary hr {
+      margin: 10px 0;
+    }
+  </style>
+
+  <body>
+    <div class="row mt-3">
+      <div class="col-8 offset-3">
+        <h3>
+          <%= listing.title %>
+        </h3>
+      </div>
+
+      <div class="card col-6 offset-3 show-card listing-card">
+        <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing_image" frameborder="0" style="
           height: 320px;
           width: 100%;
           object-fit: cover;
           border-radius: 1rem 1rem 0 0;
-        "
-        scrolling="no"
-      />
-      <div class="card-body">
-        <p class="card-text">Owned By: <i><%= listing.owner.username %></i></p>
-        <p class="card-text"><%= listing.description %></p>
-        <p class="card-text">
-          &#8377;<%= listing.price.toLocaleString("en-IN") %>/night
-        </p>
-        <p class="card-text"><%= listing.location %></p>
-        <p class="card-text"><%= listing.country %></p>
+        " scrolling="no" />
+        <div class="card-body">
+          <p class="card-text">Owned By: <i>
+              <%= listing.owner.username %>
+            </i></p>
+          <p class="card-text">
+            <%= listing.description %>
+          </p>
+          <p class="card-text">
+            &#8377;<%= listing.price.toLocaleString("en-IN") %>/night
+          </p>
+          <p class="card-text">
+            <%= listing.location %>
+          </p>
+          <p class="card-text">
+            <%= listing.country %>
+          </p>
+          <hr>
+
+          <div class="booking-card mt-4" id="bookingCard" data-price="<%= listing.price %>">
+
+            <h4>
+              ₹<%= listing.price.toLocaleString("en-IN") %>
+                <small>/ night</small>
+            </h4>
+
+            <form action="/bookings/<%= listing._id %>" method="POST" id="bookingForm">
+
+              <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                  <label class="form-label">
+                    Check In
+                  </label>
+
+                  <input type="date" class="form-control" id="checkIn" name="checkIn" required>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                  <label class="form-label">
+                    Check Out
+                  </label>
+
+                  <input type="date" class="form-control" id="checkOut" name="checkOut" required>
+
+                </div>
+
+              </div>
+
+              <div class="mb-3">
+
+                <label class="form-label">
+
+                  Guests
+
+                </label>
+
+                <select class="form-select" name="guests">
+
+                  <option value="1">1 Guest</option>
+                  <option value="2">2 Guests</option>
+                  <option value="3">3 Guests</option>
+                  <option value="4">4 Guests</option>
+                  <option value="5">5 Guests</option>
+                  <option value="6">6+ Guests</option>
+
+                </select>
+
+              </div>
+
+              <div class="mb-3">
+
+                <div class="booking-summary mt-3">
+                  <p class="mb-2">
+                    <strong>Nights :</strong>
+                    <span id="totalNights">0</span>
+                  </p>
+                  <p class="mb-2">
+                    <strong>Price / Night :</strong>
+                    ₹<%= listing.price.toLocaleString("en-IN") %>
+                  </p>
+                  <hr>
+                  <h5>
+                    Total :
+                    ₹<span id="totalPrice">0</span>
+                  </h5>
+                </div>
+
+              </div>
+
+              <button class="btn btn-danger w-100">
+
+                Reserve
+
+              </button>
+
+            </form>
+
+          </div>
+        </div>
       </div>
-    </div>
 
-    <br />
+      <br />
 
-    <% if(currUser && currUser._id.equals(listing.owner._id)) { %>
-    <div class="btns">
-      <a
-        href="/listings/<%= listing._id %>/edit"
-        class="btn btn-dark col-1 offset-3 edit-btn"
-        >Edit</a
-      >
-    </div>
+      <% if(currUser && currUser._id.equals(listing.owner._id)) { %>
+        <div class="btns">
+          <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 edit-btn">Edit</a>
+        </div>
 
-    <form action="/listings/<%= listing._id %>?_method=DELETE" method="post">
-      <button class="btn btn-dark col-1 offset-3 mt-2">Delete</button>
-    </form>
-    <% } %>
+        <form action="/listings/<%= listing._id %>?_method=DELETE" method="post">
+          <button class="btn btn-dark col-1 offset-3 mt-2">Delete</button>
+        </form>
+        <% } %>
 
-    <div class="col-6 offset-3">
-      <hr />
-      <h4>Leave a Review</h4>
+          <div class="col-6 offset-3">
+            <hr />
+            <h4>Leave a Review</h4>
 
-      <form
-        method="post"
-        action="/listings/<%= listing._id %>/reviews"
-        novalidate
-        class="needs-validation"
-      >
-        <!-- <div class="mb-3 mt-3">
+            <form method="post" action="/listings/<%= listing._id %>/reviews" novalidate class="needs-validation">
+              <!-- <div class="mb-3 mt-3">
           <label for="rating" class="form-label">Rating</label>
           <input
             type="range"
@@ -93,148 +206,169 @@
           />
         </div> -->
 
-        <div class="mb-3 mt-3">
-          <label for="rating" class="form-label">Rating:</label>
-          <fieldset class="starability-slot">
-            <input
-              type="radio"
-              id="no-rate"
-              class="input-no-rate"
-              name="review[rating]"
-              value="1"
-              checked
-              aria-label="No rating."
-            />
-            <input
-              type="radio"
-              id="first-rate1"
-              name="review[rating]"
-              value="1"
-            />
-            <label for="first-rate1" title="Terrible">1 star</label>
-            <input
-              type="radio"
-              id="first-rate2"
-              name="review[rating]"
-              value="2"
-            />
-            <label for="first-rate2" title="Not good">2 stars</label>
-            <input
-              type="radio"
-              id="first-rate3"
-              name="review[rating]"
-              value="3"
-            />
-            <label for="first-rate3" title="Average">3 stars</label>
-            <input
-              type="radio"
-              id="first-rate4"
-              name="review[rating]"
-              value="4"
-            />
-            <label for="first-rate4" title="Very good">4 stars</label>
-            <input
-              type="radio"
-              id="first-rate5"
-              name="review[rating]"
-              value="5"
-            />
-            <label for="first-rate5" title="Amazing">5 stars</label>
-          </fieldset>
-        </div>
+              <div class="mb-3 mt-3">
+                <label for="rating" class="form-label">Rating:</label>
+                <fieldset class="starability-slot">
+                  <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked
+                    aria-label="No rating." />
+                  <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                  <label for="first-rate1" title="Terrible">1 star</label>
+                  <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                  <label for="first-rate2" title="Not good">2 stars</label>
+                  <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                  <label for="first-rate3" title="Average">3 stars</label>
+                  <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                  <label for="first-rate4" title="Very good">4 stars</label>
+                  <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                  <label for="first-rate5" title="Amazing">5 stars</label>
+                </fieldset>
+              </div>
 
-        <div class="mb-3 mt-3">
-          <label for="comment" class="form-label">Comments</label>
-          <textarea
-            name="review[comment]"
-            id="comment"
-            cols="30"
-            rows="5"
-            class="form-control"
-            required
-          ></textarea>
-          <div class="invalid-feedback">Please enter your thoughts here!</div>
-        </div>
-        <br />
-        <button class="btn btn-outline-dark">Submit</button>
-        <br />
-      </form>
+              <div class="mb-3 mt-3">
+                <label for="comment" class="form-label">Comments</label>
+                <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control"
+                  required></textarea>
+                <div class="invalid-feedback">Please enter your thoughts here!</div>
+              </div>
+              <br />
+              <button class="btn btn-outline-dark">Submit</button>
+              <br />
+            </form>
 
-      <hr />
+            <hr />
 
-      <p><b>All Reviews</b></p>
-      <div
-        style="
+            <p><b>All Reviews</b></p>
+            <div style="
           max-height: 400px;
           overflow-y: auto;
           overflow-x: hidden;
           padding-right: 8px;
-        "
-      >
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-          <% for(let review of listing.reviews){ %>
-          <div class="col d-flex">
-            <div
-              class="card review-card w-100 mb-3"
-              style="
+        ">
+              <div class="row row-cols-1 row-cols-md-3 g-4">
+                <% for(let review of listing.reviews){ %>
+                  <div class="col d-flex">
+                    <div class="card review-card w-100 mb-3" style="
                 height: 200px;
                 min-width: 0;
                 max-width: 100%;
                 border-radius: 1rem;
                 box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
                 background: #f8f9fa;
-              "
-            >
-              <div class="card-body d-flex flex-column" style="padding: 1.2rem">
-                <div style="margin-bottom: 0.3rem">
-                  <h5
-                    class="card-title mb-1"
-                    style="font-size: 1.05rem; font-weight: 600; color: #222"
-                  >
-                    @<%= review.author ? review.author.username : "Anonymous" %>
-                  </h5>
-                  <div>
-                    <% for(let i=1; i<=5; i++) { %> <% if(i <= review.rating) {
-                    %>
-                    <i class="fa-solid fa-star" style="color: #ffd700"></i>
-                    <% } else { %>
-                    <i class="fa-regular fa-star" style="color: #ffd700"></i>
-                    <% } %> <% } %>
-                  </div>
-                </div>
-                <div style="flex: 1; overflow-y: auto; min-height: 0">
-                  <p
-                    class="card-text"
-                    style="
+              ">
+                      <div class="card-body d-flex flex-column" style="padding: 1.2rem">
+                        <div style="margin-bottom: 0.3rem">
+                          <h5 class="card-title mb-1" style="font-size: 1.05rem; font-weight: 600; color: #222">
+                            @<%= review.author ? review.author.username : "Anonymous" %>
+                          </h5>
+                          <div>
+                            <% for(let i=1; i<=5; i++) { %>
+                              <% if(i <=review.rating) { %>
+                                <i class="fa-solid fa-star" style="color: #ffd700"></i>
+                                <% } else { %>
+                                  <i class="fa-regular fa-star" style="color: #ffd700"></i>
+                                  <% } %>
+                                    <% } %>
+                          </div>
+                        </div>
+                        <div style="flex: 1; overflow-y: auto; min-height: 0">
+                          <p class="card-text" style="
                       font-size: 1rem;
                       color: #333;
                       line-height: 1.4;
                       max-height: 80px;
                       overflow-y: auto;
                       margin-bottom: 0;
-                    "
-                  >
-                    <%= review.comment %>
-                  </p>
-                </div>
+                    ">
+                            <%= review.comment %>
+                          </p>
+                        </div>
+                      </div>
+                      <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="mb-2"
+                        method="post">
+                        <button class="btn btn-sm btn-outline-danger" style="border-radius: 0.7rem">
+                          Delete
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                  <% } %>
               </div>
-              <form
-                action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
-                class="mb-2"
-                method="post"
-              >
-                <button
-                  class="btn btn-sm btn-outline-danger"
-                  style="border-radius: 0.7rem"
-                >
-                  Delete
-                </button>
-              </form>
             </div>
           </div>
-          <% } %>
-        </div>
-      </div>
     </div>
-  </div>
-</body>
+
+
+    <script>
+
+      const bookingCard = document.getElementById("bookingCard");
+      const price = Number(bookingCard.dataset.price);
+      const checkIn = document.getElementById("checkIn");
+      const checkOut = document.getElementById("checkOut");
+      const total = document.getElementById("totalPrice");
+      const totalNights = document.getElementById("totalNights");
+
+      // Today's date
+      const today = new Date().toISOString().split("T")[0];
+      checkIn.min = today;
+      checkOut.min = today;
+
+      // Update booking summary
+      function updateTotal() {
+
+        if (!checkIn.value || !checkOut.value) {
+          total.innerText = "0";
+          totalNights.innerText = "0";
+          return;
+        }
+
+        const inDate = new Date(checkIn.value);
+        const outDate = new Date(checkOut.value);
+        const diff = Math.ceil(
+          (outDate - inDate) / (1000 * 60 * 60 * 24)
+        );
+
+        if (diff <= 0) {
+          total.innerText = "0";
+          totalNights.innerText = "0";
+          return;
+        }
+
+        totalNights.innerText = diff;
+        total.innerText = (diff * price).toLocaleString("en-IN");
+      }
+
+
+      // When Check-in changes
+      checkIn.addEventListener("change", () => {
+        checkOut.min = checkIn.value;
+        if (checkOut.value && checkOut.value <= checkIn.value) {
+          checkOut.value = "";
+        }
+
+        updateTotal();
+
+      });
+      // When Check-out changes
+      checkOut.addEventListener("change", updateTotal);
+
+      document
+        .getElementById("bookingForm")
+        .addEventListener("submit", function (e) {
+          if (!checkIn.value || !checkOut.value) {
+            e.preventDefault();
+            alert("Please select both Check-In and Check-Out dates.");
+            return;
+          }
+          const inDate = new Date(checkIn.value);
+          const outDate = new Date(checkOut.value);
+          if (outDate <= inDate) {
+            e.preventDefault();
+            alert("Check-Out must be after Check-In.");
+            return;
+          }
+        });
+    </script>
+
+
+
+  </body>

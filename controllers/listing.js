@@ -1,11 +1,18 @@
 const Listing = require("../models/listing.js");
 
 module.exports.index = async (req, res) => {
-  const { category,search } = req.query;
+  // const { category,search } = req.query;
+  const {
+    category,
+    search,
+    checkIn,
+    checkOut,
+    guests
+  } = req.query;
   let filter = {};
 
   if (category) filter.category = category;
-  
+
   if (search) {
     filter.$or = [
       { location: { $regex: search, $options: "i" } },
@@ -15,7 +22,7 @@ module.exports.index = async (req, res) => {
   }
 
   const listings = await Listing.find(filter);
-  
+
   return res.render("listings/index.ejs", { listings, selectedCategory: category });
   // const allListings = await Listing.find({});
   // return res.render("listings/index.ejs", { allListings });
@@ -30,10 +37,10 @@ module.exports.renderNewForm = async (req, res) => {
 module.exports.createListing = async (req, res, next) => {
   let url = req.file.path
   let filename = req.file.filename
-  
+
   const newListing = new Listing(req.body.listing);
   newListing.owner = req.user._id; //it will store the current username as owner of the new listing
-  newListing.image = { url,filename }
+  newListing.image = { url, filename }
   await newListing.save();
   req.flash("success", "New Listing has been created successfully!");
   return res.redirect("/listings");
@@ -65,7 +72,7 @@ module.exports.renderEditForm = async (req, res) => {
   }
 
   let originalImageUrl = listing.image.url
-  originalImageUrl = originalImageUrl.replace("/upload","/upload/w_250")      //w_250 will set the image width to 250 pixels in the edit form..its a internal feature of cloudinary
+  originalImageUrl = originalImageUrl.replace("/upload", "/upload/w_250")      //w_250 will set the image width to 250 pixels in the edit form..its a internal feature of cloudinary
 
   return res.render("listings/edit.ejs", { listing, originalImageUrl });
 };
@@ -75,10 +82,10 @@ module.exports.updatedListing = async (req, res) => {
   let { id } = req.params;
   let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing }); //unpacking(...req.body.listing) all data from object and getting them one by one
 
-  if(typeof req.file !== "undefined"){                         //we are checking whether the req.file is empty or not because if its empty means no image exists then no need to update
+  if (typeof req.file !== "undefined") {                         //we are checking whether the req.file is empty or not because if its empty means no image exists then no need to update
     let url = req.file.path
     let filename = req.file.filename
-    listing.image = { url,filename }
+    listing.image = { url, filename }
     await listing.save()
   }
 

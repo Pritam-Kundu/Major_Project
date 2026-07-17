@@ -1,0 +1,193 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="container mt-4">
+
+        <h2 class="mb-4">
+
+            Host Dashboard
+
+        </h2>
+
+        <div class="row">
+
+            <div class="col-md-3">
+
+                <div class="card text-center shadow">
+
+                    <div class="card-body">
+
+                        <h3>
+
+                            <%= totalBookings %>
+
+                        </h3>
+
+                        <p>Total Bookings</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card text-center shadow">
+
+                    <div class="card-body">
+
+                        <h3>
+
+                            ₹<%= totalRevenue.toLocaleString("en-IN") %>
+
+                        </h3>
+
+                        <p>Total Revenue</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card text-center shadow">
+
+                    <div class="card-body">
+
+                        <h3>
+
+                            <%= activeBookings %>
+
+                        </h3>
+
+                        <p>Active</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="card text-center shadow">
+
+                    <div class="card-body">
+
+                        <h3>
+
+                            <%= cancelledBookings %>
+
+                        </h3>
+
+                        <p>Cancelled</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr class="my-4">
+
+        <h3>
+
+            Recent Bookings
+
+        </h3>
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Guest</th>
+
+                        <th>Property</th>
+
+                        <th>Check In</th>
+
+                        <th>Check Out</th>
+
+                        <th>Guests</th>
+
+                        <th>Total</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <% ownerBookings.forEach(booking=>{ %>
+
+                        <tr>
+
+                            <td>
+
+                                <%= booking.user.username %>
+
+                            </td>
+
+                            <td>
+
+                                <%= booking.listing.title %>
+
+                            </td>
+
+                            <td>
+
+                                <%= booking.checkIn.toDateString() %>
+
+                            </td>
+
+                            <td>
+
+                                <%= booking.checkOut.toDateString() %>
+
+                            </td>
+
+                            <td>
+
+                                <%= booking.guests %>
+
+                            </td>
+
+                            <td>
+
+                                ₹<%= booking.totalPrice.toLocaleString("en-IN") %>
+
+                            </td>
+
+                            <td>
+
+                                <span class="badge <%= booking.status==='Booked'
+?'bg-success'
+:'bg-danger' %>">
+
+                                    <%= booking.status %>
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        <% }) %>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>

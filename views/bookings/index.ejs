@@ -1,0 +1,115 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="container mt-4">
+        <h2 class="mb-4">
+            My Bookings
+        </h2>
+
+        <% if(bookings.length===0){ %>
+            <div class="alert alert-info">
+                You haven't booked anything yet.
+            </div>
+
+            <% } %>
+                <div class="row">
+                    <% bookings.forEach(booking=>{ %>
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <img src="<%= booking.listing.image.url %>" class="card-img-top"
+                                    style="height:220px;object-fit:cover;">
+                                <div class="card-body">
+                                    <h5>
+                                        <%= booking.listing.title %>
+                                    </h5>
+                                    <p>
+
+                                        📍
+
+                                        <%= booking.listing.location %>
+
+                                    </p>
+
+                                    <p>
+
+                                        <b>Check In:</b>
+
+                                        <%= booking.checkIn.toDateString() %>
+
+                                    </p>
+
+                                    <p>
+
+                                        <b>Check Out:</b>
+
+                                        <%= booking.checkOut.toDateString() %>
+
+                                    </p>
+
+                                    <p>
+
+                                        <b>Guests:</b>
+
+                                        <%= booking.guests %>
+
+                                    </p>
+
+                                    <p>
+
+                                        <b>Total Paid:</b>
+
+                                        ₹<%= booking.totalPrice.toLocaleString("en-IN") %>
+
+                                    </p>
+
+                                    <p>
+
+                                        <b>Status:</b>
+
+                                        <!-- <span class="badge bg-success">
+
+                                            <%= booking.status %>
+
+                                        </span> -->
+                                        <span class="badge <%= booking.status==='Booked'
+                                        ?'bg-success'
+                                        :'bg-danger' %>">
+                                            <%= booking.status %>
+                                        </span>
+
+                                    </p>
+
+                                    <% if(booking.status==="Cancelled" ){ %>
+                                        <div class="alert alert-danger mt-2 mb-0">
+                                            This booking has been cancelled.
+                                        </div>
+                                        <% } %>
+
+                                            <a href="/listings/<%= booking.listing._id %>" class="btn btn-dark w-100">
+                                                View Property
+                                            </a>
+                                            <% if(booking.status==="Booked" ){ %>
+
+                                                <form action="/bookings/<%= booking._id %>/cancel?_method=PUT"
+                                                    method="POST" class="mt-2">
+
+                                                    <button class="btn btn-outline-danger w-100"
+                                                        onclick="return confirm('Are you sure you want to cancel this booking?')">
+
+                                                        Cancel Booking
+
+                                                    </button>
+
+                                                </form>
+
+                                                <% } %>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <% }) %>
+
+                </div>
+
+    </div>

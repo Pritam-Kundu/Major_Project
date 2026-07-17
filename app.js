@@ -16,6 +16,7 @@ const LocalStrategy = require("passport-local")
 const listingRouter = require("./routes/listing.js")
 const reviewRouter = require("./routes/review.js")
 const userRouter = require("./routes/user.js")
+const bookingRouter = require("./routes/booking.js");
 
 
 const Listing = require("./models/listing.js");
@@ -108,6 +109,8 @@ app.use((err, req, res, next) => {
   let message = err.message || "Something went wrong...";
   return res.status(statusCode).render("error.ejs", { message });
 });
+
+app.use("/bookings", bookingRouter);
 
 app.listen(8080, () => {
   console.log("Server is listening to port 8080");
