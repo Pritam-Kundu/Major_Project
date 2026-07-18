@@ -132,7 +132,7 @@
 
                 </label>
 
-                <select class="form-select" name="guests">
+                <select class="form-select" id="guests" name="guests">
 
                   <option value="1">1 Guest</option>
                   <option value="2">2 Guests</option>
@@ -155,8 +155,20 @@
                   </p>
 
                   <p>
+                    <strong>Guests:</strong>
+                    <span id="selectedGuests">1</span>
+                  </p>
+
+                  <p>
                     <strong>Price / Night:</strong>
-                    ₹<%= listing.price.toLocaleString("en-IN") %>
+                    ₹<span id="pricePerNight">
+                      <%= listing.price.toLocaleString("en-IN") %>
+                    </span>
+                  </p>
+
+                  <p>
+                    <strong>Extra Guest Charge:</strong>
+                    ₹<span id="extraGuestCharge">0</span>
                   </p>
 
                   <p>
@@ -321,7 +333,8 @@
       const bookingForm = document.getElementById("bookingForm");
       const checkIn = bookingForm.querySelector("[name='checkIn']");
       const checkOut = bookingForm.querySelector("[name='checkOut']");
-      
+      const guests = document.getElementById("guests");
+
       const total = document.getElementById("totalPrice");
       const totalNights = document.getElementById("totalNights");
 
@@ -332,6 +345,18 @@
 
       // Update booking summary
       function updateTotal() {
+
+        // Guest-based pricing
+        const guestCount = parseInt(guests.value);
+        document.getElementById("selectedGuests").innerText = guestCount;
+        let extraCharge = 0;
+        if (guestCount > 1) {
+          extraCharge = (guestCount - 1) * 300;
+        }
+
+        document.getElementById("extraGuestCharge").innerText =
+          extraCharge.toLocaleString("en-IN");
+
 
         if (!checkIn.value || !checkOut.value) {
           total.innerText = "0";
@@ -352,10 +377,10 @@
         }
 
         totalNights.innerText = diff;
-        const subtotal = diff * price;
 
+        const pricePerNight = price + extraCharge;
+        const subtotal = diff * pricePerNight;
         const gst = subtotal * 0.18;
-
         const grandTotal = subtotal + gst;
 
         document.getElementById("subtotal").innerText =
@@ -363,6 +388,9 @@
 
         document.getElementById("gst").innerText =
           gst.toLocaleString("en-IN");
+
+        document.getElementById("pricePerNight").innerText =
+          pricePerNight.toLocaleString("en-IN");
 
         document.getElementById("totalPrice").innerText =
           grandTotal.toLocaleString("en-IN");
@@ -381,6 +409,7 @@
       });
       // When Check-out changes
       checkOut.addEventListener("change", updateTotal);
+      guests.addEventListener("change", updateTotal);
 
       document
         .getElementById("bookingForm")

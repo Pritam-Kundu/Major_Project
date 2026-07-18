@@ -30,9 +30,19 @@ const bookingSchema = new Schema({
         min: 1,
     },
 
+    subtotal: {
+        type: Number,
+        required: true
+    },
+
+    gst: {
+        type: Number,
+        required: true
+    },
+
     totalPrice: {
         type: Number,
-        required: true,
+        required: true
     },
 
     status: {

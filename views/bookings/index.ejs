@@ -55,10 +55,24 @@
 
                                     <p>
 
-                                        <b>Total Paid:</b>
+                                        <% const subtotal=booking.subtotal ?? booking.totalPrice; const gst=booking.gst
+                                            ?? subtotal * 0.18; const grandTotal=booking.subtotal ? booking.totalPrice :
+                                            subtotal + gst; %>
 
-                                        ₹<%= booking.totalPrice.toLocaleString("en-IN") %>
+                                            <p>
+                                                <strong>Subtotal:</strong>
+                                                ₹<%= subtotal.toLocaleString("en-IN") %>
+                                            </p>
 
+                                            <p>
+                                                <strong>GST (18%):</strong>
+                                                ₹<%= gst.toLocaleString("en-IN") %>
+                                            </p>
+
+                                            <h5>
+                                                Grand Total:
+                                                ₹<%= grandTotal.toLocaleString("en-IN") %>
+                                            </h5>
                                     </p>
 
                                     <p>

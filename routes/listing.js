@@ -1,4 +1,4 @@
-if(process.env.NODE_ENV != "production"){
+if (process.env.NODE_ENV != "production") {
   require("dotenv").config()
 }
 
@@ -11,7 +11,7 @@ const Listing = require("../models/listing.js");
 const { isLoggedIn } = require("../middleware.js");
 
 const multer = require("multer")
-const {storage} = require("../cloudconfig.js")
+const { storage } = require("../cloudconfig.js")
 const upload = multer({ storage })
 
 const listingController = require("../controllers/listing.js");
@@ -42,7 +42,11 @@ router                                              //Index Route and Create Rou
 
 //New Route
 router.get("/new", isLoggedIn, wrapAsync(listingController.renderNewForm));
-
+router.get(
+  "/my-properties",
+  isLoggedIn,
+  wrapAsync(listingController.myProperties)
+);
 
 
 router

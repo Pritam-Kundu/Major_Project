@@ -3,7 +3,8 @@ const Listing = require("../models/listing");
 
 module.exports.createBooking = async (req, res) => {
     const listing = await Listing.findById(req.params.id);
-    const { checkIn, checkOut, guests } = req.body;
+    const { checkIn, checkOut } = req.body;
+    const guests = parseInt(req.body.guests);
     // Check if dates overlap with an existing booking
     const existingBooking = await Booking.findOne({
         listing: listing._id,
@@ -27,7 +28,19 @@ module.exports.createBooking = async (req, res) => {
         (new Date(checkOut) - new Date(checkIn)) / oneDay
     );
 
-    const totalPrice = days * listing.price;
+    let extraGuestCharge = 0;
+
+    if (guests > 1) {
+        extraGuestCharge = (guests - 1) * 300;
+    }
+
+    const pricePerNight = listing.price + extraGuestCharge;
+
+    const subtotal = days * pricePerNight;
+
+    const gst = subtotal * 0.18;
+
+    const totalPrice = subtotal + gst;
 
     const booking = new Booking({
         listing: listing._id,
@@ -35,6 +48,8 @@ module.exports.createBooking = async (req, res) => {
         checkIn,
         checkOut,
         guests,
+        subtotal,
+        gst,
         totalPrice,
     });
 
