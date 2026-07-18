@@ -108,7 +108,7 @@
                     Check In
                   </label>
 
-                  <input type="date" class="form-control" id="checkIn" name="checkIn" required>
+                  <input type="date" id="bookingCheckIn" name="checkIn" required>
 
                 </div>
 
@@ -118,7 +118,7 @@
                     Check Out
                   </label>
 
-                  <input type="date" class="form-control" id="checkOut" name="checkOut" required>
+                  <input type="date" id="bookingCheckOut" name="checkOut" required>
 
                 </div>
 
@@ -148,24 +148,39 @@
               <div class="mb-3">
 
                 <div class="booking-summary mt-3">
-                  <p class="mb-2">
-                    <strong>Nights :</strong>
+
+                  <p>
+                    <strong>Nights:</strong>
                     <span id="totalNights">0</span>
                   </p>
-                  <p class="mb-2">
-                    <strong>Price / Night :</strong>
+
+                  <p>
+                    <strong>Price / Night:</strong>
                     ₹<%= listing.price.toLocaleString("en-IN") %>
                   </p>
+
+                  <p>
+                    <strong>Subtotal:</strong>
+                    ₹<span id="subtotal">0</span>
+                  </p>
+
+                  <p>
+                    <strong>GST (18%):</strong>
+                    ₹<span id="gst">0</span>
+                  </p>
+
                   <hr>
+
                   <h5>
-                    Total :
+                    Grand Total :
                     ₹<span id="totalPrice">0</span>
                   </h5>
+
                 </div>
 
               </div>
 
-              <button class="btn btn-danger w-100">
+              <button type="submit" class="btn btn-danger w-100">
 
                 Reserve
 
@@ -302,8 +317,11 @@
 
       const bookingCard = document.getElementById("bookingCard");
       const price = Number(bookingCard.dataset.price);
-      const checkIn = document.getElementById("checkIn");
-      const checkOut = document.getElementById("checkOut");
+
+      const bookingForm = document.getElementById("bookingForm");
+      const checkIn = bookingForm.querySelector("[name='checkIn']");
+      const checkOut = bookingForm.querySelector("[name='checkOut']");
+      
       const total = document.getElementById("totalPrice");
       const totalNights = document.getElementById("totalNights");
 
@@ -334,7 +352,20 @@
         }
 
         totalNights.innerText = diff;
-        total.innerText = (diff * price).toLocaleString("en-IN");
+        const subtotal = diff * price;
+
+        const gst = subtotal * 0.18;
+
+        const grandTotal = subtotal + gst;
+
+        document.getElementById("subtotal").innerText =
+          subtotal.toLocaleString("en-IN");
+
+        document.getElementById("gst").innerText =
+          gst.toLocaleString("en-IN");
+
+        document.getElementById("totalPrice").innerText =
+          grandTotal.toLocaleString("en-IN");
       }
 
 

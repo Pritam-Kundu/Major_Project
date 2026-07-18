@@ -48,13 +48,13 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 
 const sessionOptions = {
-  secret : "mysupersecretcode",           //Ensures that the cookie can’t be modified by the client (it’s signed).
-  resave : false,                         //This tells Express not to save the session back to the session store if nothing was modified.
-  saveUninitialized : true,                //Forces session to be stored even if no data is set yet.
-  cookie : {
-    expires : Date.now() + 7 * 24 * 60 * 60 * 1000,       //After 7 days cookie will be deleted 
-    maxAge : 7 * 24 * 60 * 60 * 1000,
-    httpOnly : true,
+  secret: "mysupersecretcode",           //Ensures that the cookie can’t be modified by the client (it’s signed).
+  resave: false,                         //This tells Express not to save the session back to the session store if nothing was modified.
+  saveUninitialized: true,                //Forces session to be stored even if no data is set yet.
+  cookie: {
+    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,       //After 7 days cookie will be deleted 
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
   }
 }
 
@@ -91,9 +91,10 @@ app.use((req, res, next) => {
 app.use("/listings", listingRouter)         //Rest code is in routes->listing.js
 app.use("/listings/:id/reviews", reviewRouter)
 app.use("/", userRouter)
+app.use("/bookings", bookingRouter);
 
 
-app.get('/privacy', (req,res) => {
+app.get('/privacy', (req, res) => {
   res.render("privacy")
 })
 app.get('/terms', (req, res) => {
@@ -101,6 +102,7 @@ app.get('/terms', (req, res) => {
 });
 
 
+// Error handler 
 app.use((err, req, res, next) => {
   if (res.headersSent) {
     return next(err);
@@ -110,7 +112,7 @@ app.use((err, req, res, next) => {
   return res.status(statusCode).render("error.ejs", { message });
 });
 
-app.use("/bookings", bookingRouter);
+
 
 app.listen(8080, () => {
   console.log("Server is listening to port 8080");
