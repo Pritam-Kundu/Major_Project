@@ -1,0 +1,78 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="container mt-5">
+
+        <div class="card shadow p-4">
+
+            <div class="text-center">
+
+                <i class="fa-solid fa-circle-user fa-6x text-primary mb-3"></i>
+
+                <h2>
+                    <%= user.username %>
+                </h2>
+
+                <p class="text-muted">
+                    <%= user.email %>
+                </p>
+
+            </div>
+
+            <hr>
+
+            <div class="row text-center">
+
+                <div class="col-md-3">
+                    <h4>
+                        <%= listings %>
+                    </h4>
+                    <p>Listings</p>
+                </div>
+
+                <div class="col-md-3">
+                    <h4>
+                        <%= bookings %>
+                    </h4>
+                    <p>Bookings</p>
+                </div>
+
+                <div class="col-md-3">
+                    <h4>
+                        <%= reviews %>
+                    </h4>
+                    <p>Reviews</p>
+                </div>
+
+                <div class="col-md-3">
+                    <h4>₹<%= totalSpent.toLocaleString("en-IN") %>
+                    </h4>
+                    <p>Total Spent</p>
+                </div>
+
+            </div>
+
+            <hr>
+
+            <div class="d-grid gap-2">
+
+                <a href="/bookings" class="btn btn-outline-primary">
+                    My Bookings
+                </a>
+
+                <a href="/bookings/dashboard" class="btn btn-outline-success">
+                    Host Dashboard
+                </a>
+
+                <a href="/listings/new" class="btn btn-outline-warning">
+                    List Your Property
+                </a>
+
+                <a href="/logout" class="btn btn-danger">
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>

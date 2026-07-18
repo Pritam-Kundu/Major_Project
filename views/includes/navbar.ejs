@@ -146,35 +146,63 @@
           </a>
 
           <% } %>
-            <% if(!currUser) { %>
-              <a class="nav-link signup" href="/signup"><b>SignUp</b></a>
-              <a class="nav-link" href="/login"><b>Login</b></a>
-              <% } %>
-                <% if(currUser) { %>
-                  <a class="nav-link" href="/logout"><b>Logout</b></a>
-                  <% } %>
+                <% if(currUser){ %>
 
-                    <% if(currUser){ %>
-                      <li class="nav-item">
-                        <a class="nav-link" href="/bookings">
+                  <div class="dropdown">
+
+                    <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+
+                      <i class="fa-solid fa-user-circle"></i>
+
+                      <%= currUser.username %>
+
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+
+                      <li>
+                        <a class="dropdown-item" href="/account">
+                          <i class="fa-solid fa-user"></i>
+                          My Account
+                        </a>
+                      </li>
+
+                      <li>
+                        <a class="dropdown-item" href="/bookings">
                           <i class="fa-solid fa-calendar-check"></i>
                           My Bookings
                         </a>
                       </li>
-                      <% } %>
-                        <% if(currUser){ %>
 
-                          <li class="nav-item">
+                      <li>
+                        <a class="dropdown-item" href="/bookings/dashboard">
+                          <i class="fa-solid fa-chart-line"></i>
+                          Host Dashboard
+                        </a>
+                      </li>
 
-                            <a class="nav-link" href="/bookings/dashboard">
+                      <li>
+                        <hr class="dropdown-divider">
+                      </li>
 
-                              Host Dashboard
+                      <li>
+                        <a class="dropdown-item text-danger" href="/logout">
+                          <i class="fa-solid fa-right-from-bracket"></i>
+                          Logout
+                        </a>
+                      </li>
 
-                            </a>
+                    </ul>
 
-                          </li>
+                  </div>
 
-                          <% } %>
+                  <% } else { %>
+
+                    <a class="nav-link signup" href="/signup"><b>Sign Up</b></a>
+
+                    <a class="nav-link" href="/login"><b>Login</b></a>
+
+                    <% } %>
       </div>
 
     </div>
