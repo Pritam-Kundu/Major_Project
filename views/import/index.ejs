@@ -1,0 +1,272 @@
+<% layout("layouts/boilerplate") %>
+<style>
+    .import-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        color: white;
+        padding: 3rem 0;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    .import-header h1 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+    }
+    .search-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        margin-top: -3rem;
+        position: relative;
+        z-index: 2;
+    }
+    .hotel-card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .hotel-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    .hotel-card-body {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .hotel-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--text-dark);
+    }
+    .hotel-info {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-bottom: 0.25rem;
+    }
+    .hotel-info i {
+        width: 20px;
+        color: var(--primary-color);
+    }
+    .badge-exists {
+        background-color: #6c757d;
+        font-size: 0.8rem;
+    }
+    .badge-new {
+        background-color: var(--accent-color);
+        font-size: 0.8rem;
+    }
+    .select-checkbox {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+    .import-controls {
+        position: sticky;
+        bottom: 20px;
+        background: rgba(255,255,255,0.95);
+        backdrop-filter: blur(10px);
+        padding: 15px 20px;
+        border-radius: 50px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 100;
+        border: 1px solid #eee;
+    }
+    #loadingSpinner {
+        display: none;
+    }
+</style>
+
+<div class="container mt-4 mb-5">
+    
+    <div class="import-header">
+        <h1><i class="fa-solid fa-map-location-dot me-2"></i> OpenStreetMap Hotel Import</h1>
+        <p class="lead mb-0">Discover and import real hotels into Wanderlust instantly</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="search-card">
+                <form action="/import/search" method="POST" id="searchForm">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-6">
+                            <label for="city" class="form-label fw-bold">City Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="fa-solid fa-city text-muted"></i></span>
+                                <input type="text" class="form-control" id="city" name="city" placeholder="e.g. Goa, Kolkata, Mumbai" value="<%= searchParams.city || '' %>" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="radius" class="form-label fw-bold">Search Radius (KM)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="fa-solid fa-circle-dot text-muted"></i></span>
+                                <input type="number" class="form-control" id="radius" name="radius" min="1" max="50" value="<%= searchParams.radius || '5' %>" required>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100" id="searchBtn">
+                                <i class="fa-solid fa-magnifying-glass"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="loadingSpinner" class="text-center mt-4">
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2 text-muted fw-bold">Searching OpenStreetMap...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <% if (hotels && hotels.length > 0) { %>
+        <div class="mt-5">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <h3 class="fw-bold" style="font-family: 'Playfair Display', serif;">Found <%= hotels.length %> Hotels</h3>
+                <div class="form-check">
+                    <input class="form-check-input select-checkbox" type="checkbox" id="selectAll">
+                    <label class="form-check-label fw-bold mt-1 ms-1" for="selectAll" style="cursor: pointer;">
+                        Select All New
+                    </label>
+                </div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+                <% hotels.forEach((hotel, i) => { %>
+                    <div class="col">
+                        <div class="card hotel-card <%= hotel.alreadyExists ? 'opacity-75' : '' %>">
+                            <!-- Using default image for preview -->
+                            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60" class="card-img-top" alt="Hotel Image" style="height: 180px; object-fit: cover;">
+                            
+                            <div class="hotel-card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="hotel-title text-truncate" title="<%= hotel.title %>"><%= hotel.title %></h5>
+                                    <% if (hotel.alreadyExists) { %>
+                                        <span class="badge badge-exists rounded-pill">Exists</span>
+                                    <% } else { %>
+                                        <span class="badge badge-new rounded-pill">New</span>
+                                    <% } %>
+                                </div>
+                                
+                                <p class="hotel-info text-truncate" title="<%= hotel.location %>">
+                                    <i class="fa-solid fa-location-dot"></i> <%= hotel.location %>
+                                </p>
+                                
+                                <% if (hotel.phone) { %>
+                                    <p class="hotel-info"><i class="fa-solid fa-phone"></i> <%= hotel.phone %></p>
+                                <% } %>
+                                
+                                <% if (hotel.website) { %>
+                                    <p class="hotel-info text-truncate"><i class="fa-solid fa-globe"></i> <a href="<%= hotel.website %>" target="_blank">Website</a></p>
+                                <% } %>
+                                
+                                <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
+                                    <small class="text-muted"><i class="fa-solid fa-satellite-dish me-1"></i> OSM ID: <%= hotel.osmId %></small>
+                                    <% if (!hotel.alreadyExists) { %>
+                                        <div class="form-check">
+                                            <input class="form-check-input select-checkbox hotel-checkbox" type="checkbox" value="<%= i %>" data-hotel='<%- JSON.stringify(hotel).replace(/'/g, "&#39;") %>'>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+            
+            <!-- Sticky Bottom Controls for Import -->
+            <div class="import-controls">
+                <div>
+                    <span class="fw-bold fs-5" id="selectedCount">0</span>
+                    <span class="text-muted ms-1">hotels selected</span>
+                </div>
+                <form action="/import/save" method="POST" id="importForm">
+                    <input type="hidden" name="selectedHotels" id="selectedHotelsInput">
+                    <button type="submit" class="btn btn-primary px-4 fw-bold rounded-pill" id="importBtn" disabled>
+                        <i class="fa-solid fa-cloud-arrow-down me-1"></i> Import Selected
+                    </button>
+                </form>
+            </div>
+        </div>
+    <% } else if (hotels && hotels.length === 0) { %>
+        <!-- Handled by flash messages usually, but fallback here -->
+    <% } %>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const searchForm = document.getElementById("searchForm");
+        const searchBtn = document.getElementById("searchBtn");
+        const loadingSpinner = document.getElementById("loadingSpinner");
+        
+        if(searchForm) {
+            searchForm.addEventListener("submit", () => {
+                searchBtn.disabled = true;
+                searchBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Searching...';
+                loadingSpinner.style.display = 'block';
+            });
+        }
+
+        const selectAll = document.getElementById("selectAll");
+        const checkboxes = document.querySelectorAll(".hotel-checkbox");
+        const selectedCountEl = document.getElementById("selectedCount");
+        const importBtn = document.getElementById("importBtn");
+        const importForm = document.getElementById("importForm");
+        const selectedHotelsInput = document.getElementById("selectedHotelsInput");
+
+        function updateSelection() {
+            let count = 0;
+            let selectedData = [];
+            
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    count++;
+                    selectedData.push(JSON.parse(cb.getAttribute("data-hotel")));
+                }
+            });
+            
+            selectedCountEl.textContent = count;
+            
+            if (count > 0) {
+                importBtn.disabled = false;
+                selectedHotelsInput.value = JSON.stringify(selectedData);
+            } else {
+                importBtn.disabled = true;
+                selectedHotelsInput.value = "";
+            }
+        }
+
+        if (selectAll) {
+            selectAll.addEventListener("change", (e) => {
+                const isChecked = e.target.checked;
+                checkboxes.forEach(cb => cb.checked = isChecked);
+                updateSelection();
+            });
+        }
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener("change", updateSelection);
+        });
+        
+        if(importForm) {
+            importForm.addEventListener("submit", (e) => {
+                importBtn.disabled = true;
+                importBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Importing...';
+            });
+        }
+    });
+</script>

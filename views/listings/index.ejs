@@ -1,291 +1,1869 @@
 <% layout("layouts/boilerplate") %>
-<body>
-  <!-- <h3>All Listings</h3> -->
+  <% const heroImages=[ '/images/hero_background.jpg' , '/images/hero_bg_1.png' , '/images/hero_bg_2.png'
+    , '/images/hero_bg_3.png' , '/images/hero_bg_4.png' ]; const randomHero=heroImages[Math.floor(Math.random() *
+    heroImages.length)]; %>
 
-  <style>
-    #filters-bar {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      position: relative;
-      margin-top: 1.5rem;
-      background: #f8f9fa;
-      border-radius: 2rem;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      padding: 1rem 1.5rem;
-    }
-
-    #filters-scroll {
-      display: flex;
-      flex-wrap: nowrap;
-      align-items: stretch;
-      overflow-x: auto;
-      gap: 1.5rem;
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none; /* IE and Edge */
-      flex: 1 1 auto;
-    }
-    #filters-scroll::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera */
-    }
-
-    .filters-arrow {
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 50%;
-      width: 2.5rem;
-      height: 2.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 0.5rem;
-      cursor: pointer;
-      font-size: 1.2rem;
-      z-index: 2;
-    }
-
-    .filter {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-width: 80px;
-      min-height: 48px;
-      padding: 0.3rem 1rem;
-      background: #fff;
-      border-radius: 2rem;
-      border: 1.5px solid #e0e0e0;
-      color: #333;
-      font-weight: 500;
-      font-size: 0.92rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-      transition: 
-        background 0.2s,
-        color 0.2s,
-        border 0.2s,
-        box-shadow 0.2s,
-        transform 0.15s;
-      opacity: 0.85;
-      text-decoration: none;
-      white-space: nowrap;
-      text-align: center;
-    }
-
-    .active-filter {
-      background: #007bff;
-      color: #fff !important;
-      border: 1.5px solid #007bff;
-      box-shadow: 0 4px 16px rgba(0,123,255,0.12);
-      opacity: 1;
-      transform: translateY(-2px) scale(1.06);
-    }
-
-    .filter:hover {
-      background: #e6f7ff;
-      color: #007bff;
-      border: 1.5px solid #b3e0ff;
-      box-shadow: 0 4px 16px rgba(0,123,255,0.08);
-      opacity: 1;
-      transform: translateY(-2px) scale(1.04);
-      text-decoration: none;
-    }
-
-    .filter i {
-      font-size: 1.2rem;
-      margin-bottom: 0.1rem;
-    }
-
-    .tax-info {
-      display: none;
-      background-color: rgba(255, 255, 0, 0.904);
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 0, 0.904);
-      text-align: center;
-      
-    }
-
-    .tax-toggle {
-      margin-left: auto; /* Push to rightmost */
-      border: 1px solid black;
-      border-radius: 1rem;
-      height: 3.5rem;
-      padding: 1rem;
-      display: flex;
-      flex: 0 0 auto;
-      background: #fff;
-      min-width: 250px;
-      align-items: center;
-      margin-left: 1rem;
-    }
-  </style>
-
-
-<% if (listings.length === 0) { %>
-  <div class="alert alert-warning mt-4">No listings found for your search.</div>
-<% } %>
-
-
-  <div id="filters-bar">
-    <button id="filters-left" class="filters-arrow">
-      <i class="fa-solid fa-chevron-left"></i>
-    </button>
-    <div id="filters-scroll">
-      <a
-        href="/listings"
-        class="filter <%= !selectedCategory ? 'active-filter' : '' %>"
-      >
-        <div><i class="fa-solid fa-fire"></i></div>
-        <p>All</p>
-      </a>
-      <a
-        href="/listings?category=Trending"
-        class="filter <%= selectedCategory === 'Trending' ? 'active-filter' : '' %>"
-      >
-        <div><i class="fa-solid fa-fire"></i></div>
-        <p>Trending</p>
-      </a>
-      <a
-        href="/listings?category=Beaches"
-        class="filter <%= selectedCategory === 'Beaches' ? 'active-filter' : '' %>"
-      >
-        <div><i class="fa-solid fa-umbrella-beach"></i></div>
-        <p>Beaches</p>
-      </a>
-      <a
-        href="/listings?category=Mountains"
-        class="filter <%= selectedCategory === 'Mountains' ? 'active-filter' : '' %>"
-      >
-        <div><i class="fa-solid fa-mountain-sun"></i></div>
-        <p>Mountains</p>
-      </a>
-      <a
-        href="/listings?category=Forests"
-        class="filter <%= selectedCategory === 'Forests' ? 'active-filter' : '' %>"
-      >
-        <div><i class="fa-solid fa-tree"></i></div>
-        <p>Forests</p>
-      </a>
-      <a
-        href="/listings?category=Castles"
-        class="filter <%= selectedCategory === 'Castles' ? 'active-filter' : '' %>"
-      >
-        <div><i class="fa-solid fa-chess-rook"></i></div>
-        <p>Castles</p>
-      </a>
-      <a
-        href="/listings?category=Pools"
-        class="filter <%= selectedCategory === 'Pools' ? 'active-filter' : '' %>"
-      >
-        <div><i class="fa-solid fa-person-swimming"></i></div>
-        <p>Pools</p>
-      </a>
-      <a
-        href="/listings?category=Campings"
-        class="filter <%= selectedCategory === 'Campings' ? 'active-filter' : '' %>"
-      >
-        <div><i class="fa-solid fa-campground"></i></div>
-        <p>Campings</p>
-      </a>
-      <a
-        href="/listings?category=Farms"
-        class="filter <%= selectedCategory === 'Farms' ? 'active-filter' : '' %>"
-      >
-        <div><i class="fa-solid fa-cow"></i></div>
-        <p>Farms</p>
-      </a>
-      <a
-        href="/listings?category=Arctic"
-        class="filter <%= selectedCategory === 'Arctic' ? 'active-filter' : '' %>"
-      >
-        <div><i class="fa-solid fa-snowflake"></i></div>
-        <p>Arctic</p>
-      </a>
-      <a
-        href="/listings?category=House Boats"
-        class="filter <%= selectedCategory === 'House Boats' ? 'active-filter' : '' %>"
-      >
-        <div><i class="fa-solid fa-ship"></i></div>
-        <p>House Boats</p>
-      </a>
-      <a
-        href="/listings?category=Domes"
-        class="filter <%= selectedCategory === 'Domes' ? 'active-filter' : '' %>"
-      >
-        <div><i class="fa-solid fa-igloo"></i></div>
-        <p>Domes</p>
-      </a>
-    </div>
-    <button id="filters-right" class="filters-arrow">
-      <i class="fa-solid fa-chevron-right"></i>
-    </button>
-
-    <div class="tax-toggle">
-      <div class="form-check-reverse form-switch">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          role="switch"
-          id="switchCheckDefault"
-        />
-        <label class="form-check-label" for="switchCheckDefault"
-          >Display Total After Taxes</label
-        >
-      </div>
-    </div>
-  </div>
-
-  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
-    <% for(let listing of listings){ %>
-    <a href="/listings/<%= listing._id %>" class="listing-link">
-      <div class="card col listing-card" style="width: 20rem; height: 20rem">
-        <img
-          src="<%= listing.image.url %>"
-          class="card-img-top"
-          onclick="return false"
-          height="520"
-          width="236"
-          frameborder="0"
-          scrolling="no"
-          style="height: 220px; width: 100%; object-fit: cover; border-radius: 1rem 1rem 0 0;"
-          alt="listing_image"
-        >
-        <div class="card-img-overlay"></div>
-        <div class="card-body">
-          <p class="card-text">
-            <b><%= listing.title %></b> <br />
-            &#8377;<%= listing.price.toLocaleString("en-IN") %> /night
-            &nbsp; &nbsp;
-            <i class="tax-info">
-               After Tax: &#8377;<%= (listing.price *
-              1.18).toLocaleString("en-IN", {maximumFractionDigits: 2}) %>
-              /night
-            </i>
-          </p>
-        </div>
-      </div>
-    </a>
-    <% } %>
-  </div>
-</body>
-
-<script>
-  const filtersScroll = document.getElementById("filters-scroll");
-  document.getElementById("filters-left").onclick = () => {
-    filtersScroll.scrollBy({ left: -150, behavior: "smooth" });
-  };
-  document.getElementById("filters-right").onclick = () => {
-    filtersScroll.scrollBy({ left: 150, behavior: "smooth" });
-  };
-
-  let taxSwitch = document.getElementById("switchCheckDefault");
-  taxSwitch.addEventListener("click", () => {
-    let taxInfo = document.getElementsByClassName("tax-info");
-    for (info of taxInfo) {
-      if (info.style.display != "inline") {
-        info.style.display = "inline";
-      } else {
-        info.style.display = "none";
+    <style>
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      .section-title,
+      .filter-title {
+        font-family: 'Playfair Display', serif !important;
       }
-    }
-  });
-</script>
+
+      /* Hero Section */
+      .hero-section {
+        position: relative;
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+        /* Full width hack */
+        height: 500px;
+        background-image: url('<%= randomHero %>');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 3rem;
+        margin-top: -1.5rem;
+        /* pull up if container has padding */
+      }
+
+      .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.3);
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: white;
+        margin-bottom: 2rem;
+      }
+
+      .hero-content h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      }
+
+      .hero-content p {
+        font-size: 1.3rem;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Glassmorphism Search Panel */
+      .hero-search-container {
+        position: relative;
+        z-index: 2;
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        padding: 15px 25px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        width: 95%;
+        max-width: 1100px;
+        margin-bottom: 20px;
+      }
+
+      .wl-form {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+      }
+
+      .wl-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .wl-label {
+        font-family: 'Playfair Display', serif, 'Times New Roman';
+        font-size: 1.15rem;
+        color: #112a46;
+        font-weight: 500;
+        margin-left: 10px;
+      }
+
+      .wl-divider {
+        width: 1px;
+        height: 70px;
+        background: rgba(255, 255, 255, 0.5);
+      }
+
+      .wl-input-wrapper {
+        display: flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        padding: 12px 20px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        transition: all 0.3s ease;
+        cursor: text;
+      }
+
+      .wl-input-wrapper:focus-within {
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+      }
+
+      .wl-input-wrapper i {
+        color: #333;
+        margin-right: 10px;
+      }
+
+      .wl-input-wrapper input,
+      .wl-input-wrapper select {
+        border: none;
+        background: transparent;
+        outline: none;
+        color: #222;
+        font-size: 0.95rem;
+        width: 100%;
+      }
+
+      .wl-input-wrapper input::placeholder {
+        color: #555;
+      }
+
+      .wl-input-wrapper select {
+        appearance: none;
+        cursor: pointer;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        padding-right: 15px;
+      }
+
+      .wl-property-type {
+        width: 280px;
+        max-width: 100%;
+        justify-content: space-between;
+      }
+
+      .wl-chevron {
+        color: #333;
+        font-size: 0.9rem;
+        pointer-events: none;
+        margin-left: 5px;
+        margin-right: 0 !important;
+      }
+
+      .wl-dates-wrapper {
+        display: flex;
+        gap: 10px;
+      }
+
+      .wl-date-box {
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 12px;
+        padding: 8px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 130px;
+      }
+
+      .wl-date-title {
+        font-size: 0.8rem;
+        color: #112a46;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+
+      .wl-date-input {
+        border: none;
+        background: transparent;
+        outline: none;
+        color: #333;
+        font-size: 0.9rem;
+        width: 100%;
+        cursor: pointer;
+      }
+
+      .wl-guests-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .wl-guest-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        font-size: 0.9rem;
+        color: #112a46;
+        font-family: sans-serif;
+        margin-left: 10px;
+      }
+
+      .wl-counter {
+        display: flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+      }
+
+      .wl-btn {
+        background: transparent;
+        border: none;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1.1rem;
+        color: #112a46;
+        transition: background 0.2s;
+      }
+
+      .wl-btn:hover {
+        background: rgba(255, 255, 255, 0.8);
+      }
+
+      .wl-counter input {
+        width: 20px;
+        text-align: center;
+        border: none;
+        background: transparent;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #112a46;
+        pointer-events: none;
+      }
+
+      .wl-counter input[type=number]::-webkit-inner-spin-button,
+      .wl-counter input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      .wl-counter input[type=number] {
+        -moz-appearance: textfield;
+      }
+
+      .wl-search-btn {
+        background: #0a1128;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 14px 32px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-left: 10px;
+      }
+
+      .wl-search-btn:hover {
+        background: #14214a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(10, 17, 40, 0.3);
+      }
+
+      /* --- Collections & Dashboard Layout --- */
+      .dashboard-container {
+        max-width: 1300px;
+        margin: 60px auto 40px;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: 55% 45%;
+        gap: 30px;
+      }
+
+      /* Handpicked Collections */
+      .handpicked-section h3 {
+        font-family: 'Playfair Display', serif;
+        color: #2b3a55;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+      }
+
+      .handpicked-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: 250px 250px;
+        gap: 15px;
+      }
+
+      .hp-card {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .hp-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .hp-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .hp-card:hover img {
+        transform: scale(1.05);
+      }
+
+      .hp-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        padding: 20px 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        height: 70%;
+      }
+
+      .hp-title {
+        color: white;
+        font-size: 1.15rem;
+        font-weight: 500;
+        line-height: 1.2;
+      }
+
+      .hp-rating {
+        color: #ffc107;
+        font-size: 0.9rem;
+        margin-top: 5px;
+      }
+
+      /* Specific Grid Items */
+      .hp-card:nth-child(4) {
+        grid-column: span 2;
+      }
+
+      /* Global Explorer */
+      .global-explorer {
+        background: #f4f6f8;
+        border-radius: 20px;
+        padding: 40px 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 30px;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+        position: relative;
+        overflow: hidden;
+        height: 250px;
+      }
+
+      .ge-content {
+        z-index: 2;
+        max-width: 55%;
+      }
+
+      .ge-content h3 {
+        font-family: 'Playfair Display', serif;
+        color: #2b3a55;
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+      }
+
+      .ge-content p {
+        color: #555;
+        font-size: 0.95rem;
+        margin-bottom: 25px;
+      }
+
+      .ge-btn {
+        background: #0a1128;
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 25px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .ge-btn:hover {
+        background: #14214a;
+      }
+
+      .ge-map-bg {
+        position: absolute;
+        right: -20px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 140%;
+        width: 65%;
+        object-fit: cover;
+        opacity: 0.8;
+        z-index: 1;
+      }
+
+      /* Trending Now */
+      .trending-now h3 {
+        font-family: 'Playfair Display', serif;
+        color: #2b3a55;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+      }
+
+      .trending-scroll {
+        display: flex;
+        gap: 15px;
+        overflow-x: auto;
+        padding-bottom: 15px;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(10, 17, 40, 0.4) transparent;
+      }
+
+      .trending-scroll::-webkit-scrollbar {
+        height: 8px;
+      }
+
+      .trending-scroll::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .trending-scroll::-webkit-scrollbar-thumb {
+        background: rgba(10, 17, 40, 0.4);
+        border-radius: 4px;
+      }
+
+      .trending-scroll::-webkit-scrollbar-thumb:hover {
+        background: rgba(10, 17, 40, 0.6);
+      }
+
+      .tn-card {
+        flex: 0 0 260px;
+        height: 150px;
+        border-radius: 16px;
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .tn-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .tn-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .tn-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.1) 100%);
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+
+      .tn-title {
+        color: white;
+        font-size: 1.05rem;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+
+      .tn-price-rating {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        font-size: 0.95rem;
+      }
+
+      .tn-price {
+        font-weight: 600;
+      }
+
+      .tn-rating {
+        color: #ffc107;
+      }
+
+      @media(max-width: 1024px) {
+        .dashboard-container {
+          grid-template-columns: 1fr;
+        }
+
+        .global-explorer {
+          height: auto;
+        }
+
+        .ge-map-bg {
+          height: 100%;
+        }
+      }
+
+      @media(max-width: 768px) {
+        .handpicked-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .hp-card:nth-child(4) {
+          grid-column: span 1;
+        }
+      }
+
+      .wl-custom-dropdown {
+        position: relative;
+        cursor: pointer;
+      }
+
+      .wl-dropdown-selected {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .wl-dropdown-selected span {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 0.95rem;
+        color: #222;
+      }
+
+      .wl-dropdown-options {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        width: 100%;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        display: none;
+        flex-direction: column;
+        z-index: 100;
+        max-height: 250px;
+        overflow-y: auto;
+        border: 1px solid #eee;
+      }
+
+      .wl-custom-dropdown.active .wl-dropdown-options {
+        display: flex;
+      }
+
+      .wl-dropdown-option {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        color: #333;
+        transition: background 0.2s;
+      }
+
+      .wl-dropdown-option:hover {
+        background: #f0f4f8;
+        color: #007bff;
+      }
+
+      @media(max-width: 1024px) {
+        .wl-form {
+          flex-wrap: wrap;
+        }
+
+        .wl-divider {
+          display: none;
+        }
+
+        .wl-group {
+          width: 45%;
+        }
+      }
+
+      @media(max-width: 768px) {
+        .wl-group {
+          width: 100%;
+        }
+
+        .wl-search-btn {
+          width: 100%;
+          margin-left: 0;
+          margin-top: 10px;
+        }
+
+        .hero-search-container {
+          padding: 15px;
+        }
+      }
+
+      /* Trending Destinations */
+      .section-title {
+        font-weight: 700;
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+        color: #222;
+      }
+
+      .trending-scroll-container {
+        overflow-x: auto;
+        padding-bottom: 1rem;
+        scrollbar-width: thin;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: 3rem;
+      }
+
+      .trending-scroll-container::-webkit-scrollbar {
+        height: 8px;
+      }
+
+      .trending-scroll-container::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 10px;
+      }
+
+      .trending-grid {
+        display: flex;
+        gap: 1.5rem;
+        min-width: min-content;
+      }
+
+      .trending-card {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        height: 200px;
+        width: 220px;
+        flex-shrink: 0;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+      }
+
+      .trending-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .trending-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s;
+      }
+
+      .trending-card:hover .trending-img {
+        transform: scale(1.05);
+      }
+
+      .trending-title {
+        position: absolute;
+        bottom: 10px;
+        left: 15px;
+        color: white;
+        font-weight: 700;
+        font-size: 1.2rem;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+      }
+
+      /* Promo Banner */
+      @keyframes gradientBGPromo {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      .promo-banner {
+        background: linear-gradient(135deg, #1a2a6c, #11998e, #38ef7d);
+        background-size: 200% 200%;
+        animation: gradientBGPromo 10s ease infinite;
+        border-radius: 20px;
+        padding: 3rem 4rem;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+      .promo-banner::before {
+        content: '';
+        position: absolute;
+        top: -50%; left: -50%;
+        width: 200%; height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+        transform: rotate(30deg);
+      }
+      .promo-banner h3 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 800;
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        position: relative;
+        z-index: 2;
+      }
+      .promo-banner p {
+        position: relative;
+        z-index: 2;
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+      .promo-btn {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        color: #1a2a6c;
+        padding: 12px 32px;
+        border-radius: 30px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 2;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+      .promo-btn:hover {
+        background: #ffffff;
+        color: #11998e;
+        transform: translateY(-3px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Filters & Listings adjustments */
+      #filters-bar {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 2rem;
+        background: white;
+        border-radius: 2rem;
+        border: 1px solid #ddd;
+        padding: 0.5rem 1.5rem;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+      }
+
+      #filters-scroll {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 1.5rem;
+        scrollbar-width: none;
+        flex: 1 1 auto;
+      }
+
+      #filters-scroll::-webkit-scrollbar {
+        display: none;
+      }
+
+      .filter {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 80px;
+        padding: 0.5rem;
+        color: #555;
+        text-decoration: none;
+        opacity: 0.7;
+        transition: 0.2s;
+        border-bottom: 2px solid transparent;
+      }
+
+      .filter:hover,
+      .active-filter {
+        opacity: 1;
+        color: #007bff;
+        border-bottom: 2px solid #007bff;
+      }
+
+      .filter i {
+        font-size: 1.4rem;
+        margin-bottom: 0.3rem;
+      }
+
+      .tax-toggle {
+        margin-left: auto;
+        border: 1px solid #ddd;
+        border-radius: 1rem;
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        background: #f8f9fa;
+      }
+
+      /* Mobile search */
+      @media(max-width: 768px) {
+        .hero-search-container {
+          border-radius: 12px;
+          padding: 12px;
+        }
+
+        .search-row {
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .dates-group {
+          flex-direction: column;
+        }
+
+        .date-divider {
+          width: 100%;
+          height: 1px;
+          margin: 0;
+        }
+
+        .btn-agoda {
+          width: 80%;
+          padding: 12px 20px;
+        }
+
+        .agoda-form {
+          padding-bottom: 20px;
+        }
+      }
+
+      /* Booking.com Style Cards */
+      .booking-card {
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #e0e0e0;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .booking-card:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        transform: translateY(-5px);
+      }
+
+      .booking-card-img-container {
+        position: relative;
+        height: 240px;
+        overflow: hidden;
+      }
+
+      .booking-card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .booking-card:hover .booking-card-img {
+        transform: scale(1.05);
+      }
+
+      .badge-cancel {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #008009;
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 8px;
+        border-radius: 4px;
+        z-index: 2;
+      }
+
+      .badge-heart {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 255, 255, 0.8);
+        color: #333;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        z-index: 2;
+      }
+
+      .booking-card-body {
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+
+      .booking-card-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #003580;
+        margin-bottom: 0.2rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .booking-card-location {
+        font-size: 0.85rem;
+        color: #0071c2;
+        margin-bottom: 0.5rem;
+      }
+
+      .booking-card-stars {
+        color: #febb02;
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .booking-rating {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 0.8rem;
+      }
+
+      .rating-badge {
+        background: #003580;
+        color: white;
+        font-weight: 700;
+        padding: 4px 6px;
+        border-radius: 4px;
+        border-bottom-right-radius: 0;
+        font-size: 0.9rem;
+      }
+
+      .rating-text {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .review-count {
+        font-size: 0.8rem;
+        color: #666;
+      }
+
+      .booking-amenities {
+        font-size: 0.8rem;
+        color: #008009;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+      .booking-price-section {
+        margin-top: auto;
+        text-align: right;
+      }
+
+      .price-original {
+        font-size: 0.9rem;
+        color: #d4111e;
+        text-decoration: line-through;
+        margin-right: 5px;
+      }
+
+      .price-current {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #333;
+      }
+
+      .price-tax {
+        font-size: 0.75rem;
+        color: #666;
+      }
+
+      /* Modern Sidebar Filters */
+      .sidebar-filter {
+        background: #fff;
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+      }
+
+      .filter-section {
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1.5rem;
+      }
+
+      .filter-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .filter-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .custom-checkbox {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.8rem;
+        cursor: pointer;
+      }
+
+      .custom-checkbox input {
+        display: none;
+      }
+
+      .checkmark {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ccc;
+        border-radius: 6px;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
+
+      .custom-checkbox input:checked+.checkmark {
+        background-color: #007bff;
+        border-color: #007bff;
+      }
+
+      .custom-checkbox input:checked+.checkmark::after {
+        content: '\f00c';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        color: white;
+        font-size: 12px;
+      }
+
+      .checkbox-label {
+        font-size: 0.95rem;
+        color: #555;
+        flex: 1;
+      }
+
+      .price-inputs {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .price-inputs input {
+        width: 100%;
+        padding: 6px 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 0.9rem;
+      }
+
+      .tax-toggle {
+        border: 1px solid #ddd;
+        border-radius: 1rem;
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        background: #f8f9fa;
+      }
+
+      /* List View Styles */
+      #listings-grid.list-view-active {
+        display: flex;
+        flex-direction: column;
+      }
+      #listings-grid.list-view-active .col {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+      #listings-grid.list-view-active .booking-card {
+        flex-direction: row;
+        align-items: stretch;
+      }
+      #listings-grid.list-view-active .booking-card-img-container {
+        width: 320px;
+        height: auto;
+        min-height: 220px;
+        flex-shrink: 0;
+      }
+      #listings-grid.list-view-active .booking-card-body {
+        padding: 1.5rem;
+      }
+      @media(max-width: 768px) {
+        #listings-grid.list-view-active .booking-card {
+          flex-direction: column;
+        }
+        #listings-grid.list-view-active .booking-card-img-container {
+          width: 100%;
+          height: 240px;
+        }
+      }
+    </style>
+
+    <div class="hero-section">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1>Find Your Next Stay</h1>
+        <p>Search low prices on hotels, homes and much more...</p>
+      </div>
+
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+      <div class="hero-search-container glass-panel">
+        <form class="wl-form" role="search" method="GET" action="/listings">
+
+          <!-- Destination -->
+          <div class="wl-group">
+            <label class="wl-label">Destination</label>
+            <div class="wl-input-wrapper">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="search" id="search" name="search" placeholder="Search locations..." list="destinations"
+                autocomplete="off"
+                value="<%= typeof searchParams !== 'undefined' && searchParams.search ? searchParams.search : '' %>">
+              <datalist id="destinations">
+                <option value="Goa"></option>
+                <option value="Manali"></option>
+                <option value="Kerala"></option>
+                <option value="Jaipur"></option>
+                <option value="New York City"></option>
+                <option value="Paris"></option>
+                <option value="Santorini"></option>
+                <option value="Bali"></option>
+              </datalist>
+            </div>
+          </div>
+
+          <div class="wl-divider"></div>
+
+          <!-- Dates -->
+          <div class="wl-group">
+            <label class="wl-label">Dates</label>
+            <div class="wl-dates-wrapper">
+              <div class="wl-date-box" onclick="document.getElementById('agodaCheckIn')._flatpickr.open()">
+                <span class="wl-date-title">Check-in</span>
+                <input type="text" id="agodaCheckIn" name="checkIn" class="wl-date-input" placeholder="Add dates"
+                  value="<%= typeof searchParams !== 'undefined' && searchParams.checkIn ? searchParams.checkIn : '' %>">
+              </div>
+              <div class="wl-date-box" onclick="document.getElementById('agodaCheckOut')._flatpickr.open()">
+                <span class="wl-date-title">Check-out</span>
+                <input type="text" id="agodaCheckOut" name="checkOut" class="wl-date-input" placeholder="Add dates"
+                  value="<%= typeof searchParams !== 'undefined' && searchParams.checkOut ? searchParams.checkOut : '' %>">
+              </div>
+            </div>
+          </div>
+
+          <div class="wl-divider"></div>
+
+          <!-- Guests -->
+          <div class="wl-group">
+            <label class="wl-label">Guests</label>
+            <div class="wl-guests-wrapper">
+              <div class="wl-guest-row">
+                <span>Adults</span>
+                <div class="wl-counter">
+                  <button type="button" class="wl-btn"
+                    onclick="const i=document.getElementById('guests-adults'); if(i.value>1)i.value--">-</button>
+                  <input type="number" id="guests-adults" name="guests"
+                    value="<%= typeof searchParams !=='undefined' && searchParams.guests ? searchParams.guests : '2' %>"
+                    readonly>
+                  <button type="button" class="wl-btn"
+                    onclick="document.getElementById('guests-adults').value++">+</button>
+                </div>
+              </div>
+              <div class="wl-guest-row">
+                <span>Children</span>
+                <div class="wl-counter">
+                  <button type="button" class="wl-btn"
+                    onclick="const i=document.getElementById('guests-children'); if(i.value>0)i.value--">-</button>
+                  <input type="number" id="guests-children" name="children" value="0" readonly>
+                  <button type="button" class="wl-btn"
+                    onclick="document.getElementById('guests-children').value++">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wl-divider"></div>
+
+          <!-- Property Type -->
+          <div class="wl-group">
+            <label class="wl-label">Property Type</label>
+            <div class="wl-input-wrapper wl-property-type wl-custom-dropdown" id="propertyTypeDropdown">
+              <div class="wl-dropdown-selected">
+                <span id="selected-property-text">Villas, Boutique Hotels, Eco-lodges</span>
+                <i class="fa-solid fa-chevron-down wl-chevron"></i>
+              </div>
+              <div class="wl-dropdown-options">
+                <div class="wl-dropdown-option" data-value="Any">Villas, Boutique Hotels, Eco-lodges</div>
+                <% const pTypes=["Beaches", "Mountains" , "Forests" , "Castles" , "Pools" , "Campings" , "Farms"
+                  , "Arctic" , "House Boats" , "Domes" ]; %>
+                  <% for(let p of pTypes) { %>
+                    <div class="wl-dropdown-option" data-value="<%= p %>">
+                      <%= p %>
+                    </div>
+                    <% } %>
+              </div>
+              <input type="hidden" name="propertyType" id="propertyTypeInput"
+                value="<%= typeof searchParams !=='undefined' && searchParams.propertyType ? searchParams.propertyType : 'Any' %>">
+            </div>
+          </div>
+
+          <button class="wl-search-btn" type="submit">Search</button>
+        </form>
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const dropdown = document.getElementById('propertyTypeDropdown');
+            const selectedText = document.getElementById('selected-property-text');
+            const hiddenInput = document.getElementById('propertyTypeInput');
+            const options = document.querySelectorAll('.wl-dropdown-option');
+
+            dropdown.addEventListener('click', (e) => {
+              dropdown.classList.toggle('active');
+            });
+
+            options.forEach(opt => {
+              opt.addEventListener('click', (e) => {
+                const val = opt.getAttribute('data-value');
+                hiddenInput.value = val;
+                selectedText.textContent = opt.textContent;
+              });
+            });
+
+            document.addEventListener('click', (e) => {
+              if (!dropdown.contains(e.target)) {
+                dropdown.classList.remove('active');
+              }
+            });
+
+            const initialVal = hiddenInput.value;
+            if (initialVal && initialVal !== 'Any') {
+              selectedText.textContent = initialVal;
+            }
+
+            // --- Date Validation for Search Form ---
+            // Validates that Check-in date is not after Check-out date.
+            // If invalid, prevents submission and shows a styled notification.
+            const searchForm = document.querySelector('.wl-form');
+            if (searchForm) {
+              searchForm.addEventListener('submit', (e) => {
+                const checkInVal = document.getElementById('agodaCheckIn').value;
+                const checkOutVal = document.getElementById('agodaCheckOut').value;
+                
+                if (checkInVal && checkOutVal) {
+                  const checkInDate = new Date(checkInVal);
+                  const checkOutDate = new Date(checkOutVal);
+                  
+                  if (checkInDate > checkOutDate) {
+                    e.preventDefault(); // Stop form submission
+                    
+                    // Remove existing client error toast if present to prevent duplicates
+                    const existingToast = document.getElementById('clientErrorToast');
+                    if (existingToast) existingToast.remove();
+                    
+                    // Inject a custom error toast matching the application's design
+                    const toastHtml = `
+                      <div class="custom-toast error" id="clientErrorToast">
+                          <div class="custom-toast-icon">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                  <circle cx="12" cy="12" r="10"></circle>
+                                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                              </svg>
+                          </div>
+                          <p class="custom-toast-text">Check-out date cannot be earlier than check-in date.</p>
+                          <button type="button" class="custom-toast-close" onclick="closeToast('clientErrorToast')" aria-label="Close">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                              </svg>
+                          </button>
+                      </div>`;
+                    
+                    document.body.insertAdjacentHTML('beforeend', toastHtml);
+                    
+                    // Auto-dismiss after 6 seconds
+                    setTimeout(() => {
+                        if (typeof closeToast === 'function') {
+                            closeToast('clientErrorToast');
+                        } else {
+                            const t = document.getElementById('clientErrorToast');
+                            if(t) t.remove();
+                        }
+                    }, 6000);
+                  }
+                }
+              });
+            }
+          });
+        </script>
+      </div>
+    </div>
+
+    <% // Check if any search or filter parameters exist (meaning a search was performed) let
+      isSearchActive=searchParams && Object.keys(searchParams).length> 0;
+      %>
+
+      <% if (!isSearchActive) { %>
+        <div class="promo-banner mt-4 mb-4 mx-auto" style="max-width: 1300px; width: 95%;">
+          <div>
+            <h3>Save 15% on your next getaway</h3>
+            <p class="mb-0">Book your dream stay before the month ends and get an exclusive discount.</p>
+          </div>
+          <a href="/offers" class="promo-btn">Explore Deals <i class="fa-solid fa-arrow-right ms-2"></i></a>
+        </div>
+        <div class="dashboard-container" style="margin-top: 20px;">
+          <!-- Handpicked Collections -->
+          <div class="handpicked-section">
+            <h3>Handpicked Collections</h3>
+            <div class="handpicked-grid">
+              <% if (listings && listings.length>= 5) { %>
+                <% for(let i=0; i<5; i++) { let l=listings[i]; let idStr=l._id.toString(); let ratingScore=(8 +
+                  (idStr.charCodeAt(1) % 20) / 10).toFixed(1); let imageUrl=(l.image && l.image.url) ? l.image.url :
+                  (typeof l.image==='string' ? l.image
+                  : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80' ); %>
+                  <a href="/listings/<%= l._id %>" class="hp-card">
+                    <img src="<%= imageUrl %>" alt="<%= l.title %>"
+                      onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80';">
+                    <div class="hp-overlay">
+                      <div class="hp-title">
+                        <%= l.title %>
+                      </div>
+                      <div class="hp-rating"><i class="fa-solid fa-star"></i>
+                        <%= ratingScore %>
+                      </div>
+                    </div>
+                  </a>
+                  <% } %>
+                    <% } %>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="right-dashboard">
+            <!-- Global Explorer -->
+            <div class="global-explorer">
+              <div class="ge-content">
+                <h3>Global Explorer</h3>
+                <p>Interactive map (preview regions).</p>
+                <button class="ge-btn">Explore Map</button>
+              </div>
+              <img src="/images/global_map.png" alt="World Map" class="ge-map-bg">
+            </div>
+
+            <!-- Trending Now -->
+            <div class="trending-now">
+              <h3>Trending Now</h3>
+              <div class="trending-scroll">
+                <% if (listings && listings.length> 5) { %>
+                  <% let maxTrending=Math.min(listings.length, 25); %>
+                    <% for(let i=5; i<maxTrending; i++) { let l=listings[i]; let idStr=l._id.toString(); let
+                      ratingScore=(8 + (idStr.charCodeAt(1) % 20) / 10).toFixed(1); let imageUrl=(l.image &&
+                      l.image.url) ? l.image.url : (typeof l.image==='string' ? l.image
+                      : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80'
+                      ); %>
+                      <a href="/listings/<%= l._id %>" class="tn-card">
+                        <img src="<%= imageUrl %>" alt="<%= l.title %>"
+                          onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80';">
+                        <div class="tn-overlay">
+                          <div class="tn-title">
+                            <%= l.title %>
+                          </div>
+                          <div class="tn-price-rating">
+                            <span class="tn-price">&#8377;<%= l.price.toLocaleString("en-IN") %> /avg</span>
+                            <span class="tn-rating"><i class="fa-solid fa-star"></i>
+                              <%= ratingScore %>
+                            </span>
+                          </div>
+                        </div>
+                      </a>
+                      <% } %>
+                        <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% } %>
+
+          <div class="row mt-4">
+            <!-- Sidebar Filters -->
+            <div class="col-lg-3 d-none d-lg-block">
+              <div class="sidebar-filter sticky-top" style="top: 20px; z-index: 1;">
+
+                <div class="filter-section">
+                  <h4 class="filter-title">Property Type</h4>
+                  <% const sidebarTypes=["Trending", "Beaches" , "Mountains" , "Forests" , "Castles" , "Pools"
+                    , "Campings" , "Farms" , "Arctic" ]; %>
+                    <% for(let type of sidebarTypes) { %>
+                      <label class="custom-checkbox">
+                        <input type="checkbox" class="sidebar-chk" data-filter-type="category" value="<%= type %>"
+                          <%=selectedCategory===type ? 'checked' : '' %>>
+                        <div class="checkmark"></div>
+                        <span class="checkbox-label">
+                          <%= type %>
+                        </span>
+                      </label>
+                      <% } %>
+                </div>
+
+                <div class="filter-section">
+                  <h4 class="filter-title">Price Range</h4>
+                  <div class="price-inputs">
+                    <input type="number" id="sidebarPriceMin" placeholder="Min ₹" min="0">
+                    <input type="number" id="sidebarPriceMax" placeholder="Max ₹" min="0">
+                  </div>
+                </div>
+
+                <div class="filter-section">
+                  <h4 class="filter-title">Star Rating</h4>
+                  <label class="custom-checkbox">
+                    <input type="checkbox" class="sidebar-chk" data-filter-type="stars" value="5">
+                    <div class="checkmark"></div>
+                    <span class="checkbox-label"><i class="fa-solid fa-star text-warning"></i> 5 Stars</span>
+                  </label>
+                  <label class="custom-checkbox">
+                    <input type="checkbox" class="sidebar-chk" data-filter-type="stars" value="4">
+                    <div class="checkmark"></div>
+                    <span class="checkbox-label"><i class="fa-solid fa-star text-warning"></i> 4 Stars</span>
+                  </label>
+                  <label class="custom-checkbox">
+                    <input type="checkbox" class="sidebar-chk" data-filter-type="stars" value="3">
+                    <div class="checkmark"></div>
+                    <span class="checkbox-label"><i class="fa-solid fa-star text-warning"></i> 3 Stars</span>
+                  </label>
+                </div>
+
+                <div class="filter-section">
+                  <h4 class="filter-title">Guest Rating</h4>
+                  <label class="custom-checkbox">
+                    <input type="checkbox" class="sidebar-chk" data-filter-type="rating" value="9">
+                    <div class="checkmark"></div>
+                    <span class="checkbox-label">Superb: 9+</span>
+                  </label>
+                  <label class="custom-checkbox">
+                    <input type="checkbox" class="sidebar-chk" data-filter-type="rating" value="8">
+                    <div class="checkmark"></div>
+                    <span class="checkbox-label">Fabulous: 8+</span>
+                  </label>
+                  <label class="custom-checkbox">
+                    <input type="checkbox" class="sidebar-chk" data-filter-type="rating" value="7">
+                    <div class="checkmark"></div>
+                    <span class="checkbox-label">Very Good: 7+</span>
+                  </label>
+                </div>
+
+                <div class="filter-section">
+                  <h4 class="filter-title">Amenities</h4>
+                  <label class="custom-checkbox">
+                    <input type="checkbox" class="sidebar-chk" data-filter-type="amenity" value="wifi">
+                    <div class="checkmark"></div>
+                    <span class="checkbox-label">Free WiFi</span>
+                  </label>
+                  <label class="custom-checkbox">
+                    <input type="checkbox" class="sidebar-chk" data-filter-type="amenity" value="breakfast">
+                    <div class="checkmark"></div>
+                    <span class="checkbox-label">Breakfast Included</span>
+                  </label>
+                  <label class="custom-checkbox">
+                    <input type="checkbox" class="sidebar-chk" data-filter-type="amenity" value="pool">
+                    <div class="checkmark"></div>
+                    <span class="checkbox-label">Swimming Pool</span>
+                  </label>
+                  <label class="custom-checkbox">
+                    <input type="checkbox" class="sidebar-chk" data-filter-type="amenity" value="cancel">
+                    <div class="checkmark"></div>
+                    <span class="checkbox-label">Free Cancellation</span>
+                  </label>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Listings Grid -->
+            <div class="col-lg-9">
+              <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                <h2 class="section-title mb-0">Featured Hotels</h2>
+
+                <div class="d-flex gap-3 align-items-center">
+                  <!-- 
+            * SORTING DROPDOWN:
+            * This form submits a GET request to /listings when an option is selected.
+            * It preserves any existing search parameters (like destination, category) by dynamically
+            * creating hidden input fields for them. This ensures filters and sort work together!
+          -->
+                  <div class="sort-container">
+                    <form action="/listings" method="GET" id="sortForm" class="d-flex align-items-center m-0">
+                      <% if(typeof searchParams !=='undefined' ) { %>
+                        <% for(let key in searchParams) { %>
+                          <% if(key !=='sort' ) { %>
+                            <input type="hidden" name="<%= key %>" value="<%= searchParams[key] %>">
+                            <% } %>
+                              <% } %>
+                                <% } %>
+                                  <select name="sort" class="form-select form-select-sm sort-dropdown"
+                                    onchange="document.getElementById('sortForm').submit();"
+                                    style="border-radius: 20px; font-weight: 500; cursor: pointer; padding: 0.4rem 1.5rem 0.4rem 1rem; border: 1px solid #ddd; background-color: #f8f9fa;">
+                                    <option value="newest" <%=typeof searchParams !=='undefined' &&
+                                      searchParams.sort==='newest' ? 'selected' : '' %>>Newly Added</option>
+                                    <option value="priceLow" <%=typeof searchParams !=='undefined' &&
+                                      searchParams.sort==='priceLow' ? 'selected' : '' %>>Price: Low to High</option>
+                                    <option value="priceHigh" <%=typeof searchParams !=='undefined' &&
+                                      searchParams.sort==='priceHigh' ? 'selected' : '' %>>Price: High to Low</option>
+                                    <option value="highestRated" <%=typeof searchParams !=='undefined' &&
+                                      searchParams.sort==='highestRated' ? 'selected' : '' %>>Highest Rated</option>
+                                    <option value="mostReviewed" <%=typeof searchParams !=='undefined' &&
+                                      searchParams.sort==='mostReviewed' ? 'selected' : '' %>>Most Reviewed</option>
+                                    <option value="alphabetical" <%=typeof searchParams !=='undefined' &&
+                                      searchParams.sort==='alphabetical' ? 'selected' : '' %>>Alphabetical (A-Z)
+                                    </option>
+                                  </select>
+                    </form>
+                  </div>
+
+                  <div class="view-toggle btn-group bg-white border" style="border-radius: 20px; overflow: hidden; padding: 2px;">
+                    <button class="btn btn-sm active" id="btn-grid-view" style="border-radius: 18px; padding: 4px 12px; font-weight: 500; border: none; background: #003580; color: white;">
+                      <i class="fa-solid fa-table-cells-large"></i> Grid
+                    </button>
+                    <button class="btn btn-sm" id="btn-list-view" style="border-radius: 18px; padding: 4px 12px; font-weight: 500; border: none; color: #555; background: transparent;">
+                      <i class="fa-solid fa-list"></i> List
+                    </button>
+                  </div>
+
+                  <div class="tax-toggle mb-0" style="margin-left: 0;">
+                    <div class="form-check form-switch mb-0">
+                      <input class="form-check-input" type="checkbox" id="switchCheckDefault">
+                      <label class="form-check-label" for="switchCheckDefault">Display Total After Taxes</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 
+        * NO RESULTS FOUND UI:
+        * This block of code checks if the 'listings' array passed from the controller is empty.
+        * If it is empty (listings.length === 0), it displays a modern "No Results Found" section.
+        * We show an icon, a clear message, and a button to clear the search filters and view all listings.
+      -->
+              <% if (listings.length===0) { %>
+                <div class="no-results-container text-center py-5 mt-4"
+                  style="background: #f8f9fa; border-radius: 16px; border: 1px dashed #ced4da; margin-bottom: 2rem;">
+                  <div class="mb-3">
+                    <i class="fa-solid fa-magnifying-glass-location" style="font-size: 4rem; color: #adb5bd;"></i>
+                  </div>
+                  <h3 style="font-family: 'Playfair Display', serif; font-weight: 700; color: #343a40;">No Results Found
+                  </h3>
+                  <p class="text-muted mb-4" style="font-size: 1.05rem;">We couldn't find any properties matching your
+                    advanced search criteria. <br> Try adjusting your destination, dates, or filters.</p>
+                  <a href="/listings" class="btn btn-dark px-4 py-2"
+                    style="border-radius: 30px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Clear Search
+                    & Explore All</a>
+                </div>
+                <% } %>
+
+                  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-2 row-cols-1 g-4" id="listings-grid">
+                    <% for(let listing of listings) { let idStr=listing._id.toString(); let starCount=listing.avgRating
+                      ? Math.round(listing.avgRating) : 5; let ratingScore=listing.avgRating ?
+                      listing.avgRating.toFixed(1) : "New" ; let reviewCount=listing.reviewCount || 0; let
+                      originalPrice=Math.round(listing.price * 1.2); let ratingWord=listing.avgRating>= 4.5 ? "Superb" :
+                      (listing.avgRating >= 4.0 ? "Fabulous" : (listing.avgRating ? "Good" : "No Reviews"));
+                      let hasFreeCancel = (idStr.charCodeAt(3) % 2) === 0;
+                      let hasPool = (idStr.charCodeAt(4) % 2) === 0;
+                      let amenitiesArr = ["wifi", "breakfast"];
+                      if (hasFreeCancel) amenitiesArr.push("cancel");
+                      if (hasPool) amenitiesArr.push("pool");
+                      let amenitiesStr = amenitiesArr.join(",");
+                      %>
+                      <div class="col listing-card-wrapper" data-category="<%= listing.category %>"
+                        data-price="<%= listing.price %>" data-stars="<%= starCount %>" data-rating="<%= ratingScore %>"
+                        data-amenities="<%= amenitiesStr %>">
+                        <a href="/listings/<%= listing._id %>" class="listing-link text-decoration-none">
+                          <div class="booking-card h-100">
+                            <div class="booking-card-img-container skeleton-loading">
+                              <img src="<%= listing.image.url %>" class="booking-card-img" alt="listing_image">
+                              <% if(hasFreeCancel) { %>
+                                <div class="badge-cancel">Free Cancellation</div>
+                                <% } %>
+
+                                  <!-- Heart Dropdown Container -->
+                                  <div class="dropdown"
+                                    style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+                                    <div class="badge-heart m-0" style="position: relative;" data-bs-toggle="dropdown"
+                                      aria-expanded="false" onclick="event.preventDefault(); event.stopPropagation();">
+                                      <% if(currUser && currUser.wishlist && currUser.wishlist.includes(listing._id)) {
+                                        %>
+                                        <i class="fa-solid fa-heart text-danger"></i>
+                                        <% } else { %>
+                                          <i class="fa-regular fa-heart"></i>
+                                          <% } %>
+                                    </div>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0"
+                                      onclick="event.preventDefault(); event.stopPropagation();">
+                                      <% if(!currUser) { %>
+                                        <li><a class="dropdown-item" href="/login">Log in to save</a></li>
+                                        <% } else { %>
+                                          <li>
+                                            <form action="/wishlist/<%= listing._id %>" method="POST" class="m-0">
+                                              <button type="submit" class="dropdown-item fw-bold"
+                                                onclick="event.stopPropagation();">
+                                                <% if(currUser.wishlist && currUser.wishlist.includes(listing._id)) { %>
+                                                  Remove from Wishlist
+                                                  <% } else { %>
+                                                    Save to Wishlist
+                                                    <% } %>
+                                              </button>
+                                            </form>
+                                          </li>
+                                          <% if (currUser.collections && currUser.collections.length> 0) { %>
+                                            <li>
+                                              <hr class="dropdown-divider">
+                                            </li>
+                                            <li>
+                                              <h6 class="dropdown-header">Save to Collection</h6>
+                                            </li>
+                                            <% for(let col of currUser.collections) { %>
+                                              <li>
+                                                <form
+                                                  action="/wishlist/collections/<%= col._id %>/add/<%= listing._id %>"
+                                                  method="POST" class="m-0">
+                                                  <button type="submit" class="dropdown-item"
+                                                    onclick="event.stopPropagation();">
+                                                    <i class="fa-regular fa-folder me-2 text-muted"></i>
+                                                    <%= col.name %>
+                                                  </button>
+                                                </form>
+                                              </li>
+                                              <% } %>
+                                                <% } %>
+                                                  <% } %>
+                                    </ul>
+                                  </div>
+                                  <!-- End Heart Dropdown Container -->
+                            </div>
+                            <div class="booking-card-body">
+                              <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                  <h5 class="booking-card-title">
+                                    <%= listing.title %>
+                                  </h5>
+                                  <div class="booking-card-stars">
+                                    <% for(let i=0; i<starCount; i++) { %>
+                                      <i class="fa-solid fa-star"></i>
+                                      <% } %>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="booking-card-location">
+                                <a href="#" class="text-decoration-underline text-primary"
+                                  style="color: #0071c2 !important;">
+                                  <%= listing.location %>, <%= listing.country %>
+                                </a>
+                              </div>
+
+                              <div class="booking-rating">
+                                <div class="rating-badge">
+                                  <%= ratingScore %>
+                                </div>
+                                <div>
+                                  <div class="rating-text">
+                                    <%= ratingWord %>
+                                  </div>
+                                  <div class="review-count">
+                                    <%= reviewCount %> reviews
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="booking-amenities">
+                                <i class="fa-solid fa-mug-hot me-1"></i> Breakfast included <br>
+                                <i class="fa-solid fa-wifi me-1"></i> Free WiFi
+                                <% if(hasPool) { %>
+                                  <br><i class="fa-solid fa-water-ladder me-1"></i> Swimming Pool
+                                  <% } %>
+                              </div>
+
+                              <div class="booking-price-section">
+                                <div>
+                                  <span class="price-original">&#8377;<%= originalPrice.toLocaleString("en-IN") %>
+                                      </span>
+                                  <span class="price-current">&#8377;<%= listing.price.toLocaleString("en-IN") %></span>
+                                </div>
+                                <div class="price-tax tax-info" style="display: none;">
+                                  + &#8377;<%= Math.round(listing.price * 0.18).toLocaleString("en-IN") %> taxes and
+                                    charges
+                                </div>
+                                <div class="price-tax" style="color: #666;">Per night</div>
+                              </div>
+                            </div>
+                          </div>
+                        </a>
+                      </div>
+                      <% } %>
+                  </div>
+            </div>
+          </div>
+
+              <script>
+                const taxSwitch = document.getElementById("switchCheckDefault");
+                if (taxSwitch) {
+                  taxSwitch.addEventListener("change", (e) => {
+                    let taxInfo = document.getElementsByClassName("tax-info");
+                    for (let info of taxInfo) {
+                      info.style.display = e.target.checked ? "block" : "none";
+                    }
+                  });
+                }
+
+                // Client-side filtering logic
+                document.addEventListener('DOMContentLoaded', () => {
+                  const filterInputs = document.querySelectorAll('.sidebar-chk, #sidebarPriceMin, #sidebarPriceMax');
+                  const listingCards = document.querySelectorAll('.listing-card-wrapper');
+
+                  const applyFilters = () => {
+                    const activeCategories = Array.from(document.querySelectorAll('.sidebar-chk[data-filter-type="category"]:checked')).map(cb => cb.value);
+                    const activeStars = Array.from(document.querySelectorAll('.sidebar-chk[data-filter-type="stars"]:checked')).map(cb => parseInt(cb.value));
+                    const activeRatings = Array.from(document.querySelectorAll('.sidebar-chk[data-filter-type="rating"]:checked')).map(cb => parseFloat(cb.value));
+                    const activeAmenities = Array.from(document.querySelectorAll('.sidebar-chk[data-filter-type="amenity"]:checked')).map(cb => cb.value);
+
+                    const minPrice = parseFloat(document.getElementById('sidebarPriceMin').value) || 0;
+                    const maxPrice = parseFloat(document.getElementById('sidebarPriceMax').value) || Infinity;
+
+                    listingCards.forEach(card => {
+                      const category = card.getAttribute('data-category');
+                      const price = parseFloat(card.getAttribute('data-price'));
+                      const stars = parseInt(card.getAttribute('data-stars'));
+                      const rating = parseFloat(card.getAttribute('data-rating'));
+                      const amenities = card.getAttribute('data-amenities').split(',');
+
+                      let match = true;
+
+                      if (activeCategories.length > 0 && !activeCategories.includes(category)) match = false;
+                      if (activeStars.length > 0 && !activeStars.includes(stars)) match = false;
+
+                      if (activeRatings.length > 0) {
+                        const meetsRating = activeRatings.some(r => rating >= r);
+                        if (!meetsRating) match = false;
+                      }
+
+                      if (activeAmenities.length > 0) {
+                        const hasAllAmenities = activeAmenities.every(a => amenities.includes(a));
+                        if (!hasAllAmenities) match = false;
+                      }
+
+                      if (price < minPrice || price > maxPrice) match = false;
+
+                      // Keep Bootstrap column flex layout intact
+                      card.classList.toggle('d-none', !match);
+                    });
+                  };
+
+                  filterInputs.forEach(input => {
+                    input.addEventListener('change', applyFilters);
+                    input.addEventListener('input', applyFilters);
+                  });
+                });
+              </script>
+
+              <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                  const btnGrid = document.getElementById('btn-grid-view');
+                  const btnList = document.getElementById('btn-list-view');
+                  const gridContainer = document.getElementById('listings-grid');
+          
+                  if (!btnGrid || !btnList || !gridContainer) return;
+
+                  const currentView = localStorage.getItem('wanderlust_view_preference') || 'grid';
+                  if(currentView === 'list') {
+                    enableListView();
+                  }
+          
+                  btnGrid.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    enableGridView();
+                  });
+          
+                  btnList.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    enableListView();
+                  });
+          
+                  function enableListView() {
+                    gridContainer.classList.add('list-view-active');
+                    btnList.classList.add('active');
+                    btnList.style.background = '#003580';
+                    btnList.style.color = 'white';
+                    btnGrid.classList.remove('active');
+                    btnGrid.style.background = 'transparent';
+                    btnGrid.style.color = '#555';
+                    localStorage.setItem('wanderlust_view_preference', 'list');
+                  }
+          
+                  function enableGridView() {
+                    gridContainer.classList.remove('list-view-active');
+                    btnGrid.classList.add('active');
+                    btnGrid.style.background = '#003580';
+                    btnGrid.style.color = 'white';
+                    btnList.classList.remove('active');
+                    btnList.style.background = 'transparent';
+                    btnList.style.color = '#555';
+                    localStorage.setItem('wanderlust_view_preference', 'grid');
+                  }
+                });
+              </script>
+
+              <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+              <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                  const updateDayText = (dateObj, elementId) => {
+                    if (!dateObj || !dateObj[0]) return;
+                    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                    document.getElementById(elementId).innerText = days[dateObj[0].getDay()];
+                  };
+
+                  const checkInPicker = flatpickr("#agodaCheckIn", {
+                    altInput: true,
+                    altFormat: "d M Y",
+                    dateFormat: "Y-m-d",
+                    minDate: "today",
+                    onChange: function (selectedDates) {
+                      updateDayText(selectedDates, "checkInDay");
+                      checkOutPicker.set("minDate", selectedDates[0] || "today");
+                    },
+                    onReady: function (selectedDates) {
+                      if (selectedDates.length > 0) updateDayText(selectedDates, "checkInDay");
+                    }
+                  });
+
+                  const checkOutPicker = flatpickr("#agodaCheckOut", {
+                    altInput: true,
+                    altFormat: "d M Y",
+                    dateFormat: "Y-m-d",
+                    minDate: "today",
+                    onChange: function (selectedDates) {
+                      updateDayText(selectedDates, "checkOutDay");
+                    },
+                    onReady: function (selectedDates) {
+                      if (selectedDates.length > 0) updateDayText(selectedDates, "checkOutDay");
+                    }
+                  });
+                });
+              </script>

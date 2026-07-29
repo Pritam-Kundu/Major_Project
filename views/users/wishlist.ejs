@@ -1,0 +1,340 @@
+<% layout("layouts/boilerplate") %>
+
+  <style>
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .booking-card {
+      border: 1px solid #e7e7e7;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .booking-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .booking-card-img-container {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+    }
+
+    .booking-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .booking-card:hover .booking-card-img {
+      transform: scale(1.05);
+    }
+
+    .badge-heart {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 35px;
+      height: 35px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      color: #ff385c;
+      z-index: 10;
+      transition: transform 0.2s;
+    }
+
+    .badge-heart:hover {
+      transform: scale(1.1);
+    }
+
+    .booking-card-body {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .booking-card-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 0.25rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .booking-card-location {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 0.75rem;
+    }
+
+    .booking-price-section {
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 1px solid #eee;
+    }
+
+    .price-current {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #333;
+    }
+  </style>
+
+  <div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <h2 class="section-title mb-1">Your Wishlist</h2>
+        <p class="text-muted mb-0">Saved properties you want to keep an eye on</p>
+      </div>
+      <button class="btn btn-outline-primary fw-bold px-4 rounded-pill" data-bs-toggle="modal"
+        data-bs-target="#newCollectionModal">
+        <i class="fa-solid fa-plus me-1"></i> New Collection
+      </button>
+    </div>
+
+    <!-- Collections Section -->
+    <% if(typeof collections !=='undefined' && collections.length> 0) { %>
+      <% for(let collection of collections) { %>
+        <h4 class="mt-5 mb-3 fw-bold"><i class="fa-regular fa-folder-open me-2 text-primary"></i>
+          <%= collection.name %>
+        </h4>
+        <% if(collection.listings && collection.listings.length> 0) { %>
+          <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4 mb-4">
+            <% for(let listing of collection.listings) { %>
+              <div class="col" id="col-card-<%= collection._id %>-<%= listing._id %>">
+                <div class="booking-card h-100 position-relative">
+                  <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark d-block h-100">
+                    <div class="booking-card-img-container">
+                      <% let imgUrl=listing.images && listing.images.length> 0 ? listing.images[0].url : (listing.image
+                        ? listing.image.url : ''); %>
+                        <img src="<%= imgUrl %>" class="booking-card-img" alt="listing_image">
+                    </div>
+                    <div class="booking-card-body">
+                      <h5 class="booking-card-title">
+                        <%= listing.title %>
+                      </h5>
+                      <div class="booking-card-location">
+                        <%= listing.location %>, <%= listing.country %>
+                      </div>
+                      <div class="booking-price-section">
+                        <span class="price-current">&#8377;<%= listing.price.toLocaleString("en-IN") %></span> / night
+                      </div>
+                    </div>
+                  </a>
+                  <button class="btn btn-sm btn-danger position-absolute"
+                    style="top: 10px; right: 10px; border-radius: 50%; width: 32px; height: 32px; z-index: 10;"
+                    onclick="removeFromCollection('<%= collection._id %>', '<%= listing._id %>')"
+                    title="Remove from Collection">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+              </div>
+              <% } %>
+          </div>
+          <% } else { %>
+            <p class="text-muted mb-4">No items in this collection yet.</p>
+            <% } %>
+              <% } %>
+                <hr class="my-5 text-muted">
+                <% } %>
+
+                  <!-- All Saved Items -->
+                  <h4 class="mb-3 fw-bold">All Saved Items</h4>
+                  <% if(!wishlist || wishlist.length===0) { %>
+                    <div class="alert alert-info border-0" style="background-color: #f0f7fa; color: #0071c2;">
+                      <i class="fa-solid fa-heart me-2"></i> Your wishlist is currently empty. Start exploring
+                      properties to save your favorites!
+                    </div>
+                    <a href="/listings" class="btn btn-primary mt-2 rounded-pill px-4 fw-bold">Explore Hotels</a>
+                    <% } else { %>
+                      <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4" id="wishlist-container">
+                        <% for(let listing of wishlist) { %>
+                          <div class="col" id="wishlist-card-<%= listing._id %>">
+                            <div class="booking-card h-100 position-relative">
+                              <a href="/listings/<%= listing._id %>"
+                                class="text-decoration-none text-dark d-block h-100">
+                                <div class="booking-card-img-container">
+                                  <% let imgUrl=listing.images && listing.images.length> 0 ? listing.images[0].url :
+                                    (listing.image ? listing.image.url : ''); %>
+                                    <img src="<%= imgUrl %>" class="booking-card-img" alt="listing_image">
+                                    <div class="badge-heart"
+                                      onclick="event.preventDefault(); removeFromWishlist('<%= listing._id %>'); return false;"
+                                      title="Quick Remove">
+                                      <i class="fa-solid fa-heart text-danger"></i>
+                                    </div>
+                                </div>
+                                <div class="booking-card-body">
+                                  <h5 class="booking-card-title pe-4">
+                                    <%= listing.title %>
+                                  </h5>
+                                  <div class="booking-card-location">
+                                    <%= listing.location %>, <%= listing.country %>
+                                  </div>
+                                  <div class="booking-price-section">
+                                    <span class="price-current">&#8377;<%= listing.price.toLocaleString("en-IN") %>
+                                    </span> / night
+                                  </div>
+                                </div>
+                              </a>
+                              <!-- Collection Dropdown -->
+                              <div class="dropdown position-absolute" style="bottom: 15px; right: 15px; z-index: 10;">
+                                <button class="btn btn-sm btn-outline-secondary rounded-circle" type="button"
+                                  data-bs-toggle="dropdown" title="Add to Collection"
+                                  style="width: 32px; height: 32px; padding: 0;">
+                                  <i class="fa-solid fa-folder-plus"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                                  <% if (typeof collections !=='undefined' && collections.length> 0) { %>
+                                    <% for(let col of collections) { %>
+                                      <li>
+                                        <form action="/wishlist/collections/<%= col._id %>/add/<%= listing._id %>"
+                                          method="POST">
+                                          <button type="submit" class="dropdown-item"><i
+                                              class="fa-regular fa-folder me-2 text-muted"></i>
+                                            <%= col.name %>
+                                          </button>
+                                        </form>
+                                      </li>
+                                      <% } %>
+                                        <% } else { %>
+                                          <li><span class="dropdown-item text-muted">No collections</span></li>
+                                          <% } %>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <% } %>
+                      </div>
+                      <% } %>
+
+                        <!-- Recently Viewed -->
+                        <% if(typeof recentlyViewed !=='undefined' && recentlyViewed.length> 0) { %>
+                          <h4 class="mt-5 mb-3 fw-bold">Recently Viewed</h4>
+                          <div
+                            class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4 flex-nowrap overflow-auto pb-3 custom-scrollbar">
+                            <% let recent=[...recentlyViewed].reverse(); for(let listing of recent) { %>
+                              <div class="col" style="min-width: 280px;">
+                                <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
+                                  <div class="booking-card h-100 opacity-75 hover-opacity-100 transition">
+                                    <div class="booking-card-img-container" style="height: 180px;">
+                                      <% let imgUrl=listing.images && listing.images.length> 0 ? listing.images[0].url :
+                                        (listing.image ? listing.image.url : ''); %>
+                                        <img src="<%= imgUrl %>" class="booking-card-img" alt="listing_image">
+                                    </div>
+                                    <div class="booking-card-body p-3">
+                                      <h5 class="booking-card-title fs-6">
+                                        <%= listing.title %>
+                                      </h5>
+                                      <div class="booking-card-location" style="font-size: 0.8rem;">
+                                        <%= listing.location %>, <%= listing.country %>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </a>
+                              </div>
+                              <% } %>
+                          </div>
+                          <% } %>
+  </div>
+
+  <!-- New Collection Modal -->
+  <div class="modal fade" id="newCollectionModal" tabindex="-1" aria-labelledby="newCollectionModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <form action="/wishlist/collections" method="POST">
+          <div class="modal-header border-0">
+            <h5 class="modal-title fw-bold" id="newCollectionModalLabel">Create a New Collection</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="collectionName" class="form-label">Collection Name</label>
+              <input type="text" class="form-control rounded-pill px-3" id="collectionName" name="name"
+                placeholder="e.g. Summer Trip" required maxlength="50">
+            </div>
+          </div>
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Quick Remove from Wishlist
+    async function removeFromWishlist(listingId) {
+      try {
+        const res = await fetch(`/wishlist/${listingId}`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+          }
+        });
+        const data = await res.json();
+        if (data.success && !data.isWishlisted) {
+          const card = document.getElementById(`wishlist-card-${listingId}`);
+          if (card) {
+            card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+              card.remove();
+              // Optional: if no cards left, reload to show empty state
+              if (document.querySelectorAll('#wishlist-container .col').length === 0) {
+                window.location.reload();
+              }
+            }, 300);
+          }
+        }
+      } catch (err) {
+        console.error("Error removing from wishlist", err);
+      }
+    }
+
+    // Quick Remove from Collection
+    async function removeFromCollection(collectionId, listingId) {
+      try {
+        const res = await fetch(`/wishlist/collections/${collectionId}/remove/${listingId}`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+          }
+        });
+        const data = await res.json();
+        if (data.success) {
+          const card = document.getElementById(`col-card-${collectionId}-${listingId}`);
+          if (card) {
+            card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+              card.remove();
+            }, 300);
+          }
+        }
+      } catch (err) {
+        console.error("Error removing from collection", err);
+      }
+    }
+  </script>

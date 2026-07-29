@@ -13,6 +13,10 @@ router.get(
     bookingController.hostDashboard
 );
 
+router.get("/:id/payment", isLoggedIn, bookingController.renderPaymentPage);
+router.post("/:id/payment", isLoggedIn, bookingController.processPayment);
+router.get("/:id/success/:bookingId", isLoggedIn, bookingController.renderSuccessPage);
+
 router.post("/:id", isLoggedIn, bookingController.createBooking);
 
 router.put("/:id/cancel", isLoggedIn, bookingController.cancelBooking);

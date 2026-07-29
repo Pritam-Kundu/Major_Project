@@ -1,14 +1,175 @@
-<footer>
-    <div class="f-info">
-        <div class="f-info-socials">
-            <a target="_blank" href="https://www.facebook.com/profile.php?id=100082902708389"><i class="fa-brands fa-square-facebook"></i></a>
-            <a target="_blank" href="https://www.instagram.com/its_pritam_kundu?igsh=MXJhcm8yaWU1ODd1MQ=="><i class="fa-brands fa-square-instagram"></i></a>
-            <a target="_blank" href="https://www.linkedin.com/in/pritam-kundu-6993611a9/" target="_blank"><i class="fa-brands fa-linkedin"></i></a> 
+<style>
+.footer {
+  background-color: #0b1a2a;
+  color: #fff;
+  padding: 4rem 0 1.5rem 0;
+  margin-top: auto;
+  font-family: 'Inter', sans-serif;
+}
+.footer-col {
+  margin-bottom: 2rem;
+}
+.footer-col h5 {
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #fff;
+  font-size: 1.1rem;
+}
+.footer-col p {
+  color: #a0aec0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.footer-links li {
+  margin-bottom: 0.85rem;
+}
+.footer-links a {
+  color: #a0aec0;
+  text-decoration: none;
+  transition: color 0.2s, padding-left 0.2s;
+  display: inline-block;
+  font-size: 0.95rem;
+}
+.footer-links a:hover {
+  color: #fff;
+  padding-left: 6px;
+}
+.newsletter-form {
+  position: relative;
+  margin-top: 1.25rem;
+}
+.newsletter-form input {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #2d3748;
+  background: #1a202c;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.newsletter-form input:focus {
+  border-color: #0071c2;
+  box-shadow: 0 0 0 2px rgba(0, 113, 194, 0.25);
+}
+.newsletter-form button {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  bottom: 5px;
+  background: #0071c2;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 0 15px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.newsletter-form button:hover {
+  background: #0056b3;
+}
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.5rem;
+  margin-top: 2rem;
+  border-top: 1px solid #2d3748;
+  color: #a0aec0;
+  font-size: 0.9rem;
+}
+.footer-socials a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: #1a202c;
+  color: #fff;
+  border-radius: 50%;
+  margin-left: 0.5rem;
+  transition: background 0.2s, transform 0.2s;
+  text-decoration: none;
+}
+.footer-socials a:hover {
+  background: #0071c2;
+  transform: translateY(-3px);
+}
+</style>
+
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <!-- Company Info & Newsletter -->
+      <div class="col-lg-4 col-md-6 footer-col pe-lg-5">
+        <h5 class="d-flex align-items-center">
+          <i class="fa-solid fa-compass me-2" style="color: #0071c2; font-size: 1.4rem;"></i>
+          WanderLust
+        </h5>
+        <p>Your trusted platform for booking premium hotels, resorts, and unique stays worldwide. Discover your next adventure with us.</p>
+        <div class="newsletter-form">
+          <form onsubmit="event.preventDefault(); alert('Thank you for subscribing to our newsletter!');">
+            <input type="email" placeholder="Your email address" required>
+            <button type="submit">Subscribe</button>
+          </form>
         </div>
-        <div class="f-info-brand">&copy; Wanderlust Private Limited</div>
-        <div class="f-info-links">
-            <a href="/privacy">Privacy</a>
-            <a href="/terms">Terms</a>
-        </div>
+      </div>
+      
+      <!-- Company Links -->
+      <div class="col-lg-2 col-md-6 footer-col">
+        <h5>Company</h5>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press & Media</a></li>
+          <li><a href="#">Travel Blog</a></li>
+          <li><a href="#">Gift Cards</a></li>
+        </ul>
+      </div>
+      
+      <!-- Support Links -->
+      <div class="col-lg-3 col-md-6 footer-col">
+        <h5>Support</h5>
+        <ul class="footer-links">
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Safety Information</a></li>
+          <li><a href="#">Cancellation Options</a></li>
+          <li><a href="#">Accessibility</a></li>
+          <li><a href="#">COVID-19 Response</a></li>
+        </ul>
+      </div>
+      
+      <!-- Legal Pages -->
+      <div class="col-lg-3 col-md-6 footer-col">
+        <h5>Legal</h5>
+        <ul class="footer-links">
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+          <li><a href="#">Vendor Terms</a></li>
+        </ul>
+      </div>
     </div>
+    
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <div>
+        &copy; 2026 Wanderlust Private Limited. All rights reserved.
+      </div>
+      <div class="footer-socials mt-3 mt-md-0">
+        <a href="#" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" target="_blank" title="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+      </div>
+    </div>
+  </div>
 </footer>

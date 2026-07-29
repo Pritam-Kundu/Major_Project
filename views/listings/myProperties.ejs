@@ -1,77 +1,144 @@
 <% layout("layouts/boilerplate") %>
 
-    <div class="container mt-4">
+<style>
+  .property-card {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .property-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  }
+  .property-img-wrapper {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+  }
+  .property-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .property-card:hover .property-img {
+    transform: scale(1.05);
+  }
+  .property-status-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background: #008009;
+    color: white;
+  }
+  .property-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .property-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .property-location {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .property-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 1.5rem;
+  }
+  .property-actions {
+    margin-top: auto;
+    display: flex;
+    gap: 10px;
+  }
+  .property-actions .btn {
+    flex: 1;
+  }
+</style>
 
-        <h2 class="mb-4">
-            My Properties
-        </h2>
+<div class="container mt-5 mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold m-0" style="font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #222;">
+      My Properties
+    </h2>
+    <% if(listings.length > 0) { %>
+      <a href="/listings/new" class="btn btn-outline-dark fw-bold rounded-pill px-4">
+        <i class="fa-solid fa-plus me-2"></i> List New
+      </a>
+    <% } %>
+  </div>
 
-        <% if(listings.length===0){ %>
-
-            <div class="alert alert-info">
-
-                You haven't listed any property yet.
-
+  <% if(listings.length === 0){ %>
+    <div class="text-center py-5 my-5 bg-light rounded-4 border">
+      <i class="fa-solid fa-house-user text-muted mb-3" style="font-size: 4rem; opacity: 0.5;"></i>
+      <h3 class="fw-bold">No properties listed... yet!</h3>
+      <p class="text-muted fs-5">Turn your extra space into extra income. Start hosting today.</p>
+      <a href="/listings/new" class="btn btn-dark px-5 py-3 mt-3 fw-bold rounded-pill text-uppercase" style="letter-spacing: 1px;">List Your First Property</a>
+    </div>
+  <% } else { %>
+    <div class="row g-4">
+      <% listings.forEach(listing => { %>
+        <div class="col-12 col-md-6 col-xl-4">
+          <div class="property-card">
+            
+            <div class="property-img-wrapper">
+              <img src="<%= listing.image.url %>" class="property-img" alt="<%= listing.title %>" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80';">
+              <span class="badge property-status-badge">
+                <i class="fa-solid fa-check-circle me-1"></i> Active
+              </span>
             </div>
 
-            <a href="/listings/new" class="btn btn-success">
+            <div class="property-body">
+              <h5 class="property-title" title="<%= listing.title %>"><%= listing.title %></h5>
+              <div class="property-location">
+                <i class="fa-solid fa-location-dot text-danger"></i> <%= listing.location %>, <%= listing.country %>
+              </div>
+              
+              <div class="property-price">
+                ₹<%= listing.price.toLocaleString("en-IN") %> <span class="text-muted" style="font-size: 0.9rem; font-weight: 500;">/night</span>
+              </div>
 
-                List Your First Property
+              <!-- Action Buttons -->
+              <div class="property-actions">
+                <a href="/listings/<%= listing._id %>" class="btn btn-dark py-2 fw-bold text-uppercase" style="letter-spacing: 1px; border-radius: 8px; font-size: 0.85rem;">
+                  View
+                </a>
+                <a href="/listings/<%= listing._id %>/edit" class="btn btn-outline-dark py-2 fw-bold text-uppercase" style="letter-spacing: 1px; border-radius: 8px; font-size: 0.85rem;">
+                  Edit
+                </a>
+              </div>
 
-            </a>
-
-            <% } else { %>
-
-                <div class="row">
-
-                    <% listings.forEach(listing=>{ %>
-
-                        <div class="col-md-4 mb-4">
-
-                            <div class="card h-100 shadow">
-
-                                <img src="<%= listing.image.url %>" class="card-img-top"
-                                    style="height:220px; object-fit:cover;">
-
-                                <div class="card-body">
-
-                                    <h5>
-                                        <%= listing.title %>
-                                    </h5>
-
-                                    <p>
-                                        <%= listing.location %>,
-                                            <%= listing.country %>
-                                    </p>
-
-                                    <p>
-
-                                        ₹<%= listing.price.toLocaleString("en-IN") %>/night
-
-                                    </p>
-
-                                    <a href="/listings/<%= listing._id %>" class="btn btn-primary">
-
-                                        View
-
-                                    </a>
-
-                                    <a href="/listings/<%= listing._id %>/edit" class="btn btn-warning">
-
-                                        Edit
-
-                                    </a>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <% }) %>
-
-                </div>
-
-                <% } %>
-
+            </div>
+          </div>
+        </div>
+      <% }) %>
     </div>
+  <% } %>
+</div>

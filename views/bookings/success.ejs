@@ -1,0 +1,272 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+  body {
+    background-color: #f7f9fa;
+  }
+  
+  .success-container {
+    max-width: 650px;
+    margin: 3rem auto 5rem;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    overflow: hidden;
+  }
+
+  .success-header {
+    background: linear-gradient(135deg, #008009 0%, #00a60c 100%);
+    color: white;
+    padding: 3rem 2rem;
+    text-align: center;
+    position: relative;
+  }
+  
+  .success-icon-container {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 8px 16px rgba(0, 128, 9, 0.2);
+  }
+  
+  .success-icon-container i {
+    font-size: 2.5rem;
+    color: #008009;
+  }
+
+  .success-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .success-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+  }
+
+  .success-body {
+    padding: 2.5rem;
+  }
+
+  .booking-ref-card {
+    background: #f8f9fa;
+    border: 1px dashed #ced4da;
+    border-radius: 8px;
+    padding: 1.25rem;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .booking-ref-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .booking-ref-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #212529;
+    font-family: monospace;
+  }
+
+  .details-table {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .details-table tr td {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #ebebeb;
+  }
+
+  .details-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .detail-label {
+    color: #6c757d;
+    font-weight: 500;
+    width: 40%;
+  }
+
+  .detail-value {
+    color: #212529;
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .btn-view-bookings {
+    flex: 1;
+    background: #0071c2;
+    color: white;
+    font-weight: 600;
+    padding: 0.8rem;
+    border-radius: 8px;
+    border: none;
+    transition: background 0.2s;
+  }
+  
+  .btn-view-bookings:hover {
+    background: #0056b3;
+    color: white;
+  }
+
+  .btn-home {
+    flex: 1;
+    background: white;
+    color: #212529;
+    font-weight: 600;
+    padding: 0.8rem;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    transition: background 0.2s;
+  }
+
+  .btn-home:hover {
+    background: #f8f9fa;
+  }
+
+  /* Success Toast */
+  .toast-container-custom {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+  }
+  .success-toast {
+    background: #fff;
+    border-left: 5px solid #008009;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 15px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    transform: translateX(120%);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    max-width: 350px;
+  }
+  .success-toast.show {
+    transform: translateX(0);
+  }
+  .toast-icon {
+    font-size: 1.5rem;
+    color: #008009;
+  }
+  .toast-content h6 {
+    margin: 0 0 5px 0;
+    font-weight: 700;
+    color: #222;
+  }
+  .toast-content p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #555;
+  }
+</style>
+
+<div class="toast-container-custom">
+  <div class="success-toast" id="successToast">
+    <div class="toast-icon">
+      <i class="fa-solid fa-circle-check"></i>
+    </div>
+    <div class="toast-content">
+      <h6>🎉 Payment Successful!</h6>
+      <p>Your booking at <%= booking.listing.title %> is confirmed.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="success-container">
+    <div class="success-header">
+      <div class="success-icon-container">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <h1 class="success-title">Payment Successful</h1>
+      <p class="success-subtitle">Thank you! Your booking is confirmed.</p>
+    </div>
+    
+    <div class="success-body">
+      <div class="booking-ref-card">
+        <div class="booking-ref-label">Payment Reference</div>
+        <div class="booking-ref-number"><%= booking.paymentReference %></div>
+      </div>
+      
+      <h5 class="mb-4 fw-bold border-bottom pb-2">Booking Summary</h5>
+      
+      <table class="details-table">
+        <tr>
+          <td class="detail-label">Booking ID</td>
+          <td class="detail-value"><%= booking._id %></td>
+        </tr>
+        <tr>
+          <td class="detail-label">Hotel</td>
+          <td class="detail-value"><%= booking.listing.title %></td>
+        </tr>
+        <tr>
+          <td class="detail-label">Check-in</td>
+          <td class="detail-value"><%= new Date(booking.checkIn).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) %></td>
+        </tr>
+        <tr>
+          <td class="detail-label">Check-out</td>
+          <td class="detail-value"><%= new Date(booking.checkOut).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) %></td>
+        </tr>
+        <tr>
+          <td class="detail-label">Guests</td>
+          <td class="detail-value"><%= booking.guests %></td>
+        </tr>
+        <tr>
+          <td class="detail-label">Payment Method</td>
+          <td class="detail-value"><%= booking.paymentMethod %></td>
+        </tr>
+        <tr>
+          <td class="detail-label fw-bold" style="color: #212529;">Total Paid</td>
+          <td class="detail-value fw-bold fs-5 text-success">₹<%= booking.totalPrice.toLocaleString('en-IN') %></td>
+        </tr>
+      </table>
+
+      <div class="text-center text-muted small mb-4">
+        A confirmation email will be sent to your registered email address shortly. (Simulated)
+      </div>
+
+      <div class="action-buttons">
+        <a href="/bookings" class="btn btn-view-bookings text-center text-decoration-none">View My Bookings</a>
+        <a href="/listings" class="btn btn-home text-center text-decoration-none">Back to Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Show toast on load
+  document.addEventListener('DOMContentLoaded', () => {
+    const toast = document.getElementById('successToast');
+    
+    // Show after small delay for animation effect
+    setTimeout(() => {
+      toast.classList.add('show');
+    }, 500);
+
+    // Hide after 5 seconds
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 5500);
+  });
+</script>

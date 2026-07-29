@@ -37,4 +37,34 @@ router.get(
 );
 router.get("/logout", userController.logout);
 
+router.post(
+  "/wishlist/collections",
+  isLoggedIn,
+  wrapAsync(userController.createCollection)
+);
+
+router.post(
+  "/wishlist/collections/:collectionId/add/:listingId",
+  isLoggedIn,
+  wrapAsync(userController.addToCollection)
+);
+
+router.post(
+  "/wishlist/collections/:collectionId/remove/:listingId",
+  isLoggedIn,
+  wrapAsync(userController.removeFromCollection)
+);
+
+router.post(
+  "/wishlist/:id",
+  isLoggedIn,
+  wrapAsync(userController.toggleWishlist)
+);
+
+router.get(
+  "/wishlist",
+  isLoggedIn,
+  wrapAsync(userController.renderWishlist)
+);
+
 module.exports = router;

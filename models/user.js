@@ -9,7 +9,36 @@ const userSchema = new Schema({
     email : {
         type : String,
         required : true
-    }
+    },
+    wishlist: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Listing"
+        }
+    ],
+    recentlyViewed: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Listing"
+        }
+    ],
+    collections: [
+        {
+            name: String,
+            listings: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: "Listing"
+                }
+            ]
+        }
+    ],
+    claimedOffers: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Offer"
+        }
+    ]
 })
 
 

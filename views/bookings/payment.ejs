@@ -1,0 +1,541 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+  body {
+    background-color: #f7f9fa;
+  }
+  .payment-header {
+    background: #fff;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #ebebeb;
+    margin-bottom: 2rem;
+  }
+  /* Progress Bar */
+  .checkout-progress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .checkout-progress::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: #e0e0e0;
+    z-index: 1;
+    transform: translateY(-50%);
+  }
+  .progress-step {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    padding: 0 15px;
+  }
+  .step-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+  .step-completed .step-icon {
+    background: #008009;
+    color: white;
+  }
+  .step-active .step-icon {
+    background: #0071c2;
+    color: white;
+    box-shadow: 0 0 0 4px rgba(0, 113, 194, 0.2);
+  }
+  .step-inactive .step-icon {
+    background: #f0f0f0;
+    color: #888;
+  }
+  .step-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #555;
+  }
+  .step-active .step-label {
+    color: #222;
+  }
+
+  /* Payment Container */
+  .payment-container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .payment-section {
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  }
+  .payment-section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #222;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ebebeb;
+  }
+
+  /* Sticky Summary */
+  .booking-summary-card {
+    position: sticky;
+    top: 20px;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+  }
+  .summary-hotel-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  .price-breakdown {
+    margin-top: 1.5rem;
+  }
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    color: #444;
+  }
+  .price-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ebebeb;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: #222;
+  }
+
+  /* Payment Methods */
+  .payment-methods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .payment-method-card {
+    border: 2px solid #ebebeb;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fff;
+  }
+  .payment-method-card:hover {
+    border-color: #0071c2;
+    background: #f8fbff;
+  }
+  .payment-method-card.active {
+    border-color: #0071c2;
+    background: #f8fbff;
+    box-shadow: 0 0 0 1px #0071c2;
+  }
+  .payment-method-card i {
+    font-size: 1.5rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+  }
+  .payment-method-card.active i {
+    color: #0071c2;
+  }
+  
+  .payment-details-pane {
+    display: none;
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #ebebeb;
+  }
+  .payment-details-pane.active {
+    display: block;
+  }
+
+  /* Custom Input Styling */
+  .form-control {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  .form-control:focus {
+    box-shadow: 0 0 0 3px rgba(0,113,194,0.1);
+    border-color: #0071c2;
+  }
+
+  /* Confirm Button */
+  .btn-pay-now {
+    background: linear-gradient(90deg, #0071c2, #0056b3);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 1rem;
+    border-radius: 8px;
+    border: none;
+    width: 100%;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-pay-now:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 113, 194, 0.3);
+    color: white;
+  }
+  .btn-pay-now:disabled {
+    background: #ccc;
+    transform: none;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  /* Loader */
+  .spinner-container {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .btn-loading .btn-text {
+    visibility: hidden;
+  }
+  .btn-loading .spinner-container {
+    display: block;
+  }
+
+  /* Security Badge */
+  .security-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f3fcf4;
+    border: 1px solid #c3e6cb;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 1rem;
+    color: #008009;
+  }
+</style>
+
+<div class="payment-header">
+  <div class="checkout-progress">
+    <div class="progress-step step-completed">
+      <div class="step-icon"><i class="fa-solid fa-check"></i></div>
+      <div class="step-label">Booking Details</div>
+    </div>
+    <div class="progress-step step-active">
+      <div class="step-icon">2</div>
+      <div class="step-label">Payment</div>
+    </div>
+    <div class="progress-step step-inactive">
+      <div class="step-icon">3</div>
+      <div class="step-label">Confirmation</div>
+    </div>
+  </div>
+</div>
+
+<div class="container payment-container pb-5">
+  <form id="paymentForm" action="/bookings/<%= listing._id %>/payment" method="POST" class="needs-validation" novalidate>
+    <input type="hidden" name="checkIn" value="<%= checkIn %>">
+    <input type="hidden" name="checkOut" value="<%= checkOut %>">
+    <input type="hidden" name="guests" value="<%= guests %>">
+    <input type="hidden" id="selectedPaymentMethod" name="paymentMethod" value="Credit Card">
+
+    <div class="row">
+      <!-- Left Column: Forms -->
+      <div class="col-lg-7 col-xl-8 pe-lg-4">
+        
+        <!-- Guest Information -->
+        <div class="payment-section">
+          <h3 class="payment-section-title">Guest Information</h3>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-control" name="guestName" value="<%= currUser.username %>" required>
+              <div class="invalid-feedback">Please enter your full name.</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-control" name="guestEmail" value="<%= currUser.email %>" required>
+              <div class="invalid-feedback">Please enter a valid email address.</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" name="guestPhone" placeholder="+91 9876543210" required>
+              <div class="invalid-feedback">Please enter a valid phone number.</div>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Special Requests (Optional)</label>
+              <textarea class="form-control" name="specialRequests" rows="2" placeholder="Any special requirements?"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="payment-section">
+          <h3 class="payment-section-title">Payment Method</h3>
+          
+          <div class="payment-methods-grid">
+            <div class="payment-method-card active" data-method="Credit Card">
+              <i class="fa-regular fa-credit-card"></i>
+              <div>Credit / Debit Card</div>
+            </div>
+            <div class="payment-method-card" data-method="UPI">
+              <i class="fa-solid fa-mobile-screen"></i>
+              <div>UPI</div>
+            </div>
+            <div class="payment-method-card" data-method="Net Banking">
+              <i class="fa-solid fa-building-columns"></i>
+              <div>Net Banking</div>
+            </div>
+            <div class="payment-method-card" data-method="Wallet">
+              <i class="fa-solid fa-wallet"></i>
+              <div>Wallet</div>
+            </div>
+          </div>
+
+          <!-- Card Details Pane -->
+          <div id="pane-Credit Card" class="payment-details-pane active">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label">Card Holder Name</label>
+                <input type="text" class="form-control payment-input" required placeholder="Name on card">
+                <div class="invalid-feedback">Card holder name is required.</div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Card Number</label>
+                <input type="text" class="form-control payment-input" required placeholder="0000 0000 0000 0000" maxlength="19">
+                <div class="invalid-feedback">Valid card number is required.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Expiry Date</label>
+                <input type="text" class="form-control payment-input" required placeholder="MM/YY" maxlength="5">
+                <div class="invalid-feedback">Expiry date is required.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">CVV</label>
+                <input type="password" class="form-control payment-input" required placeholder="123" maxlength="4">
+                <div class="invalid-feedback">CVV is required.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- UPI Details Pane -->
+          <div id="pane-UPI" class="payment-details-pane">
+            <div class="mb-3">
+              <label class="form-label">UPI ID</label>
+              <input type="text" class="form-control payment-input" placeholder="username@upi">
+              <div class="invalid-feedback">Valid UPI ID is required.</div>
+            </div>
+            <p class="text-muted small mb-0">A payment request will be sent to your UPI app.</p>
+          </div>
+
+          <!-- Net Banking Details Pane -->
+          <div id="pane-Net Banking" class="payment-details-pane">
+            <div class="mb-3">
+              <label class="form-label">Select Bank</label>
+              <select class="form-select payment-input">
+                <option value="">Choose a bank...</option>
+                <option value="sbi">State Bank of India</option>
+                <option value="hdfc">HDFC Bank</option>
+                <option value="icici">ICICI Bank</option>
+                <option value="axis">Axis Bank</option>
+              </select>
+              <div class="invalid-feedback">Please select a bank.</div>
+            </div>
+          </div>
+
+          <!-- Wallet Details Pane -->
+          <div id="pane-Wallet" class="payment-details-pane">
+            <div class="mb-3">
+              <label class="form-label">Select Wallet</label>
+              <select class="form-select payment-input">
+                <option value="">Choose a wallet...</option>
+                <option value="paytm">Paytm</option>
+                <option value="amazon">Amazon Pay</option>
+                <option value="phonepe">PhonePe</option>
+              </select>
+              <div class="invalid-feedback">Please select a wallet.</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Booking Policies -->
+        <div class="payment-section">
+          <h3 class="payment-section-title">Booking Policies & Agreement</h3>
+          <p class="text-muted" style="font-size: 0.9rem;">
+            <strong>Cancellation Policy:</strong> Free cancellation up to 48 hours before check-in. After that, a 50% refund applies.<br>
+            <strong>Hotel Rules:</strong> No smoking. Pets are not allowed. Quiet hours are from 10 PM to 7 AM.
+          </p>
+          
+          <div class="form-check mt-3">
+            <input class="form-check-input" type="checkbox" id="termsCheck" required>
+            <label class="form-check-label" for="termsCheck" style="font-size: 0.95rem;">
+              I agree to the <a href="/terms" target="_blank">Terms & Conditions</a>, <a href="/privacy" target="_blank">Privacy Policy</a>, and the booking policies stated above.
+            </label>
+            <div class="invalid-feedback">You must agree to the terms and conditions to proceed.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Summary -->
+      <div class="col-lg-5 col-xl-4">
+        <div class="booking-summary-card">
+          <%
+            let imageUrl = "https://images.unsplash.com/photo-1522798514352-25b4122d4f82?q=80&w=800&auto=format&fit=crop";
+            if (listing.images && listing.images.length > 0) imageUrl = listing.images[0].url;
+            else if (listing.image && listing.image.url) imageUrl = listing.image.url;
+          %>
+          <img src="<%= imageUrl %>" alt="<%= listing.title %>" class="summary-hotel-img">
+          
+          <h4 class="mb-1 fw-bold"><%= listing.title %></h4>
+          <p class="text-muted small mb-3"><i class="fa-solid fa-location-dot me-1"></i> <%= listing.location %>, <%= listing.country %></p>
+          
+          <div class="d-flex justify-content-between mb-2">
+            <div class="fw-semibold">Check-in</div>
+            <div><%= new Date(checkIn).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) %></div>
+          </div>
+          <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+            <div class="fw-semibold">Check-out</div>
+            <div><%= new Date(checkOut).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) %></div>
+          </div>
+          
+          <div class="d-flex justify-content-between mb-2 text-muted">
+            <div>Guests</div>
+            <div><%= guests %> <%= guests > 1 ? 'Guests' : 'Guest' %></div>
+          </div>
+          <div class="d-flex justify-content-between mb-2 text-muted">
+            <div>Length of Stay</div>
+            <div><%= days %> <%= days > 1 ? 'Nights' : 'Night' %></div>
+          </div>
+
+          <div class="price-breakdown">
+            <div class="price-row">
+              <div>Room Price x <%= days %> nights</div>
+              <div>₹<%= (days * pricePerNight).toLocaleString('en-IN') %></div>
+            </div>
+            <% if (extraGuestCharge > 0) { %>
+              <div class="price-row">
+                <div>Extra Guest Charge</div>
+                <div>₹<%= extraGuestCharge.toLocaleString('en-IN') %></div>
+              </div>
+            <% } %>
+            <div class="price-row">
+              <div>Taxes & GST (18%)</div>
+              <div>₹<%= gst.toLocaleString('en-IN') %></div>
+            </div>
+            
+            <div class="price-total">
+              <div>Total Amount</div>
+              <div>₹<%= totalPrice.toLocaleString('en-IN') %></div>
+            </div>
+          </div>
+
+          <div class="security-badge">
+            <i class="fa-solid fa-lock fs-4"></i>
+            <div>
+              <div class="fw-bold fs-6">Secure Checkout</div>
+              <div class="small">Your payment info is encrypted and secure.</div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-pay-now mt-4" id="payBtn">
+            <span class="btn-text">Confirm Booking</span>
+            <div class="spinner-container">
+              <div class="spinner-border spinner-border-sm text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Handle Payment Method Switching
+  const methodCards = document.querySelectorAll('.payment-method-card');
+  const methodPanes = document.querySelectorAll('.payment-details-pane');
+  const selectedMethodInput = document.getElementById('selectedPaymentMethod');
+
+  methodCards.forEach(card => {
+    card.addEventListener('click', () => {
+      // Remove active from all
+      methodCards.forEach(c => c.classList.remove('active'));
+      methodPanes.forEach(p => p.classList.remove('active'));
+      
+      // Make clicked active
+      card.classList.add('active');
+      const method = card.dataset.method;
+      selectedMethodInput.value = method;
+      
+      const pane = document.getElementById('pane-' + method);
+      if(pane) {
+        pane.classList.add('active');
+      }
+
+      // Update required attributes based on active pane
+      document.querySelectorAll('.payment-input').forEach(input => input.removeAttribute('required'));
+      if(pane) {
+        pane.querySelectorAll('.payment-input').forEach(input => input.setAttribute('required', 'true'));
+      }
+    });
+  });
+
+  // Handle Form Submission and Simulation
+  const form = document.getElementById('paymentForm');
+  const payBtn = document.getElementById('payBtn');
+
+  form.addEventListener('submit', function(event) {
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+      form.classList.add('was-validated');
+    } else {
+      // Form is valid, simulate payment
+      event.preventDefault(); // Prevent immediate submission
+      
+      // UI updates for loading
+      payBtn.disabled = true;
+      payBtn.classList.add('btn-loading');
+      
+      const btnText = payBtn.querySelector('.btn-text');
+      btnText.style.visibility = 'visible';
+      btnText.innerHTML = 'Processing Payment...';
+      btnText.style.marginRight = '25px'; // make room for spinner
+
+      // Simulate 2.5 seconds network delay
+      setTimeout(() => {
+        form.submit();
+      }, 2500);
+    }
+  }, false);
+</script>

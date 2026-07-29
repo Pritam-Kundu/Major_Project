@@ -1,129 +1,240 @@
 <% layout("layouts/boilerplate") %>
 
-    <div class="container mt-4">
-        <h2 class="mb-4">
-            My Bookings
-        </h2>
+<style>
+  .booking-card {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .booking-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  }
+  .booking-img-wrapper {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+  }
+  .booking-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .booking-card:hover .booking-img {
+    transform: scale(1.05);
+  }
+  .booking-status-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .booking-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .booking-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .booking-location {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .booking-dates-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    background: #f8f9fa;
+    padding: 14px;
+    border-radius: 10px;
+    margin-bottom: 1.25rem;
+    border: 1px solid #f0f0f0;
+  }
+  .date-box {
+    display: flex;
+    flex-direction: column;
+  }
+  .date-box:first-child {
+    border-right: 1px solid #e0e0e0;
+  }
+  .date-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #888;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+  }
+  .date-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #222;
+  }
+  .booking-details-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem 0;
+  }
+  .booking-details-list li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    color: #555;
+  }
+  .booking-details-list li.total {
+    border-top: 1px dashed #ccc;
+    padding-top: 10px;
+    margin-top: 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #111;
+  }
+  .cancel-policy-box {
+    background: #fffdf5;
+    border: 1px solid #ffe69c;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 0.85rem;
+    color: #664d03;
+    margin-bottom: 1.5rem;
+  }
+  .cancel-policy-box ul {
+    padding-left: 1.2rem;
+    margin-bottom: 0;
+    margin-top: 6px;
+  }
+  .booking-actions {
+    margin-top: auto; /* Pushes buttons to the bottom of the card */
+  }
+</style>
 
-        <% if(bookings.length===0){ %>
-            <div class="alert alert-info">
-                You haven't booked anything yet.
+<div class="container mt-5 mb-5">
+  <h2 class="mb-4 fw-bold" style="font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #222;">
+    My Trips
+  </h2>
+
+  <% if(bookings.length === 0){ %>
+    <div class="text-center py-5 my-5 bg-light rounded-4 border">
+      <i class="fa-solid fa-plane-departure text-muted mb-3" style="font-size: 4rem; opacity: 0.5;"></i>
+      <h3 class="fw-bold">No trips booked... yet!</h3>
+      <p class="text-muted fs-5">Time to dust off your bags and start planning your next adventure.</p>
+      <a href="/listings" class="btn btn-dark px-5 py-3 mt-3 fw-bold rounded-pill text-uppercase" style="letter-spacing: 1px;">Start Exploring</a>
+    </div>
+  <% } else { %>
+    <div class="row g-4">
+      <% bookings.forEach(booking => { %>
+        <div class="col-12 col-md-6 col-xl-4">
+          <div class="booking-card">
+            
+            <div class="booking-img-wrapper">
+              <img src="<%= booking.listing.image.url %>" class="booking-img" alt="<%= booking.listing.title %>">
+              <span class="badge booking-status-badge <%= (booking.status === 'Booked' || booking.status === 'Confirmed') ? 'bg-success' : 'bg-danger' %>">
+                <%- (booking.status === 'Booked' || booking.status === 'Confirmed') ? '<i class="fa-solid fa-check me-1"></i> Confirmed' : '<i class="fa-solid fa-xmark me-1"></i> Cancelled' %>
+              </span>
             </div>
 
-            <% } %>
-                <div class="row">
-                    <% bookings.forEach(booking=>{ %>
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 shadow-sm">
-                                <img src="<%= booking.listing.image.url %>" class="card-img-top"
-                                    style="height:220px;object-fit:cover;">
-                                <div class="card-body">
-                                    <h5>
-                                        <%= booking.listing.title %>
-                                    </h5>
-                                    <p>
+            <div class="booking-body">
+              <h5 class="booking-title" title="<%= booking.listing.title %>"><%= booking.listing.title %></h5>
+              <div class="booking-location">
+                <i class="fa-solid fa-location-dot text-danger"></i> <%= booking.listing.location %>
+              </div>
 
-                                        📍
-
-                                        <%= booking.listing.location %>
-
-                                    </p>
-
-                                    <p>
-
-                                        <b>Check In:</b>
-
-                                        <%= booking.checkIn.toDateString() %>
-
-                                    </p>
-
-                                    <p>
-
-                                        <b>Check Out:</b>
-
-                                        <%= booking.checkOut.toDateString() %>
-
-                                    </p>
-
-                                    <p>
-
-                                        <b>Guests:</b>
-
-                                        <%= booking.guests %>
-
-                                    </p>
-
-                                    <p>
-
-                                        <% const subtotal=booking.subtotal ?? booking.totalPrice; const gst=booking.gst
-                                            ?? subtotal * 0.18; const grandTotal=booking.subtotal ? booking.totalPrice :
-                                            subtotal + gst; %>
-
-                                            <p>
-                                                <strong>Subtotal:</strong>
-                                                ₹<%= subtotal.toLocaleString("en-IN") %>
-                                            </p>
-
-                                            <p>
-                                                <strong>GST (18%):</strong>
-                                                ₹<%= gst.toLocaleString("en-IN") %>
-                                            </p>
-
-                                            <h5>
-                                                Grand Total:
-                                                ₹<%= grandTotal.toLocaleString("en-IN") %>
-                                            </h5>
-                                    </p>
-
-                                    <p>
-
-                                        <b>Status:</b>
-
-                                        <!-- <span class="badge bg-success">
-
-                                            <%= booking.status %>
-
-                                        </span> -->
-                                        <span class="badge <%= booking.status==='Booked'
-                                        ?'bg-success'
-                                        :'bg-danger' %>">
-                                            <%= booking.status %>
-                                        </span>
-
-                                    </p>
-
-                                    <% if(booking.status==="Cancelled" ){ %>
-                                        <div class="alert alert-danger mt-2 mb-0">
-                                            This booking has been cancelled.
-                                        </div>
-                                        <% } %>
-
-                                            <a href="/listings/<%= booking.listing._id %>" class="btn btn-dark w-100">
-                                                View Property
-                                            </a>
-                                            <% if(booking.status==="Booked" ){ %>
-
-                                                <form action="/bookings/<%= booking._id %>/cancel?_method=PUT"
-                                                    method="POST" class="mt-2">
-
-                                                    <button class="btn btn-outline-danger w-100"
-                                                        onclick="return confirm('Are you sure you want to cancel this booking?')">
-
-                                                        Cancel Booking
-
-                                                    </button>
-
-                                                </form>
-
-                                                <% } %>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <% }) %>
-
+              <div class="booking-dates-grid">
+                <div class="date-box">
+                  <span class="date-label">Check-in</span>
+                  <span class="date-value"><%= booking.checkIn.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
                 </div>
+                <div class="date-box ms-2">
+                  <span class="date-label">Checkout</span>
+                  <span class="date-value"><%= booking.checkOut.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
+                </div>
+              </div>
 
+              <% 
+                const subtotal = booking.subtotal ?? booking.totalPrice; 
+                const gst = booking.gst ?? subtotal * 0.18; 
+                const grandTotal = booking.subtotal ? booking.totalPrice : subtotal + gst; 
+                
+                const now = new Date();
+                const timeDiff = new Date(booking.checkIn).getTime() - now.getTime();
+                const hoursLeft = timeDiff / (1000 * 60 * 60);
+                let refundEstimate = 0;
+                if(hoursLeft >= 48) refundEstimate = grandTotal;
+                else if(hoursLeft >= 24) refundEstimate = grandTotal * 0.5;
+              %>
+
+              <ul class="booking-details-list">
+                <li><span>Guests</span> <span><%= booking.guests %> Guest<%= booking.guests > 1 ? 's' : '' %></span></li>
+                <li><span>Subtotal</span> <span>₹<%= subtotal.toLocaleString("en-IN") %></span></li>
+                <li><span>Taxes & Fees</span> <span>₹<%= gst.toLocaleString("en-IN") %></span></li>
+                <li class="total"><span>Total Paid</span> <span>₹<%= grandTotal.toLocaleString("en-IN") %></span></li>
+              </ul>
+
+              <% if(booking.status === "Cancelled") { %>
+                <div class="alert alert-danger py-3 px-3 mb-4" style="font-size: 0.9rem; border-radius: 10px;">
+                  <strong><i class="fa-solid fa-circle-exclamation me-1"></i> Trip Cancelled</strong><br>
+                  <span class="d-inline-block mt-1">Refund Processed: <b class="text-dark">₹<%= booking.refundAmount ? booking.refundAmount.toLocaleString("en-IN") : "0" %></b></span>
+                </div>
+              <% } else if(booking.status === "Booked" || booking.status === "Confirmed") { %>
+                <div class="cancel-policy-box">
+                  <strong class="text-dark"><i class="fa-solid fa-shield-halved me-1"></i> Cancellation Policy</strong>
+                  <ul>
+                    <li><b>100% refund</b> until <%= booking.cancellationDeadline ? new Date(booking.cancellationDeadline).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : new Date(new Date(booking.checkIn).getTime() - (48 * 60 * 60 * 1000)).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) %></li>
+                    <li><b>50% refund</b> until <%= new Date(new Date(booking.checkIn).getTime() - (24 * 60 * 60 * 1000)).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) %></li>
+                  </ul>
+                  <div class="mt-2 pt-2 border-top border-warning text-danger fw-bold d-flex justify-content-between">
+                    <span>Est. Refund Now:</span>
+                    <span>₹<%= Math.round(refundEstimate).toLocaleString("en-IN") %></span>
+                  </div>
+                </div>
+              <% } %>
+
+              <!-- Action Buttons -->
+              <div class="booking-actions">
+                <a href="/listings/<%= booking.listing._id %>" class="btn btn-dark w-100 mb-2 py-2 fw-bold text-uppercase" style="letter-spacing: 1px; border-radius: 8px;">
+                  View Property
+                </a>
+                
+                <% if(booking.status === "Booked" || booking.status === "Confirmed") { %>
+                  <form action="/bookings/<%= booking._id %>/cancel?_method=PUT" method="POST" class="m-0">
+                    <button type="submit" class="btn btn-outline-danger w-100 py-2 fw-bold text-uppercase" style="letter-spacing: 1px; border-radius: 8px;"
+                      onclick="return confirm('Cancel this trip? Your estimated refund is ₹<%= Math.round(refundEstimate).toLocaleString("en-IN") %>. Do you wish to proceed?')">
+                      Cancel Trip
+                    </button>
+                  </form>
+                <% } %>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      <% }) %>
     </div>
+  <% } %>
+</div>

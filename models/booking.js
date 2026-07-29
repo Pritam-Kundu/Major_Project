@@ -47,8 +47,26 @@ const bookingSchema = new Schema({
 
     status: {
         type: String,
-        enum: ["Booked", "Cancelled"],
+        enum: ["Booked", "Confirmed", "Cancelled"],
         default: "Booked",
+    },
+
+    paymentStatus: {
+        type: String,
+        enum: ["Pending", "Paid", "Failed"],
+        default: "Pending"
+    },
+
+    paymentMethod: {
+        type: String
+    },
+
+    paymentReference: {
+        type: String
+    },
+
+    paymentDate: {
+        type: Date
     },
 
     bookedAt: {
@@ -59,6 +77,15 @@ const bookingSchema = new Schema({
     cancelledAt: {
         type: Date,
         default: null,
+    },
+
+    refundAmount: {
+        type: Number,
+        default: 0,
+    },
+
+    cancellationDeadline: {
+        type: Date,
     },
 });
 

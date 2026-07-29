@@ -34,7 +34,7 @@ router                                              //Index Route and Create Rou
   .get(wrapAsync(listingController.index))
   .post(
     isLoggedIn,
-    upload.single("listing[image]"),
+    upload.array("listing[images]", 10),
     validateListing,                      //After going to mentioned route it will validate the listing after that it will do the further work
     wrapAsync(listingController.createListing)
   )
@@ -54,7 +54,7 @@ router
   .get(wrapAsync(listingController.showListing))
   .put(
     isLoggedIn,
-    upload.single("listing[image]"),
+    upload.array("listing[images]", 10),
     validateListing,
     wrapAsync(listingController.updatedListing)
   )

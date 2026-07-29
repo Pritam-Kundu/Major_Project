@@ -1,15 +1,144 @@
+<style>
+.custom-toast {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fbfaf8; /* Slightly warm off-white, like the image */
+    border-radius: 6px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    z-index: 9999;
+    min-width: 350px;
+    max-width: 90%;
+    border: 1px solid #f0eee9;
+    animation: slideDownToast 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.custom-toast.error {
+    background-color: #fffcfc;
+    border-color: #ffe6e6;
+}
+
+@keyframes slideDownToast {
+    from {
+        top: -100px;
+        opacity: 0;
+    }
+    to {
+        top: 30px;
+        opacity: 1;
+    }
+}
+
+/* Add a class to transition out when dismissed */
+.custom-toast.fade-out {
+    animation: slideUpToast 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUpToast {
+    from {
+        top: 30px;
+        opacity: 1;
+    }
+    to {
+        top: -100px;
+        opacity: 0;
+    }
+}
+
+.custom-toast-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 18px;
+}
+
+.custom-toast-text {
+    flex-grow: 1;
+    font-size: 1.05rem;
+    color: #2c2c2c;
+    margin: 0;
+    margin-right: 20px;
+    font-weight: 400;
+}
+
+.custom-toast-close {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 4px;
+    transition: opacity 0.2s;
+    opacity: 0.6;
+}
+
+.custom-toast-close:hover {
+    opacity: 1;
+}
+</style>
 
 <% if(success && success.length){ %>
-<div class="alert alert-success alert-dismissible fade show col-6 offset-3" role="alert">
-    <%= success %>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="custom-toast success" id="successToast">
+    <div class="custom-toast-icon">
+        <!-- SVG perfectly matching the bell icon from the image -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#876b43" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a6 6 0 0 0-6 6v7H4v2h16v-2h-2V8a6 6 0 0 0-6-6z"></path>
+            <path d="M10 19a2 2 0 1 0 4 0"></path>
+        </svg>
+    </div>
+    <p class="custom-toast-text"><%= success %></p>
+    <button type="button" class="custom-toast-close" onclick="closeToast('successToast')" aria-label="Close">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+    </button>
 </div>
 <% } %>
 
 
 <% if(error && error.length){ %>
-<div class="alert alert-danger alert-dismissible fade show col-6 offset-3" role="alert">
-    <%= error %>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="custom-toast error" id="errorToast">
+    <div class="custom-toast-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+    </div>
+    <p class="custom-toast-text"><%= error %></p>
+    <button type="button" class="custom-toast-close" onclick="closeToast('errorToast')" aria-label="Close">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+    </button>
 </div>
 <% } %>
+
+<script>
+    // Custom dismiss function that adds a fade-out animation before removing
+    function closeToast(id) {
+        const toast = document.getElementById(id);
+        if(toast) {
+            toast.classList.add('fade-out');
+            setTimeout(() => {
+                toast.remove();
+            }, 400); // Wait for animation to finish
+        }
+    }
+    
+    // Auto-dismiss after 6 seconds
+    setTimeout(() => {
+        const sToast = document.getElementById('successToast');
+        if(sToast) closeToast('successToast');
+        
+        const eToast = document.getElementById('errorToast');
+        if(eToast) closeToast('errorToast');
+    }, 6000);
+</script>

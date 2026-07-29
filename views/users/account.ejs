@@ -1,78 +1,479 @@
 <% layout("layouts/boilerplate") %>
 
-    <div class="container mt-5">
+<style>
+  .dashboard-header {
+    background: linear-gradient(135deg, #0071c2, #0056b3);
+    color: white;
+    padding: 3rem 0;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+  }
+  .profile-avatar-large {
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    color: #0071c2;
+    font-size: 2.5rem;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #e7e7e7;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+  }
+  .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #0071c2;
+    margin-bottom: 0.5rem;
+  }
+  .nav-tabs .nav-link {
+    color: #555;
+    font-weight: 600;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 1rem 1.5rem;
+  }
+  .nav-tabs .nav-link:hover {
+    border-color: transparent;
+    color: #0071c2;
+  }
+  .nav-tabs .nav-link.active {
+    color: #0071c2;
+    border-bottom: 3px solid #0071c2;
+    background: transparent;
+  }
+  .booking-list-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e7e7e7;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    background: #fff;
+    transition: box-shadow 0.2s;
+  }
+  @media(min-width: 768px) {
+    .booking-list-card {
+      flex-direction: row;
+    }
+  }
+  .booking-list-card:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+  .booking-img-wrap {
+    width: 100%;
+    height: 200px;
+  }
+  @media(min-width: 768px) {
+    .booking-img-wrap {
+      width: 250px;
+      height: auto;
+    }
+  }
+  .booking-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .booking-details {
+    padding: 1.5rem;
+    flex: 1;
+  }
+  
+  /* Wishlist Grid Styles copied from index/wishlist */
+  .booking-card {
+    border: 1px solid #e7e7e7;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .booking-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+  }
+  .booking-card-img-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+  }
+  .booking-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .badge-heart {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    cursor: pointer;
+    color: #ff385c;
+    z-index: 10;
+  }
+  .booking-card-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+</style>
 
-        <div class="card shadow p-4">
-
-            <div class="text-center">
-
-                <i class="fa-solid fa-circle-user fa-6x text-primary mb-3"></i>
-
-                <h2>
-                    <%= user.username %>
-                </h2>
-
-                <p class="text-muted">
-                    <%= user.email %>
-                </p>
-
-            </div>
-
-            <hr>
-
-            <div class="row text-center">
-
-                <div class="col-md-3">
-                    <h4>
-                        <%= listings %>
-                    </h4>
-                    <p>Listings</p>
-                </div>
-
-                <div class="col-md-3">
-                    <h4>
-                        <%= bookings %>
-                    </h4>
-                    <p>Bookings</p>
-                </div>
-
-                <div class="col-md-3">
-                    <h4>
-                        <%= reviews %>
-                    </h4>
-                    <p>Reviews</p>
-                </div>
-
-                <div class="col-md-3">
-                    <h4>₹<%= totalSpent.toLocaleString("en-IN") %>
-                    </h4>
-                    <p>Total Spent</p>
-                </div>
-
-            </div>
-
-            <hr>
-
-            <div class="d-grid gap-2">
-
-                <a href="/bookings" class="btn btn-outline-primary">
-                    My Bookings
-                </a>
-
-                <a href="/bookings/dashboard" class="btn btn-outline-success">
-                    Host Dashboard
-                </a>
-
-                <a href="/listings/new" class="btn btn-outline-warning">
-                    List Your Property
-                </a>
-
-                <a href="/logout" class="btn btn-danger">
-                    Logout
-                </a>
-
-            </div>
-
-        </div>
-
+<div class="container mt-4 mb-5">
+  
+  <!-- Profile Header -->
+  <div class="dashboard-header d-flex flex-column align-items-center text-center px-3">
+    <div class="profile-avatar-large">
+      <%= user.username.charAt(0).toUpperCase() %>
     </div>
+    <h2 class="mb-1 fw-bold"><%= user.username %></h2>
+    <p class="mb-3 opacity-75"><i class="fa-regular fa-envelope me-2"></i><%= user.email %></p>
+    <div class="d-flex gap-3 mt-2">
+      <a href="/listings/new" class="btn btn-light fw-bold px-4 rounded-pill">Host a Property</a>
+      <a href="/logout" class="btn btn-outline-light fw-bold px-4 rounded-pill">Log out</a>
+    </div>
+  </div>
+
+  <!-- Dashboard Tabs -->
+  <ul class="nav nav-tabs mb-4" id="dashboardTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">Overview</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="upcoming-tab" data-bs-toggle="tab" data-bs-target="#upcoming" type="button" role="tab">Upcoming Trips</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="past-tab" data-bs-toggle="tab" data-bs-target="#past" type="button" role="tab">Past Stays</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="wishlist-tab" data-bs-toggle="tab" data-bs-target="#wishlist" type="button" role="tab">Wishlist</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">My Reviews</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="cancelled-tab" data-bs-toggle="tab" data-bs-target="#cancelled" type="button" role="tab">Cancelled</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link text-success fw-bold" id="offers-tab" data-bs-toggle="tab" data-bs-target="#offers" type="button" role="tab"><i class="fa-solid fa-gift me-1"></i>My Offers</button>
+    </li>
+  </ul>
+
+  <!-- Tab Content -->
+  <div class="tab-content" id="dashboardTabsContent">
+    
+    <!-- Overview Tab -->
+    <div class="tab-pane fade show active" id="overview" role="tabpanel">
+      <div class="row g-4">
+        <div class="col-md-3 col-sm-6">
+          <div class="stat-card">
+            <div class="stat-value"><%= upcomingBookings.length %></div>
+            <div class="text-muted fw-bold">Upcoming Trips</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="stat-card">
+            <div class="stat-value"><%= completedStays.length %></div>
+            <div class="text-muted fw-bold">Past Stays</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="stat-card">
+            <div class="stat-value"><%= userReviews.length %></div>
+            <div class="text-muted fw-bold">Reviews Written</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="stat-card">
+            <div class="stat-value">₹<%= totalSpent.toLocaleString("en-IN") %></div>
+            <div class="text-muted fw-bold">Total Spent</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-5">
+        <h4 class="fw-bold mb-3">Host Tools</h4>
+        <div class="d-flex gap-3">
+          <a href="/bookings/dashboard" class="btn btn-outline-primary fw-bold px-4"><i class="fa-solid fa-chart-line me-2"></i>Host Dashboard</a>
+          <a href="/listings/my-properties" class="btn btn-outline-secondary fw-bold px-4"><i class="fa-solid fa-house-user me-2"></i>Manage My Properties (<%= listingsCount %>)</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming Trips Tab -->
+    <div class="tab-pane fade" id="upcoming" role="tabpanel">
+      <% if (upcomingBookings.length === 0) { %>
+        <div class="alert alert-info border-0 text-center p-5 rounded-4" style="background: #f0f7fa;">
+          <i class="fa-solid fa-suitcase-rolling fa-3x mb-3 text-primary"></i>
+          <h4>No upcoming trips yet</h4>
+          <p class="text-muted">Time to dust off your bags and start planning your next adventure.</p>
+          <a href="/listings" class="btn btn-primary mt-2 px-4 rounded-pill">Start Exploring</a>
+        </div>
+      <% } else { %>
+        <% for(let booking of upcomingBookings) { %>
+          <div class="booking-list-card">
+            <div class="booking-img-wrap">
+              <img src="<%= booking.listing.image.url %>" alt="Property">
+            </div>
+            <div class="booking-details position-relative">
+              <div class="badge bg-success mb-2 position-absolute top-0 end-0 m-3 rounded-pill px-3 py-2">Upcoming</div>
+              <h4 class="fw-bold"><%= booking.listing.title %></h4>
+              <p class="text-muted mb-3"><i class="fa-solid fa-location-dot me-2"></i><%= booking.listing.location %>, <%= booking.listing.country %></p>
+              
+              <div class="row mb-3">
+                <div class="col-sm-6 mb-2 mb-sm-0">
+                  <div class="fw-bold text-dark">Check-in</div>
+                  <div class="text-muted"><%= booking.checkIn.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) %></div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="fw-bold text-dark">Check-out</div>
+                  <div class="text-muted"><%= booking.checkOut.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) %></div>
+                </div>
+              </div>
+              
+              <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                <div class="fw-bold fs-5">Total: ₹<%= booking.totalPrice.toLocaleString("en-IN") %></div>
+                <a href="/listings/<%= booking.listing._id %>" class="btn btn-outline-primary rounded-pill">View Property</a>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      <% } %>
+    </div>
+
+    <!-- Past Stays Tab -->
+    <div class="tab-pane fade" id="past" role="tabpanel">
+      <% if (completedStays.length === 0) { %>
+        <div class="alert alert-light border text-center p-5 rounded-4">
+          <i class="fa-solid fa-clock-rotate-left fa-3x mb-3 text-secondary"></i>
+          <h4>No completed stays</h4>
+          <p class="text-muted">You haven't completed any trips with us yet.</p>
+        </div>
+      <% } else { %>
+        <% for(let booking of completedStays) { %>
+          <div class="booking-list-card">
+            <div class="booking-img-wrap">
+              <img src="<%= booking.listing.image.url %>" style="filter: grayscale(20%);" alt="Property">
+            </div>
+            <div class="booking-details position-relative">
+              <div class="badge bg-secondary mb-2 position-absolute top-0 end-0 m-3 rounded-pill px-3 py-2">Completed</div>
+              <h4 class="fw-bold"><%= booking.listing.title %></h4>
+              <p class="text-muted mb-3"><i class="fa-solid fa-location-dot me-2"></i><%= booking.listing.location %>, <%= booking.listing.country %></p>
+              
+              <div class="text-muted mb-3">
+                <i class="fa-regular fa-calendar me-2"></i>Stayed from <%= booking.checkIn.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) %> to <%= booking.checkOut.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+              </div>
+              
+              <div class="mt-3 pt-3 border-top d-flex justify-content-between align-items-center">
+                <a href="/listings/<%= booking.listing._id %>" class="btn btn-outline-dark rounded-pill">Book Again</a>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      <% } %>
+    </div>
+
+    <!-- Wishlist Tab -->
+    <div class="tab-pane fade" id="wishlist" role="tabpanel">
+      <% if(!wishlist || wishlist.length === 0) { %>
+        <div class="alert alert-light border text-center p-5 rounded-4">
+          <i class="fa-regular fa-heart fa-3x mb-3 text-danger"></i>
+          <h4>Your wishlist is empty</h4>
+          <p class="text-muted">Save your favorite properties to keep track of them here.</p>
+        </div>
+      <% } else { %>
+        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4">
+          <% for(let listing of wishlist) { %>
+            <div class="col">
+              <a href="/listings/<%= listing._id %>" class="text-decoration-none">
+                <div class="booking-card">
+                  <div class="booking-card-img-container">
+                    <img src="<%= listing.image.url %>" class="booking-card-img" alt="listing_image">
+                    <div class="badge-heart" onclick="event.preventDefault(); document.getElementById('dash-wishlist-form-<%= listing._id %>').submit();">
+                      <i class="fa-solid fa-heart text-danger"></i>
+                    </div>
+                    <form id="dash-wishlist-form-<%= listing._id %>" action="/wishlist/<%= listing._id %>" method="POST" style="display: none;"></form>
+                  </div>
+                  <div class="booking-card-body">
+                    <h6 class="fw-bold text-dark text-truncate mb-1"><%= listing.title %></h6>
+                    <div class="text-muted small mb-2"><%= listing.location %></div>
+                    <div class="mt-auto fw-bold text-dark">
+                      ₹<%= listing.price.toLocaleString("en-IN") %> <span class="fw-normal text-muted small">/ night</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- My Reviews Tab -->
+    <div class="tab-pane fade" id="reviews" role="tabpanel">
+      <% if(userReviews.length === 0) { %>
+        <div class="alert alert-light border text-center p-5 rounded-4">
+          <i class="fa-regular fa-star fa-3x mb-3 text-warning"></i>
+          <h4>No reviews yet</h4>
+          <p class="text-muted">Share your experiences after your stays to help other travelers.</p>
+        </div>
+      <% } else { %>
+        <div class="row g-4">
+          <% for(let review of userReviews) { %>
+            <div class="col-md-6">
+              <div class="card h-100 border rounded-4 shadow-sm" style="transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                <div class="card-body p-4">
+                  <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                      <% if(review.listing) { %>
+                        <h6 class="text-uppercase fw-bold text-muted mb-1" style="font-size: 0.75rem; letter-spacing: 1px;">Review for</h6>
+                        <h5 class="fw-bold mb-0"><a href="/listings/<%= review.listing._id %>" class="text-dark text-decoration-none" onmouseover="this.style.color='#0071c2'" onmouseout="this.style.color='#212529'"><%= review.listing.title %></a></h5>
+                      <% } else { %>
+                        <h5 class="fw-bold mb-0 text-dark">Unknown Property</h5>
+                      <% } %>
+                    </div>
+                    <div class="bg-light px-3 py-1 rounded-pill d-flex align-items-center border">
+                      <i class="fa-solid fa-star text-warning me-1"></i>
+                      <span class="fw-bold"><%= review.rating %>.0</span>
+                    </div>
+                  </div>
+                  <div class="review-quote-box bg-light p-3 rounded-3 mt-4 position-relative border">
+                    <i class="fa-solid fa-quote-left text-muted opacity-25 fs-4 position-absolute top-0 start-0 ms-2 mt-2"></i>
+                    <p class="card-text text-dark ms-4 mb-0 fst-italic" style="line-height: 1.6;">"<%= review.comment %>"</p>
+                  </div>
+                </div>
+                <div class="card-footer bg-transparent border-top-0 text-muted small px-4 pb-4">
+                  <i class="fa-regular fa-clock me-1"></i> Posted on <%= new Date(review.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+                </div>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+    
+    <!-- Cancelled Tab -->
+    <div class="tab-pane fade" id="cancelled" role="tabpanel">
+      <% if (cancelledBookings.length === 0) { %>
+        <div class="alert alert-light border text-center p-5 rounded-4">
+          <i class="fa-solid fa-ban fa-3x mb-3 text-secondary"></i>
+          <h4>No cancelled bookings</h4>
+        </div>
+      <% } else { %>
+        <% for(let booking of cancelledBookings) { %>
+          <div class="card border mb-4 rounded-4 shadow-sm" style="transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+            <div class="card-body p-4 d-flex align-items-center flex-wrap flex-md-nowrap gap-4">
+              <div class="rounded-3 overflow-hidden flex-shrink-0" style="width: 100px; height: 80px;">
+                <img src="<%= booking.listing.image.url %>" alt="Property" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(50%);">
+              </div>
+              <div class="flex-grow-1">
+                <h4 class="fw-bold mb-1"><%= booking.listing.title %></h4>
+                <div class="text-muted d-flex align-items-center flex-wrap gap-3">
+                  <span><i class="fa-solid fa-location-dot me-1"></i><%= booking.listing.location %>, <%= booking.listing.country %></span>
+                  <span><i class="fa-regular fa-calendar me-1"></i> <%= booking.checkIn.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) %> - <%= booking.checkOut.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
+                </div>
+              </div>
+              <div class="d-flex flex-column align-items-md-end mt-2 mt-md-0">
+                <div class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-4 py-2 border border-danger border-opacity-25 fw-bold mb-2">
+                  <i class="fa-solid fa-ban me-1"></i> Cancelled
+                </div>
+                <div class="fw-bold text-muted text-decoration-line-through">₹<%= booking.totalPrice.toLocaleString("en-IN") %></div>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      <% } %>
+    </div>
+
+    <!-- Claimed Offers Tab -->
+    <div class="tab-pane fade" id="offers" role="tabpanel">
+      <% if (!user.claimedOffers || user.claimedOffers.length === 0) { %>
+        <div class="alert alert-light border text-center p-5 rounded-4">
+          <i class="fa-solid fa-tags fa-3x mb-3 text-secondary opacity-50"></i>
+          <h4>No offers claimed yet</h4>
+          <p class="text-muted">Explore our exclusive deals and claim them to save on your next trip.</p>
+          <a href="/offers" class="btn btn-primary mt-2 px-4 rounded-pill">View Offers</a>
+        </div>
+      <% } else { %>
+        <div class="row g-4">
+          <% for(let offer of user.claimedOffers) { 
+               const isExpired = new Date(offer.expiryDate) < new Date();
+          %>
+            <div class="col-md-6 col-lg-4">
+              <div class="card h-100 border-0 rounded-4 shadow-sm position-relative overflow-hidden <%= isExpired ? 'opacity-75' : '' %>" style="background: #fdfbfb;">
+                <% if(isExpired) { %>
+                  <div class="position-absolute top-0 end-0 bg-secondary text-white px-3 py-1 m-3 rounded-pill fw-bold" style="font-size:0.8rem; z-index:10;">Expired</div>
+                <% } else { %>
+                  <div class="position-absolute top-0 end-0 bg-success text-white px-3 py-1 m-3 rounded-pill fw-bold" style="font-size:0.8rem; z-index:10;">Active</div>
+                <% } %>
+                <div style="height: 140px; overflow: hidden;">
+                  <img src="<%= offer.image %>" class="w-100 h-100 object-fit-cover <%= isExpired ? 'grayscale' : '' %>" alt="Offer image">
+                </div>
+                <div class="card-body p-4 d-flex flex-column">
+                  <div class="d-flex align-items-center mb-2">
+                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-2 py-1 me-2" style="font-size:0.7rem;"><i class="fa-solid fa-tag me-1"></i> <%= offer.category %></span>
+                  </div>
+                  <h5 class="fw-bold mb-1"><%= offer.title %></h5>
+                  <p class="text-muted small mb-3 flex-grow-1"><%= offer.description %></p>
+                  
+                  <div class="bg-light border rounded-3 p-3 text-center mb-3">
+                    <div class="fw-bold fs-5 text-dark mb-1"><%= offer.discount %></div>
+                    <div class="text-muted small">Valid till <%= new Date(offer.expiryDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></div>
+                  </div>
+                  
+                  <% if(offer.promoCode) { %>
+                    <button class="btn btn-outline-secondary w-100 fw-bold border-2 d-flex justify-content-between align-items-center" onclick="copyPromoCode('<%= offer.promoCode %>', this)" <%= isExpired ? 'disabled' : '' %>>
+                      <span>Code: <span class="text-dark"><%= offer.promoCode %></span></span>
+                      <i class="fa-regular fa-copy"></i>
+                    </button>
+                  <% } else { %>
+                    <button class="btn btn-outline-secondary w-100 fw-bold" disabled>No Code Required</button>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          <% } %>
+        </div>
+        
+        <script>
+          function copyPromoCode(code, btn) {
+            navigator.clipboard.writeText(code).then(() => {
+              const originalHtml = btn.innerHTML;
+              btn.innerHTML = '<i class="fa-solid fa-check text-success"></i> Copied!';
+              btn.classList.add('border-success');
+              setTimeout(() => {
+                btn.innerHTML = originalHtml;
+                btn.classList.remove('border-success');
+              }, 2000);
+            });
+          }
+        </script>
+      <% } %>
+    </div>
+
+  </div>
+</div>

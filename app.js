@@ -17,6 +17,9 @@ const listingRouter = require("./routes/listing.js")
 const reviewRouter = require("./routes/review.js")
 const userRouter = require("./routes/user.js")
 const bookingRouter = require("./routes/booking.js");
+const notificationRouter = require("./routes/notification.js");
+const offerRouter = require("./routes/offer.js");
+const importRouter = require("./routes/import.js");
 
 
 const Listing = require("./models/listing.js");
@@ -92,6 +95,10 @@ app.use("/listings", listingRouter)         //Rest code is in routes->listing.js
 app.use("/listings/:id/reviews", reviewRouter)
 app.use("/", userRouter)
 app.use("/bookings", bookingRouter);
+app.use("/notifications", notificationRouter);
+app.use("/offers", offerRouter);
+app.use("/import", importRouter);
+
 
 
 app.get('/privacy', (req, res) => {

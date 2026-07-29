@@ -1,6 +1,6 @@
 const Review = require("../models/review.js")
 const Listing = require("../models/listing.js")
-
+const { createNotification } = require("./notification");
 
 module.exports.createReview = async(req, res) => {
   let { id } = req.params
@@ -18,6 +18,15 @@ module.exports.createReview = async(req, res) => {
 
   await newReview.save()
   await listing.save()
+  
+  // Trigger Notification to the listing owner
+  await createNotification(
+      listing.owner,
+      'review',
+      'New Review Received',
+      `Someone just left a ${newReview.rating}-star review on your property "${listing.title}".`,
+      `/listings/${listing._id}`
+  );
 
   req.flash("success","Your review has been added!")
   res.redirect(`/listings/${listing._id}`)

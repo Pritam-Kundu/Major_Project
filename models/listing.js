@@ -13,6 +13,10 @@ const listingSchema = new Schema({
         url: String,
         filename: String,
     },
+    images: [{
+        url: String,
+        filename: String,
+    }],
     price: Number,
     location: String,
     country: String,
@@ -27,7 +31,21 @@ const listingSchema = new Schema({
     category: {
         type: String,
         enum: ["Beaches", "Mountains", "Forests", "Castles", "Pools", "Campings", "Farms", "Arctic", "House Boats", "Domes"]
-    }
+    },
+    latitude: Number,
+    longitude: Number,
+    source: {
+        type: String,
+        default: "Manual"
+    },
+    osmId: {
+        type: String,
+        sparse: true,
+        unique: true
+    },
+    lastUpdated: Date,
+    website: String,
+    phone: String
 })
 
 

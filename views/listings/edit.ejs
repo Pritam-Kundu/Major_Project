@@ -1,139 +1,275 @@
 <% layout("layouts/boilerplate") %>
-<body>
-  <div class="row mt-3">
-    <div class="col-8 offset-2">
-      <h3>Edit Listing</h3>
-      <form
-        action="/listings/<%= listing._id %>?_method=PUT"
-        method="post"
-        novalidate class="needs-validation"
-        enctype="multipart/form-data"
-      >
-        <div>
-          <label for="title" class="form-label">Title: </label>
-          <input
-            type="text"
-            name="listing[title]"
-            value="<%= listing.title %>"
-            class="form-control"
-            required
-          />
-          <div class="invalid-feedback">Please give a title</div>
+
+<style>
+  /* Base Container overriding standard margins */
+  .listing-container {
+    background-color: #fbfaf8; /* Soft cream/off-white background matching login */
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    margin: 2rem auto 4rem auto;
+    padding: 3rem 2rem;
+    max-width: 800px;
+  }
+
+  @media (min-width: 768px) {
+    .listing-container {
+      padding: 4rem 5rem;
+    }
+  }
+
+  /* Typography */
+  .auth-brand {
+    font-size: 1.25rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    font-weight: 500;
+    color: #222;
+    text-align: center;
+  }
+
+  .auth-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 3rem;
+    color: #111;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .auth-subtitle {
+    color: #555;
+    font-size: 1.05rem;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  /* Form Elements */
+  .auth-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+  }
+  
+  .auth-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #222;
+  }
+
+  .auth-input {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #c4c4c4;
+    padding: 14px 16px;
+    font-size: 1rem;
+    color: #333;
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.2s;
+  }
+  
+  .auth-input:focus {
+    outline: none;
+    border-color: #222;
+    background: #fff;
+    box-shadow: none;
+  }
+
+  /* Buttons */
+  .auth-btn-dark {
+    width: 100%;
+    background: #000;
+    color: #fff;
+    border: 1px solid #000;
+    padding: 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 2px;
+    margin-top: 1.5rem;
+  }
+  .auth-btn-dark:hover {
+    background: #333;
+  }
+  
+  .invalid-feedback {
+    display: none;
+    color: #d93025;
+    font-size: 0.85rem;
+    margin-top: -1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .valid-feedback {
+    display: none;
+    color: #198754;
+    font-size: 0.85rem;
+    margin-top: -1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .was-validated .form-control:invalid ~ .invalid-feedback {
+    display: block;
+  }
+  .was-validated .form-control:valid ~ .valid-feedback {
+    display: block;
+  }
+</style>
+
+<div class="listing-container">
+  <div class="auth-brand">Wanderlust</div>
+  <h1 class="auth-title">Edit Property</h1>
+  <p class="auth-subtitle">Update the details of your property to keep it looking great.</p>
+  
+  <form
+    action="/listings/<%= listing._id %>?_method=PUT"
+    method="post"
+    novalidate
+    class="needs-validation"
+    enctype="multipart/form-data"
+  >
+    <div class="auth-label-row">
+      <label for="title" class="auth-label">Title</label>
+    </div>
+    <input
+      type="text"
+      name="listing[title]"
+      id="title"
+      value="<%= listing.title %>"
+      placeholder="Catchy Property Title"
+      class="auth-input form-control"
+      required
+    />
+    <div class="valid-feedback">Title looks good!</div>
+    <div class="invalid-feedback">Please enter a property title.</div>
+
+    <div class="auth-label-row">
+      <label for="description" class="auth-label">Description</label>
+    </div>
+    <textarea
+      name="listing[description]"
+      id="description"
+      placeholder="Describe your property in detail..."
+      class="auth-input form-control"
+      rows="4"
+      required
+    ><%= listing.description %></textarea>
+    <div class="invalid-feedback">Please enter a short description</div>
+
+    <div class="auth-label-row">
+      <label class="auth-label">Original Images</label>
+    </div>
+    <div class="d-flex flex-wrap gap-3 mb-4">
+      <% for(let imgUrl of originalImageUrls) { %>
+        <img src="<%= imgUrl %>" alt="Listing Image" style="width: 150px; height: 100px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;">
+      <% } %>
+    </div>
+
+    <div class="auth-label-row">
+      <label for="image" class="auth-label">Upload Additional Images</label>
+    </div>
+    <input
+      type="file"
+      name="listing[images]"
+      id="image"
+      class="auth-input form-control"
+      multiple
+    />
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="auth-label-row">
+          <label for="price" class="auth-label">Price per night (₹)</label>
         </div>
-
-        <br /><br />
-
-        <div>
-          <label for="description" class="form-label">Description: </label>
-          <textarea
-            name="listing[description]"
-            id=""
-            class="form-control"
-            required
-          >
-            <%= listing.description %></textarea
-          >
-          <div class="invalid-feedback">Please enter a short description</div>
-        </div>
-
-        <br /><br />
-
-        <div class="mb-3">
-          Original Listing Image <br>
-          <img src="<%= originalImageUrl %>" alt="">
-        </div>
-
-        <div>
-          <label for="image" class="form-label">Upload New Image: </label>
-          <input
-            type="file"
-            name="listing[image]"
-            class="form-control"
-          />
-        </div>
-
-        <br /><br />
-
-        <div class="row">
-          <div class="col-md-4">
-            <label for="price" class="form-label">Price: </label>
-            <input
-              type="number"
-              name="listing[price]"
-              value="<%= listing.price %>"
-              class="form-control"
-              required
-            />
-            <div class="invalid-feedback">Please enter a valid Price</div>
-          </div>
-
-          <br /><br />
-
-          <div class="col-md-8">
-            <label for="country" class="form-label">Country: </label>
-            <input
-              type="text"
-              name="listing[country]"
-              value="<%= listing.country %>"
-              class="form-control"
-              required
-            />
-            <div class="invalid-feedback">Country should be valid</div>
-          </div>
-        </div>
-
-        <br /><br />
-
-        <div>
-          <label for="location" class="form-label">Location: </label>
-          <input
-            type="text"
-            name="listing[location]"
-            value="<%= listing.location %>"
-            class="form-control"
-            required
-          />
-          <div class="invalid-feedback">Location should be valid</div>
-        </div>
-
-        <br /><br />
-
-        <div style="position: relative">
-        <label for="category" class="form-label">Category: </label>
-        <select name="listing[category]" class="form-control" id="category" required style="appearance: none; -webkit-appearance: none; padding-right: 2.2rem;">
-          <option value="Mountains" <%= listing.category === "Mountains" ? "selected" : "" %>>Mountains</option>
-          <option value="Beaches" <%= listing.category === "Beaches" ? "selected" : "" %>>Beaches</option>
-          <option value="Domes" <%= listing.category === "Domes" ? "selected" : "" %>>Domes</option>
-          <option value="Pools" <%= listing.category === "Pools" ? "selected" : "" %>>Pools</option>
-          <option value="Forests" <%= listing.category === "Forests" ? "selected" : "" %>>Forests</option>
-          <option value="Castles" <%= listing.category === "Castles" ? "selected" : "" %>>Castles</option>
-          <option value="Campings" <%= listing.category === "Campings" ? "selected" : "" %>>Campings</option>
-          <option value="Farms" <%= listing.category === "Farms" ? "selected" : "" %>>Farms</option>
-          <option value="Arctic" <%= listing.category === "Arctic" ? "selected" : "" %>>Arctic</option>
-          <option value="House Boats" <%= listing.category === "House Boats" ? "selected" : "" %>>House Boats</option>
-        </select>
-        <i
-          class="fa-solid fa-chevron-down category-icon"
-          style="
-            position: absolute;
-            right: 28px;
-            top: 70%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            color: #888;
-            font-size: 1rem;
-            z-index: 2;
-          "
-        ></i>
+        <input
+          type="number"
+          name="listing[price]"
+          id="price"
+          value="<%= listing.price %>"
+          placeholder="e.g. 12000"
+          class="auth-input form-control"
+          required
+        />
+        <div class="invalid-feedback">Please enter a valid Price</div>
       </div>
 
-        <br> <br>
-
-        <button type="submit" class="btn btn-dark edit-btn mt-3">Edit</button>
-        <br /><br />
-      </form>
+      <div class="col-md-6">
+        <div class="auth-label-row">
+          <label for="country" class="auth-label">Country</label>
+        </div>
+        <input
+          type="text"
+          name="listing[country]"
+          id="country"
+          value="<%= listing.country %>"
+          placeholder="e.g. India"
+          class="auth-input form-control"
+          required
+        />
+        <div class="invalid-feedback">Country should be valid</div>
+      </div>
     </div>
-  </div>
-</body>
 
+    <div class="row">
+      <div class="col-md-6">
+        <div class="auth-label-row">
+          <label for="location" class="auth-label">Location (City)</label>
+        </div>
+        <input
+          type="text"
+          name="listing[location]"
+          id="location"
+          value="<%= listing.location %>"
+          placeholder="e.g. Shimla"
+          class="auth-input form-control"
+          required
+        />
+        <div class="invalid-feedback">Location should be valid</div>
+      </div>
 
+      <div class="col-md-6">
+        <div style="position: relative;">
+          <div class="auth-label-row">
+            <label for="category" class="auth-label">Property Category</label>
+          </div>
+          <select name="listing[category]" class="auth-input form-control" id="category" style="appearance: none;" required>
+            <option value="Mountains" <%= listing.category === "Mountains" ? "selected" : "" %>>Mountains</option>
+            <option value="Beaches" <%= listing.category === "Beaches" ? "selected" : "" %>>Beaches</option>
+            <option value="Domes" <%= listing.category === "Domes" ? "selected" : "" %>>Domes</option>
+            <option value="Pools" <%= listing.category === "Pools" ? "selected" : "" %>>Pools</option>
+            <option value="Forests" <%= listing.category === "Forests" ? "selected" : "" %>>Forests</option>
+            <option value="Castles" <%= listing.category === "Castles" ? "selected" : "" %>>Castles</option>
+            <option value="Campings" <%= listing.category === "Campings" ? "selected" : "" %>>Campings</option>
+            <option value="Farms" <%= listing.category === "Farms" ? "selected" : "" %>>Farms</option>
+            <option value="Arctic" <%= listing.category === "Arctic" ? "selected" : "" %>>Arctic</option>
+            <option value="House Boats" <%= listing.category === "House Boats" ? "selected" : "" %>>House Boats</option>
+          </select>
+          <i
+            class="fa-solid fa-chevron-down"
+            style="
+              position: absolute;
+              right: 16px;
+              top: 45px;
+              pointer-events: none;
+              color: #888;
+            "
+          ></i>
+          <div class="invalid-feedback">Please select a category</div>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="auth-btn-dark">
+      Update Property <i class="fa-solid fa-check"></i>
+    </button>
+  </form>
+</div>

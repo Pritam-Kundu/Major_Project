@@ -1,434 +1,1289 @@
 <% layout("layouts/boilerplate") %>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+  /* Styling for booked/unavailable dates in Flatpickr */
+  .flatpickr-day.flatpickr-disabled,
+  .flatpickr-day.flatpickr-disabled:hover {
+    color: #ff0000 !important;
+    background: #ffe6e6 !important;
+    border-color: #ffe6e6 !important;
+    text-decoration: line-through;
+    cursor: not-allowed;
+  }
+  
+  /* Base & General Styling */
+  .hotel-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 0.2rem;
+  }
+  .hotel-meta {
+    font-size: 0.95rem;
+    color: #0071c2;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .hotel-meta i {
+    color: #0071c2;
+  }
+  .hotel-stars {
+    color: #febb02;
+    font-size: 0.9rem;
+  }
+  .badge-rating {
+    background-color: #003580;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border-bottom-right-radius: 0;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: inline-block;
+  }
+
+  /* Gallery Grid */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 200px 200px;
+    gap: 10px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+  .gallery-main {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: filter 0.3s;
+  }
+  .gallery-sub {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: filter 0.3s;
+  }
+  .gallery-main:hover, .gallery-sub:hover {
+    filter: brightness(0.85);
+  }
+
+  .btn-view-photos {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    color: #222;
+    border: 1px solid #222;
+    padding: 7px 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background 0.2s;
+    z-index: 2;
+  }
+  .btn-view-photos:hover {
+    background: #f8f9fa;
+  }
+  
+  /* Responsive Gallery */
+  @media(max-width: 768px) {
+    .gallery-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: 300px;
+    }
+    .gallery-sub { display: none; }
+    .gallery-main { grid-column: 1 / 2; grid-row: 1 / 2; }
+  }
+
+  /* Main Body Sections */
+  .section-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #333;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .hotel-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #444;
+    margin-bottom: 2rem;
+  }
+
+  /* Airbnb-style Amenities */
+  .airbnb-amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+    margin-bottom: 1.5rem;
+  }
+  .airbnb-amenity-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px;
+    border: 1px solid #e7e7e7;
+    border-radius: 12px;
+    font-size: 1rem;
+    color: #222;
+    background: #fff;
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .airbnb-amenity-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-color: #222;
+  }
+  .airbnb-amenity-card i {
+    font-size: 1.5rem;
+    color: #222;
+    width: 32px;
+    text-align: center;
+  }
+
+  /* Map Placeholder */
+  .map-container {
+    width: 100%;
+    height: 250px;
+    background-image: url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=800&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+    position: relative;
+    margin-bottom: 2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .map-container::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.1);
+    border-radius: 12px;
+  }
+  .map-btn {
+    position: relative;
+    z-index: 2;
+    background: white;
+    color: #0071c2;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+
+  /* Sticky Booking Card */
+  .booking-sidebar {
+    position: sticky;
+    top: 100px;
+    margin-bottom: 2rem;
+  }
+  .booking-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+    overflow: hidden;
+  }
+  .booking-card-header {
+    background: #003580;
+    color: white;
+    padding: 15px 20px;
+  }
+  .booking-card-header h4 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+  .booking-card-body {
+    padding: 20px;
+  }
+  .booking-summary {
+    background: #f0f7fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-size: 0.95rem;
+  }
+  .booking-summary hr { margin: 10px 0; border-color: #cce5f0; }
+  .btn-reserve {
+    background: #0071c2;
+    color: white;
+    font-weight: 700;
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 1.1rem;
+    transition: background 0.2s;
+  }
+  .btn-reserve:hover {
+    background: #0056b3;
+    color: white;
+  }
+
+  /* Reviews */
+  .review-score-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 1.5rem;
+  }
+  .review-score-box .badge-rating {
+    font-size: 1.8rem;
+    padding: 10px 15px;
+  }
+  .review-score-text h5 {
+    margin: 0;
+    font-weight: 700;
+    color: #222;
+  }
+  .review-score-text p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .review-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    background: #fff;
+    margin-bottom: 1rem;
+    transition: transform 0.2s;
+  }
+  .review-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  .reviewer-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+  .reviewer-avatar {
+    width: 40px;
+    height: 40px;
+    background: #003580;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  .reviewer-name {
+    font-weight: 600;
+    color: #222;
+    margin: 0;
+  }
+  .review-rating-small {
+    color: #febb02;
+    font-size: 0.8rem;
+  }
+  .review-text {
+    color: #444;
+    line-height: 1.5;
+    margin-bottom: 0;
+  }
+  /* Booking.com Style Reviews */
+  .bk-review-card {
+    border: 1px solid #e7e7e7;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+  }
+  @media(min-width: 768px) {
+    .bk-review-card {
+      flex-direction: row;
+      gap: 2rem;
+    }
+  }
+  .bk-reviewer-sidebar {
+    flex: 0 0 25%;
+    max-width: 250px;
+    border-right: 1px solid #e7e7e7;
+    padding-right: 1rem;
+    margin-bottom: 1rem;
+  }
+  @media(max-width: 767px) {
+    .bk-reviewer-sidebar {
+      border-right: none;
+      border-bottom: 1px solid #e7e7e7;
+      padding-right: 0;
+      padding-bottom: 1rem;
+      flex: 1;
+      max-width: 100%;
+    }
+  }
+  .bk-reviewer-avatar {
+    width: 48px;
+    height: 48px;
+    background: #0071c2;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  .bk-reviewer-name {
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.2rem;
+  }
+  .bk-reviewer-country {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .bk-reviewer-country img {
+    width: 16px;
+  }
+  .bk-review-stats {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.2rem;
+  }
+  .bk-verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: #008009;
+    background: #e6f6e5;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .bk-review-main {
+    flex: 1;
+  }
+  .bk-review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+  .bk-review-date {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.2rem;
+  }
+  .bk-review-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+  }
+  .bk-review-score {
+    background: #003580;
+    color: white;
+    font-weight: 700;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 1rem;
+    margin-left: 1rem;
+  }
+  
+  .bk-review-text {
+    font-size: 0.95rem;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  .bk-review-images {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .bk-review-images img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .bk-review-images img:hover {
+    opacity: 0.8;
+  }
+  
+  .bk-helpful-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid #0071c2;
+    background: transparent;
+    color: #0071c2;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .bk-helpful-btn:hover {
+    background: #f0f7fa;
+  }
+</style>
+
+<body>
+  <div class="row mt-4">
+    <!-- Header Section -->
+    <div class="col-12 mb-3 d-flex flex-column flex-md-row justify-content-between align-items-md-start">
+      <div class="mb-3 mb-md-0">
+        <div class="d-flex align-items-center gap-3 mb-2">
+          <div class="badge-rating">9.2</div>
+          <div class="hotel-stars">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <h1 class="hotel-title mb-0"><%= listing.title %></h1>
+          
+          <!-- Wishlist Toggle -->
+          <div class="ms-3 flex-shrink-0">
+            <div class="badge-heart" onclick="document.getElementById('wishlist-form-<%= listing._id %>').submit();" style="width: 40px; height: 40px; background: #fff; border: 1px solid #e7e7e7; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s;">
+              <% if(currUser && currUser.wishlist && currUser.wishlist.includes(listing._id)) { %>
+                <i class="fa-solid fa-heart text-danger fs-5"></i>
+              <% } else { %>
+                <i class="fa-regular fa-heart text-muted fs-5"></i>
+              <% } %>
+            </div>
+            <form id="wishlist-form-<%= listing._id %>" action="/wishlist/<%= listing._id %>" method="POST" style="display: none;"></form>
+          </div>
+        </div>
+        <div class="hotel-meta">
+          <i class="fa-solid fa-location-dot"></i>
+          <a href="#" class="text-decoration-underline" style="color: #0071c2;">
+            <%= listing.location %>, <%= listing.country %>
+          </a>
+          <span>&bull;</span>
+          <span style="color: #008009; font-weight: 600;"><i class="fa-solid fa-leaf me-1"></i>Travel Sustainable Level 3</span>
+        </div>
+      </div>
+      <div class="d-none d-md-block text-end">
+        <p class="mb-1 text-muted">Price from</p>
+        <h3 class="mb-2" style="font-weight: 700;">₹<%= listing.price.toLocaleString("en-IN") %></h3>
+        <button class="btn btn-reserve px-4" onclick="document.getElementById('bookingCard').scrollIntoView({behavior: 'smooth'})">Reserve your apartment</button>
+      </div>
+    </div>
+
+    <!-- Gallery Section -->
+    <div class="col-12 mb-4">
+      <%
+        let displayImages = [];
+        if (listing.images && listing.images.length > 0) {
+            displayImages = listing.images.map(img => img.url);
+        } else if (listing.image && listing.image.url) {
+            displayImages = [listing.image.url];
+        } else {
+            displayImages = ["https://images.unsplash.com/photo-1522798514352-25b4122d4f82?q=80&w=800&auto=format&fit=crop"];
+        }
+      %>
+      
+      <!-- Gallery Grid -->
+      <div class="gallery-grid">
+        <img src="<%= displayImages[0] %>" class="gallery-main" alt="Main Hotel Image" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#allPhotosModal">
+        <img src="<%= displayImages[1] || displayImages[0] %>" class="gallery-sub" alt="Room View" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#allPhotosModal">
+        <img src="<%= displayImages[2] || displayImages[0] %>" class="gallery-sub" alt="Lobby" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#allPhotosModal">
+        <img src="<%= displayImages[3] || displayImages[0] %>" class="gallery-sub" alt="Bathroom" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#allPhotosModal">
+        <img src="<%= displayImages[4] || displayImages[0] %>" class="gallery-sub" alt="Pool" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#allPhotosModal">
+        <button class="btn-view-photos" data-bs-toggle="modal" data-bs-target="#allPhotosModal">
+          <i class="fa-solid fa-images"></i> Show all photos
+        </button>
+      </div>
+    </div>
+
+    <!-- All Photos Modal -->
+    <div class="modal fade" id="allPhotosModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+          <div class="modal-header border-0 pb-0">
+            <h5 class="modal-title ms-3 mt-2 fw-bold">All photos</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body px-5">
+            <div class="row g-3">
+              <% displayImages.forEach((imgUrl, i) => { %>
+                <div class="<%= i % 3 === 0 ? 'col-12' : 'col-md-6' %>">
+                  <img src="<%= imgUrl %>" alt="Photo <%= i+1 %>" class="w-100 rounded" style="object-fit: cover; height: <%= i % 3 === 0 ? '600px' : '400px' %>; cursor: zoom-in;" onclick="openZoomModal(<%= i %>)">
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zoom Modal -->
+    <div class="modal fade" id="imageZoomModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content bg-dark">
+          <div class="modal-header border-0 pb-0">
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body d-flex align-items-center justify-content-center position-relative" style="overflow: hidden;">
+            <img id="zoomedImage" src="" alt="Zoomed" style="max-height: 90vh; max-width: 100%; object-fit: contain; transition: transform 0.15s ease-out; cursor: grab;">
+            <% if (displayImages.length > 1) { %>
+              <button class="carousel-control-prev" style="width: 10%;" type="button" onclick="zoomPrev()">
+                <span class="carousel-control-prev-icon" aria-hidden="true" style="width: 3rem; height: 3rem;"></span>
+              </button>
+              <button class="carousel-control-next" style="width: 10%;" type="button" onclick="zoomNext()">
+                <span class="carousel-control-next-icon" aria-hidden="true" style="width: 3rem; height: 3rem;"></span>
+              </button>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Left Column: Details -->
+    <div class="col-lg-8 pe-lg-4">
+      <div class="hotel-description">
+        <p><%= listing.description %></p>
+        <p>Owned by <strong><%= listing.owner ? listing.owner.username : "Unknown Owner" %></strong>, this property offers excellent facilities, a great location, and a memorable stay for all guests.</p>
+      </div>
+
+      <h3 class="section-title">What this place offers</h3>
+      <div class="airbnb-amenities-grid">
+        <div class="airbnb-amenity-card"><i class="fa-solid fa-wifi"></i> <span>Fast WiFi</span></div>
+        <div class="airbnb-amenity-card"><i class="fa-solid fa-car"></i> <span>Free parking on premises</span></div>
+        <div class="airbnb-amenity-card"><i class="fa-solid fa-water-ladder"></i> <span>Private pool</span></div>
+        <div class="airbnb-amenity-card"><i class="fa-solid fa-kitchen-set"></i> <span>Kitchen</span></div>
+        <div class="airbnb-amenity-card"><i class="fa-solid fa-tv"></i> <span>65" HDTV</span></div>
+        <div class="airbnb-amenity-card"><i class="fa-solid fa-snowflake"></i> <span>Air conditioning</span></div>
+        <div class="airbnb-amenity-card"><i class="fa-solid fa-bell-concierge"></i> <span>Room service</span></div>
+        <div class="airbnb-amenity-card"><i class="fa-solid fa-paw"></i> <span>Pets allowed</span></div>
+      </div>
+      <button class="btn btn-outline-dark rounded-pill px-4 fw-bold mb-4" style="border-width: 1px;">Show all 32 amenities</button>
+
+      <h3 class="section-title">Location</h3>
+      <div class="map-container">
+        <div class="map-btn"><i class="fa-solid fa-map-location-dot me-2"></i>Show on map</div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <h5 style="font-weight: 600; font-size: 1.1rem;"><i class="fa-solid fa-walking me-2 text-muted"></i>What's nearby</h5>
+          <ul class="list-unstyled mt-3" style="color: #444; font-size: 0.95rem;">
+            <li class="d-flex justify-content-between mb-2"><span>City Center</span> <span>1.2 km</span></li>
+            <li class="d-flex justify-content-between mb-2"><span>Central Station</span> <span>2.5 km</span></li>
+            <li class="d-flex justify-content-between mb-2"><span>National Museum</span> <span>3.0 km</span></li>
+            <li class="d-flex justify-content-between mb-2"><span>Airport</span> <span>15 km</span></li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <h5 style="font-weight: 600; font-size: 1.1rem;"><i class="fa-solid fa-clipboard-list me-2 text-muted"></i>House rules</h5>
+          <ul class="list-unstyled mt-3" style="color: #444; font-size: 0.95rem;">
+            <li class="mb-2"><strong>Check-in:</strong> 14:00 - 22:00</li>
+            <li class="mb-2"><strong>Check-out:</strong> 08:00 - 11:00</li>
+            <li class="mb-2"><strong>Cancellation:</strong> Policies vary by date.</li>
+            <li class="mb-2"><strong>Pets:</strong> Pets are not allowed.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 class="section-title">Guest reviews</h3>
+      
+      <!-- RATING BREAKDOWN SECTION -->
+      <div class="rating-breakdown-container mb-4 p-4 border rounded bg-white shadow-sm hover-shadow-transition" style="transition: box-shadow 0.3s ease;">
+        <div class="row align-items-center">
+          <!-- Left: Overall Rating -->
+          <div class="col-md-4 text-center text-md-start mb-4 mb-md-0 border-end-md pe-md-4">
+            <h2 class="display-4 fw-bold mb-0 text-dark"><i class="fa-solid fa-star text-warning me-2" style="font-size: 2.2rem;"></i><%= avgRating || "0.0" %></h2>
+            <p class="text-muted mb-0 mt-1 fs-5 fw-medium">Overall Rating</p>
+            <p class="text-muted mb-0"><%= totalReviews %> <%= totalReviews === 1 ? 'Review' : 'Reviews' %></p>
+          </div>
+          
+          <!-- Right: Progress Bars -->
+          <div class="col-md-8 ps-md-4">
+            <% if (totalReviews === 0) { %>
+              <div class="text-center text-muted py-4">
+                <i class="fa-regular fa-comment-dots fs-1 mb-2"></i>
+                <p class="mb-0 fs-5">No reviews yet.</p>
+                <p class="small">Be the first to share your experience!</p>
+              </div>
+            <% } else { %>
+              <!-- 5 Star -->
+              <div class="d-flex align-items-center mb-2 hover-bg-light rounded p-1" style="transition: background 0.2s;">
+                <div class="text-nowrap" style="width: 40px; font-weight: 600; color: #333;">5 <i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i></div>
+                <div class="progress flex-grow-1 mx-3 rounded-pill bg-light" style="height: 12px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);">
+                  <div class="progress-bar bg-success rounded-pill" role="progressbar" style="width: 0%; transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);" data-width="<%= ratingPercentages[5] %>%" aria-valuenow="<%= ratingPercentages[5] %>" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="text-end text-muted fw-medium" style="width: 40px; font-size: 0.9rem;"><%= ratingPercentages[5] %>%</div>
+              </div>
+
+              <!-- 4 Star -->
+              <div class="d-flex align-items-center mb-2 hover-bg-light rounded p-1" style="transition: background 0.2s;">
+                <div class="text-nowrap" style="width: 40px; font-weight: 600; color: #333;">4 <i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i></div>
+                <div class="progress flex-grow-1 mx-3 rounded-pill bg-light" style="height: 12px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);">
+                  <div class="progress-bar rounded-pill" role="progressbar" style="width: 0%; background-color: #8bc34a; transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);" data-width="<%= ratingPercentages[4] %>%" aria-valuenow="<%= ratingPercentages[4] %>" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="text-end text-muted fw-medium" style="width: 40px; font-size: 0.9rem;"><%= ratingPercentages[4] %>%</div>
+              </div>
+
+              <!-- 3 Star -->
+              <div class="d-flex align-items-center mb-2 hover-bg-light rounded p-1" style="transition: background 0.2s;">
+                <div class="text-nowrap" style="width: 40px; font-weight: 600; color: #333;">3 <i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i></div>
+                <div class="progress flex-grow-1 mx-3 rounded-pill bg-light" style="height: 12px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);">
+                  <div class="progress-bar bg-warning rounded-pill" role="progressbar" style="width: 0%; transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);" data-width="<%= ratingPercentages[3] %>%" aria-valuenow="<%= ratingPercentages[3] %>" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="text-end text-muted fw-medium" style="width: 40px; font-size: 0.9rem;"><%= ratingPercentages[3] %>%</div>
+              </div>
+
+              <!-- 2 Star -->
+              <div class="d-flex align-items-center mb-2 hover-bg-light rounded p-1" style="transition: background 0.2s;">
+                <div class="text-nowrap" style="width: 40px; font-weight: 600; color: #333;">2 <i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i></div>
+                <div class="progress flex-grow-1 mx-3 rounded-pill bg-light" style="height: 12px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);">
+                  <div class="progress-bar rounded-pill" role="progressbar" style="width: 0%; background-color: #fd7e14; transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);" data-width="<%= ratingPercentages[2] %>%" aria-valuenow="<%= ratingPercentages[2] %>" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="text-end text-muted fw-medium" style="width: 40px; font-size: 0.9rem;"><%= ratingPercentages[2] %>%</div>
+              </div>
+
+              <!-- 1 Star -->
+              <div class="d-flex align-items-center hover-bg-light rounded p-1" style="transition: background 0.2s;">
+                <div class="text-nowrap" style="width: 40px; font-weight: 600; color: #333;">1 <i class="fa-solid fa-star text-warning" style="font-size: 0.8rem;"></i></div>
+                <div class="progress flex-grow-1 mx-3 rounded-pill bg-light" style="height: 12px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);">
+                  <div class="progress-bar bg-danger rounded-pill" role="progressbar" style="width: 0%; transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);" data-width="<%= ratingPercentages[1] %>%" aria-valuenow="<%= ratingPercentages[1] %>" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="text-end text-muted fw-medium" style="width: 40px; font-size: 0.9rem;"><%= ratingPercentages[1] %>%</div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Script to trigger progress bar animation -->
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          const progressBars = document.querySelectorAll('.rating-breakdown-container .progress-bar');
+          
+          // Animate after a small delay to make it smooth on load
+          setTimeout(() => {
+            progressBars.forEach(bar => {
+              const width = bar.getAttribute('data-width');
+              if (width) {
+                bar.style.width = width;
+              }
+            });
+          }, 300);
+        });
+      </script>
+      
+      <style>
+        .hover-shadow-transition:hover {
+          box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+        }
+        .hover-bg-light:hover {
+          background-color: #f8f9fa!important;
+        }
+        @media (min-width: 768px) {
+          .border-end-md {
+            border-right: 1px solid #dee2e6;
+          }
+        }
+      </style>
+
+      <div class="reviews-list">
+        <% for(let review of listing.reviews){ %>
+          <% 
+            // Mock Date if not present. Use ObjectId timestamp if possible
+            let rDate = "12 August 2023";
+            if(review._id && review._id.getTimestamp) {
+              rDate = review._id.getTimestamp().toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+            }
+            
+            // Dynamic Title based on rating
+            let title = "Good";
+            if (review.rating === 5) title = "Exceptional";
+            else if (review.rating === 4) title = "Superb";
+            else if (review.rating === 3) title = "Very good";
+            else if (review.rating <= 2) title = "Disappointing";
+          %>
+          <div class="bk-review-card">
+            
+            <!-- Left Column: Reviewer Info -->
+            <div class="bk-reviewer-sidebar">
+              <div class="bk-reviewer-avatar">
+                <%= review.author ? review.author.username.charAt(0).toUpperCase() : "A" %>
+              </div>
+              <div class="bk-reviewer-name"><%= review.author ? review.author.username : "Anonymous guest" %></div>
+              <div class="bk-reviewer-country">
+                <img src="https://flagcdn.com/w20/us.png" alt="United States"> United States
+              </div>
+              
+              <div class="bk-review-stats">
+                <i class="fa-solid fa-pen-to-square" style="color:#777; width:16px;"></i> 1 review
+              </div>
+              
+              <div class="bk-verified-badge mt-2">
+                <i class="fa-solid fa-check"></i> Verified guest
+              </div>
+            </div>
+
+            <!-- Right Column: Review Main -->
+            <div class="bk-review-main d-flex flex-column">
+              <div class="bk-review-header">
+                <div>
+                  <div class="bk-review-date text-muted">Reviewed: <%= rDate %></div>
+                  <h4 class="bk-review-title"><%= title %></h4>
+                </div>
+                <div class="bk-review-score"><%= review.rating %>.0</div>
+              </div>
+              
+              <div class="bk-review-text flex-grow-1">
+                <p><strong><i class="fa-regular fa-face-smile text-success me-1"></i> Liked:</strong> <%= review.comment %></p>
+              </div>
+
+              <!-- Mock Review Images -->
+              <% if(review.rating >= 4) { %>
+                <div class="bk-review-images">
+                  <img src="https://images.unsplash.com/photo-1590490359683-658d3d23f972?q=80&w=150&auto=format&fit=crop" alt="Review Photo">
+                  <img src="https://images.unsplash.com/photo-1560347876-aeef00ee58a4?q=80&w=150&auto=format&fit=crop" alt="Review Photo">
+                </div>
+              <% } %>
+
+              <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                <button class="bk-helpful-btn" onclick="this.innerHTML='<i class=\'fa-solid fa-thumbs-up\'></i> Helpful (1)'; this.style.background='#eef6fb'">
+                  <i class="fa-regular fa-thumbs-up"></i> Helpful
+                </button>
+
+                <!-- Admin/Owner Controls -->
+                <div class="d-flex gap-2">
+                  <% if(currUser && review.author && currUser._id.equals(review.author._id)) { %>
+                    <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
+                      <button class="btn btn-sm text-danger border-0 bg-transparent text-decoration-underline" style="font-weight: 500; padding: 0;">Delete</button>
+                    </form>
+                  <% } else if(currUser && listing.owner && currUser._id.equals(listing.owner._id)) { %>
+                    <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
+                      <button class="btn btn-sm text-danger border-0 bg-transparent text-decoration-underline" style="font-weight: 500; padding: 0;">Delete (Host)</button>
+                    </form>
+                  <% } %>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        <% } %>
+      </div>
+
+      <hr class="my-5">
+
+      <h4>Leave a Review</h4>
+      <form method="post" action="/listings/<%= listing._id %>/reviews" novalidate class="needs-validation mb-5 p-4 border rounded bg-light">
+        <div class="mb-3">
+          <label class="form-label" style="font-weight: 600;">Your Rating</label>
+          <fieldset class="starability-slot">
+            <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+            <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+            <label for="first-rate1" title="Terrible">1 star</label>
+            <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+            <label for="first-rate2" title="Not good">2 stars</label>
+            <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+            <label for="first-rate3" title="Average">3 stars</label>
+            <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+            <label for="first-rate4" title="Very good">4 stars</label>
+            <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+            <label for="first-rate5" title="Amazing">5 stars</label>
+          </fieldset>
+        </div>
+        <div class="mb-3">
+          <label for="comment" class="form-label" style="font-weight: 600;">What did you like or dislike?</label>
+          <textarea name="review[comment]" id="comment" cols="30" rows="4" class="form-control" required placeholder="Tell us about your experience..."></textarea>
+          <div class="invalid-feedback">Please enter your review text.</div>
+        </div>
+        <button class="btn btn-primary px-4">Submit Review</button>
+      </form>
+    </div>
+
+    <!-- Right Column: Sticky Booking Card -->
+    <div class="col-lg-4">
+      <div class="booking-sidebar">
+        <div class="booking-card" id="bookingCard" data-price="<%= listing.price %>">
+          <div class="booking-card-header">
+            <h4>₹<%= listing.price.toLocaleString("en-IN") %> <span style="font-size: 1rem; font-weight: 400; opacity: 0.8;">/ night</span></h4>
+          </div>
+          <div class="booking-card-body">
+            <form action="/bookings/<%= listing._id %>/payment" method="GET" id="bookingForm">
+              <div class="border rounded mb-3" style="border-color: #b0b0b0 !important;">
+                <div class="d-flex border-bottom" style="border-color: #b0b0b0 !important;">
+                  <div class="w-50 p-3 border-end position-relative" style="border-color: #b0b0b0 !important; cursor: pointer;" onclick="document.getElementById('bookingCheckIn').focus()">
+                    <label class="form-label text-muted mb-1" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; pointer-events: none;">Check-in</label>
+                    <input type="text" id="bookingCheckIn" name="checkIn" class="form-control border-0 p-0 shadow-none bg-white" style="font-weight: 600; font-size: 0.95rem; cursor: pointer;" placeholder="Add date" required readonly>
+                  </div>
+                  <div class="w-50 p-3 position-relative" style="cursor: pointer;" onclick="document.getElementById('bookingCheckOut').focus()">
+                    <label class="form-label text-muted mb-1" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; pointer-events: none;">Checkout</label>
+                    <input type="text" id="bookingCheckOut" name="checkOut" class="form-control border-0 p-0 shadow-none bg-white" style="font-weight: 600; font-size: 0.95rem; cursor: pointer;" placeholder="Add date" required readonly>
+                  </div>
+                </div>
+                
+                <div class="d-flex">
+                  <div class="w-50 p-3 border-end position-relative dropdown" style="border-color: #b0b0b0 !important;">
+                    <button class="w-100 text-start border-0 bg-transparent p-0 shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <label class="form-label text-muted mb-1 d-block" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; pointer-events: none; cursor: pointer;">Guests</label>
+                      <div class="d-flex justify-content-between align-items-center" style="font-weight: 600; font-size: 0.95rem;">
+                        <span id="guests-display">2 Guests</span>
+                        <i class="fa-solid fa-chevron-down text-muted" style="font-size: 0.8rem;"></i>
+                      </div>
+                    </button>
+                    <input type="hidden" id="guests" name="guests" value="2">
+                    <ul class="dropdown-menu w-100 shadow-sm border mt-2" style="border-radius: 12px; padding: 8px;">
+                      <li><a class="dropdown-item py-2 mb-1 rounded" href="#" onclick="selectCustomOption('guests', 1, '1 Guest', event)">1 Guest</a></li>
+                      <li><a class="dropdown-item py-2 mb-1 rounded active bg-dark" href="#" onclick="selectCustomOption('guests', 2, '2 Guests', event)">2 Guests</a></li>
+                      <li><a class="dropdown-item py-2 mb-1 rounded" href="#" onclick="selectCustomOption('guests', 3, '3 Guests', event)">3 Guests</a></li>
+                      <li><a class="dropdown-item py-2 mb-1 rounded" href="#" onclick="selectCustomOption('guests', 4, '4 Guests', event)">4 Guests</a></li>
+                      <li><a class="dropdown-item py-2 rounded" href="#" onclick="selectCustomOption('guests', 5, '5+ Guests', event)">5+ Guests</a></li>
+                    </ul>
+                  </div>
+                  
+                  <div class="w-50 p-3 position-relative dropdown">
+                    <button class="w-100 text-start border-0 bg-transparent p-0 shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <label class="form-label text-muted mb-1 d-block" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; pointer-events: none; cursor: pointer;">Rooms</label>
+                      <div class="d-flex justify-content-between align-items-center" style="font-weight: 600; font-size: 0.95rem;">
+                        <span id="rooms-display">1 Room</span>
+                        <i class="fa-solid fa-chevron-down text-muted" style="font-size: 0.8rem;"></i>
+                      </div>
+                    </button>
+                    <input type="hidden" id="rooms" name="rooms" value="1">
+                    <ul class="dropdown-menu w-100 shadow-sm border mt-2" style="border-radius: 12px; padding: 8px;">
+                      <li><a class="dropdown-item py-2 mb-1 rounded active bg-dark" href="#" onclick="selectCustomOption('rooms', 1, '1 Room', event)">1 Room</a></li>
+                      <li><a class="dropdown-item py-2 mb-1 rounded" href="#" onclick="selectCustomOption('rooms', 2, '2 Rooms', event)">2 Rooms</a></li>
+                      <li><a class="dropdown-item py-2 mb-1 rounded" href="#" onclick="selectCustomOption('rooms', 3, '3 Rooms', event)">3 Rooms</a></li>
+                      <li><a class="dropdown-item py-2 rounded" href="#" onclick="selectCustomOption('rooms', 4, '4+ Rooms', event)">4+ Rooms</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="booking-summary" id="bookingSummaryBlock" style="display: none;">
+                <div class="d-flex justify-content-between mb-2">
+                  <span>₹<%= listing.price.toLocaleString("en-IN") %> x <span id="totalNights">0</span> nights</span>
+                  <span>₹<span id="subtotal">0</span></span>
+                </div>
+                <div class="d-flex justify-content-between mb-2 text-muted" style="font-size: 0.85rem;">
+                  <span>Extra Guest Charge</span>
+                  <span>₹<span id="extraGuestCharge">0</span></span>
+                </div>
+                <div class="d-flex justify-content-between mb-2 text-muted" style="font-size: 0.85rem;">
+                  <span>Taxes (GST 18%)</span>
+                  <span>₹<span id="gst">0</span></span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between align-items-center" style="font-weight: 700; font-size: 1.2rem; color: #222;">
+                  <span>Total</span>
+                  <span>₹<span id="totalPrice">0</span></span>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-reserve w-100 mt-3" style="background: linear-gradient(90deg, #e61e4d 0%, #e31c5f 50%, #d70466 100%); font-weight: 700; border: none; padding: 12px; font-size: 1.1rem; border-radius: 8px;">Reserve</button>
+              <div class="text-center mt-3 text-muted" style="font-size: 0.85rem;">You won't be charged yet</div>
+
+              <div class="mt-4 pt-3 border-top text-center d-flex align-items-center justify-content-center gap-2">
+                <i class="fa-solid fa-shield-halved" style="font-size: 1.2rem; color: #008009;"></i>
+                <div class="text-start">
+                  <div style="font-weight: 700; font-size: 0.85rem; color: #222;">Free cancellation</div>
+                  <div class="text-muted" style="font-size: 0.75rem;">Cancel before check-in for a full refund.</div>
+                </div>
+              </div>
+            </form>
+
+            <% if(currUser && listing.owner && currUser._id.equals(listing.owner._id)) { %>
+              <hr class="my-4">
+              <h6 class="mb-3 text-muted text-center" style="font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">Owner Controls</h6>
+              <div class="d-flex gap-2">
+                <a href="/listings/<%= listing._id %>/edit" class="btn btn-outline-dark w-50">Edit</a>
+                <form action="/listings/<%= listing._id %>?_method=DELETE" method="post" class="w-50">
+                  <button class="btn btn-outline-danger w-100">Delete</button>
+                </form>
+              </div>
+            <% } %>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <style>
-    .review-card {
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-
-    .review-card:hover {
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.13);
-      transform: translateY(-3px) scale(1.02);
-      background: #fff;
-    }
-
-    .review-card .card-title {
-      color: #007bff;
-    }
-
-    .review-card .btn-outline-danger {
-      margin-top: 0.5rem;
-    }
-
-    .review-card .card-text::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .review-card .card-text::-webkit-scrollbar-thumb {
-      background: #e0e0e0;
-      border-radius: 4px;
-    }
-
-    .booking-card {
-      border: 1px solid #ddd;
-      padding: 25px;
-      border-radius: 15px;
-      background: white;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, .08);
-    }
-
-    .booking-card h4 {
-      font-weight: 700;
-    }
-
-    .booking-card button {
+    .rec-card {
       border-radius: 12px;
-      padding: 12px;
-      font-size: 18px;
+      overflow: hidden;
+      border: 1px solid #e0e0e0;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none !important;
     }
-
-    .booking-summary {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 15px;
+    .rec-card:hover {
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+      transform: translateY(-5px);
     }
-
-    .booking-summary hr {
-      margin: 10px 0;
+    .rec-img-container {
+      height: 240px;
+      overflow: hidden;
+      position: relative;
+    }
+    .rec-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .rec-card:hover .rec-img {
+      transform: scale(1.05);
+    }
+    .rec-body {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .rec-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #003580;
+      margin-bottom: 0.2rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .rec-location {
+      font-size: 0.85rem;
+      color: #0071c2;
+      margin-bottom: 0.5rem;
+    }
+    .rec-stars {
+      color: #febb02;
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+    .rec-rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.8rem;
+    }
+    .rec-badge {
+      background: #003580;
+      color: white;
+      font-weight: 700;
+      padding: 4px 6px;
+      border-radius: 4px;
+      border-bottom-right-radius: 0;
+      font-size: 0.9rem;
+    }
+    .rec-rating-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #333;
+    }
+    .rec-price-section {
+      margin-top: auto;
+      text-align: right;
+    }
+    .rec-price {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #333;
+    }
+    .rec-price-tax {
+      font-size: 0.75rem;
+      color: #666;
     }
   </style>
 
-  <body>
-    <div class="row mt-3">
-      <div class="col-8 offset-3">
-        <h3>
-          <%= listing.title %>
-        </h3>
-      </div>
-
-      <div class="card col-6 offset-3 show-card listing-card">
-        <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing_image" frameborder="0" style="
-          height: 320px;
-          width: 100%;
-          object-fit: cover;
-          border-radius: 1rem 1rem 0 0;
-        " scrolling="no" />
-        <div class="card-body">
-          <p class="card-text">Owned By: <i>
-              <%= listing.owner.username %>
-            </i></p>
-          <p class="card-text">
-            <%= listing.description %>
-          </p>
-          <p class="card-text">
-            &#8377;<%= listing.price.toLocaleString("en-IN") %>/night
-          </p>
-          <p class="card-text">
-            <%= listing.location %>
-          </p>
-          <p class="card-text">
-            <%= listing.country %>
-          </p>
-          <hr>
-
-          <div class="booking-card mt-4" id="bookingCard" data-price="<%= listing.price %>">
-
-            <h4>
-              ₹<%= listing.price.toLocaleString("en-IN") %>
-                <small>/ night</small>
-            </h4>
-
-            <form action="/bookings/<%= listing._id %>" method="POST" id="bookingForm">
-
-              <div class="row">
-
-                <div class="col-md-6 mb-3">
-
-                  <label class="form-label">
-                    Check In
-                  </label>
-
-                  <input type="date" id="bookingCheckIn" name="checkIn" required>
-
-                </div>
-
-                <div class="col-md-6 mb-3">
-
-                  <label class="form-label">
-                    Check Out
-                  </label>
-
-                  <input type="date" id="bookingCheckOut" name="checkOut" required>
-
-                </div>
-
-              </div>
-
-              <div class="mb-3">
-
-                <label class="form-label">
-
-                  Guests
-
-                </label>
-
-                <select class="form-select" id="guests" name="guests">
-
-                  <option value="1">1 Guest</option>
-                  <option value="2">2 Guests</option>
-                  <option value="3">3 Guests</option>
-                  <option value="4">4 Guests</option>
-                  <option value="5">5 Guests</option>
-                  <option value="6">6+ Guests</option>
-
-                </select>
-
-              </div>
-
-              <div class="mb-3">
-
-                <div class="booking-summary mt-3">
-
-                  <p>
-                    <strong>Nights:</strong>
-                    <span id="totalNights">0</span>
-                  </p>
-
-                  <p>
-                    <strong>Guests:</strong>
-                    <span id="selectedGuests">1</span>
-                  </p>
-
-                  <p>
-                    <strong>Price / Night:</strong>
-                    ₹<span id="pricePerNight">
-                      <%= listing.price.toLocaleString("en-IN") %>
-                    </span>
-                  </p>
-
-                  <p>
-                    <strong>Extra Guest Charge:</strong>
-                    ₹<span id="extraGuestCharge">0</span>
-                  </p>
-
-                  <p>
-                    <strong>Subtotal:</strong>
-                    ₹<span id="subtotal">0</span>
-                  </p>
-
-                  <p>
-                    <strong>GST (18%):</strong>
-                    ₹<span id="gst">0</span>
-                  </p>
-
-                  <hr>
-
-                  <h5>
-                    Grand Total :
-                    ₹<span id="totalPrice">0</span>
-                  </h5>
-
-                </div>
-
-              </div>
-
-              <button type="submit" class="btn btn-danger w-100">
-
-                Reserve
-
-              </button>
-
-            </form>
-
-          </div>
-        </div>
-      </div>
-
-      <br />
-
-      <% if(currUser && currUser._id.equals(listing.owner._id)) { %>
-        <div class="btns">
-          <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 edit-btn">Edit</a>
-        </div>
-
-        <form action="/listings/<%= listing._id %>?_method=DELETE" method="post">
-          <button class="btn btn-dark col-1 offset-3 mt-2">Delete</button>
-        </form>
-        <% } %>
-
-          <div class="col-6 offset-3">
-            <hr />
-            <h4>Leave a Review</h4>
-
-            <form method="post" action="/listings/<%= listing._id %>/reviews" novalidate class="needs-validation">
-              <!-- <div class="mb-3 mt-3">
-          <label for="rating" class="form-label">Rating</label>
-          <input
-            type="range"
-            class="form-range"
-            min="1"
-            max="5"
-            id="rating"
-            name="review[rating]"
-          />
-        </div> -->
-
-              <div class="mb-3 mt-3">
-                <label for="rating" class="form-label">Rating:</label>
-                <fieldset class="starability-slot">
-                  <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked
-                    aria-label="No rating." />
-                  <input type="radio" id="first-rate1" name="review[rating]" value="1" />
-                  <label for="first-rate1" title="Terrible">1 star</label>
-                  <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-                  <label for="first-rate2" title="Not good">2 stars</label>
-                  <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-                  <label for="first-rate3" title="Average">3 stars</label>
-                  <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-                  <label for="first-rate4" title="Very good">4 stars</label>
-                  <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-                  <label for="first-rate5" title="Amazing">5 stars</label>
-                </fieldset>
-              </div>
-
-              <div class="mb-3 mt-3">
-                <label for="comment" class="form-label">Comments</label>
-                <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control"
-                  required></textarea>
-                <div class="invalid-feedback">Please enter your thoughts here!</div>
-              </div>
-              <br />
-              <button class="btn btn-outline-dark">Submit</button>
-              <br />
-            </form>
-
-            <hr />
-
-            <p><b>All Reviews</b></p>
-            <div style="
-          max-height: 400px;
-          overflow-y: auto;
-          overflow-x: hidden;
-          padding-right: 8px;
-        ">
-              <div class="row row-cols-1 row-cols-md-3 g-4">
-                <% for(let review of listing.reviews){ %>
-                  <div class="col d-flex">
-                    <div class="card review-card w-100 mb-3" style="
-                height: 200px;
-                min-width: 0;
-                max-width: 100%;
-                border-radius: 1rem;
-                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
-                background: #f8f9fa;
-              ">
-                      <div class="card-body d-flex flex-column" style="padding: 1.2rem">
-                        <div style="margin-bottom: 0.3rem">
-                          <h5 class="card-title mb-1" style="font-size: 1.05rem; font-weight: 600; color: #222">
-                            @<%= review.author ? review.author.username : "Anonymous" %>
-                          </h5>
-                          <div>
-                            <% for(let i=1; i<=5; i++) { %>
-                              <% if(i <=review.rating) { %>
-                                <i class="fa-solid fa-star" style="color: #ffd700"></i>
-                                <% } else { %>
-                                  <i class="fa-regular fa-star" style="color: #ffd700"></i>
-                                  <% } %>
-                                    <% } %>
-                          </div>
-                        </div>
-                        <div style="flex: 1; overflow-y: auto; min-height: 0">
-                          <p class="card-text" style="
-                      font-size: 1rem;
-                      color: #333;
-                      line-height: 1.4;
-                      max-height: 80px;
-                      overflow-y: auto;
-                      margin-bottom: 0;
-                    ">
-                            <%= review.comment %>
-                          </p>
-                        </div>
-                      </div>
-                      <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="mb-2"
-                        method="post">
-                        <button class="btn btn-sm btn-outline-danger" style="border-radius: 0.7rem">
-                          Delete
-                        </button>
-                      </form>
+  <!-- You May Also Like Section (Recommendations) -->
+  <% if (recommendations && recommendations.length > 0) { %>
+    <div class="row mt-5 mb-5">
+      <div class="col-12">
+        <h3 class="section-title mb-4">You May Also Like</h3>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+          <% for(let rec of recommendations) { 
+              let recRatingScore = rec.avgRating ? rec.avgRating.toFixed(1) : "New";
+              let recRatingWord = rec.avgRating >= 4.5 ? "Superb" : (rec.avgRating >= 4.0 ? "Fabulous" : (rec.avgRating ? "Good" : "No Reviews"));
+              let starCount = rec.avgRating ? Math.round(rec.avgRating) : 5;
+              let imageUrl = (rec.image && rec.image.url) ? rec.image.url : (typeof rec.image === 'string' ? rec.image : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80');
+          %>
+            <div class="col">
+              <a href="/listings/<%= rec._id %>" class="text-decoration-none">
+                <div class="rec-card h-100">
+                  <div class="rec-img-container">
+                    <img src="<%= imageUrl %>" class="rec-img" alt="<%= rec.title %>">
+                  </div>
+                  <div class="rec-body">
+                    <h5 class="rec-title"><%= rec.title %></h5>
+                    <div class="rec-stars">
+                      <% for(let i=0; i<starCount; i++) { %>
+                        <i class="fa-solid fa-star"></i>
+                      <% } %>
+                    </div>
+                    <div class="rec-location text-decoration-underline"><%= rec.location %><% if(rec.country) { %>, <%= rec.country %><% } %></div>
+                    <div class="rec-rating">
+                      <div class="rec-badge"><%= recRatingScore %></div>
+                      <div class="rec-rating-text"><%= recRatingWord %></div>
+                    </div>
+                    <div class="rec-price-section">
+                      <span class="rec-price">₹<%= rec.price.toLocaleString("en-IN") %></span>
+                      <div class="rec-price-tax">Per night</div>
                     </div>
                   </div>
-                  <% } %>
-              </div>
+                </div>
+              </a>
             </div>
-          </div>
+          <% } %>
+        </div>
+      </div>
     </div>
+  <% } %>
 
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    const bookingCard = document.getElementById("bookingCard");
+    const price = Number(bookingCard.dataset.price);
 
-    <script>
+    const bookingForm = document.getElementById("bookingForm");
+    const checkIn = bookingForm.querySelector("[name='checkIn']");
+    const checkOut = bookingForm.querySelector("[name='checkOut']");
+    const guests = document.getElementById("guests");
+    const rooms = document.getElementById("rooms");
 
-      const bookingCard = document.getElementById("bookingCard");
-      const price = Number(bookingCard.dataset.price);
+    const total = document.getElementById("totalPrice");
+    const totalNights = document.getElementById("totalNights");
+    const summaryBlock = document.getElementById("bookingSummaryBlock");
 
-      const bookingForm = document.getElementById("bookingForm");
-      const checkIn = bookingForm.querySelector("[name='checkIn']");
-      const checkOut = bookingForm.querySelector("[name='checkOut']");
-      const guests = document.getElementById("guests");
+    // Parse booked dates from backend
+    const bookedDatesStr = '<%- typeof bookedDates !== "undefined" ? JSON.stringify(bookedDates) : "[]" %>';
+    const bookedDates = JSON.parse(bookedDatesStr).map(range => ({
+        from: new Date(range.from).toISOString().split('T')[0],
+        to: new Date(range.to).toISOString().split('T')[0]
+    }));
 
-      const total = document.getElementById("totalPrice");
-      const totalNights = document.getElementById("totalNights");
+    // Gallery Scripts
+    const displayImagesStr = '<%- typeof displayImages !== "undefined" ? JSON.stringify(displayImages) : "[]" %>';
+    const displayImagesArray = JSON.parse(displayImagesStr);
+    let currentZoomIndex = 0;
+    
+    let zoomModal = null;
+    let zoomedImage = null;
+    let currentScale = 1;
 
-      // Today's date
-      const today = new Date().toISOString().split("T")[0];
-      checkIn.min = today;
-      checkOut.min = today;
+    function resetZoom() {
+      currentScale = 1;
+      if (zoomedImage) {
+        zoomedImage.style.transform = `scale(${currentScale})`;
+      }
+    }
 
-      // Update booking summary
-      function updateTotal() {
-
-        // Guest-based pricing
-        const guestCount = parseInt(guests.value);
-        document.getElementById("selectedGuests").innerText = guestCount;
-        let extraCharge = 0;
-        if (guestCount > 1) {
-          extraCharge = (guestCount - 1) * 300;
-        }
-
-        document.getElementById("extraGuestCharge").innerText =
-          extraCharge.toLocaleString("en-IN");
-
-
-        if (!checkIn.value || !checkOut.value) {
-          total.innerText = "0";
-          totalNights.innerText = "0";
-          return;
-        }
-
-        const inDate = new Date(checkIn.value);
-        const outDate = new Date(checkOut.value);
-        const diff = Math.ceil(
-          (outDate - inDate) / (1000 * 60 * 60 * 24)
-        );
-
-        if (diff <= 0) {
-          total.innerText = "0";
-          totalNights.innerText = "0";
-          return;
-        }
-
-        totalNights.innerText = diff;
-
-        const pricePerNight = price + extraCharge;
-        const subtotal = diff * pricePerNight;
-        const gst = subtotal * 0.18;
-        const grandTotal = subtotal + gst;
-
-        document.getElementById("subtotal").innerText =
-          subtotal.toLocaleString("en-IN");
-
-        document.getElementById("gst").innerText =
-          gst.toLocaleString("en-IN");
-
-        document.getElementById("pricePerNight").innerText =
-          pricePerNight.toLocaleString("en-IN");
-
-        document.getElementById("totalPrice").innerText =
-          grandTotal.toLocaleString("en-IN");
+    function openZoomModal(index) {
+      if(!zoomModal) {
+         const zoomModalEl = document.getElementById('imageZoomModal');
+         if(zoomModalEl && typeof bootstrap !== "undefined") {
+            zoomModal = new bootstrap.Modal(zoomModalEl);
+         }
+      }
+      if(!zoomedImage) {
+         zoomedImage = document.getElementById('zoomedImage');
+         
+         // Add wheel event for zooming
+         zoomedImage.addEventListener('wheel', (e) => {
+           e.preventDefault();
+           if (e.deltaY < 0) {
+             currentScale = Math.min(currentScale + 0.2, 5); // Max zoom 5x
+           } else {
+             currentScale = Math.max(currentScale - 0.2, 1); // Min zoom 1x
+           }
+           zoomedImage.style.transform = `scale(${currentScale})`;
+         });
       }
 
+      if(!zoomModal || !zoomedImage) return;
 
-      // When Check-in changes
-      checkIn.addEventListener("change", () => {
-        checkOut.min = checkIn.value;
-        if (checkOut.value && checkOut.value <= checkIn.value) {
-          checkOut.value = "";
+      currentZoomIndex = index;
+      zoomedImage.src = displayImagesArray[currentZoomIndex];
+      resetZoom();
+      zoomModal.show();
+    }
+
+    function zoomNext() {
+      currentZoomIndex = (currentZoomIndex + 1) % displayImagesArray.length;
+      zoomedImage.src = displayImagesArray[currentZoomIndex];
+      resetZoom();
+    }
+
+    function zoomPrev() {
+      currentZoomIndex = (currentZoomIndex - 1 + displayImagesArray.length) % displayImagesArray.length;
+      zoomedImage.src = displayImagesArray[currentZoomIndex];
+      resetZoom();
+    }
+    
+    // Custom Dropdown Selection
+    function selectCustomOption(inputId, value, displayText, event) {
+      if (event) {
+        event.preventDefault();
+      }
+      
+      // Update hidden input
+      const input = document.getElementById(inputId);
+      if (input) input.value = value;
+      
+      // Update display text
+      const display = document.getElementById(inputId + '-display');
+      if (display) display.innerText = displayText;
+      
+      // Update active classes
+      if (event && event.currentTarget) {
+        const menu = event.currentTarget.closest('.dropdown-menu');
+        if (menu) {
+          menu.querySelectorAll('.dropdown-item').forEach(item => {
+            item.classList.remove('active', 'bg-dark');
+          });
+          event.currentTarget.classList.add('active', 'bg-dark');
         }
+      }
+      
+      // Trigger total update
+      updateTotal();
+    }
 
+    // Flatpickr initialization
+    const checkInPicker = flatpickr(checkIn, {
+      minDate: "today",
+      dateFormat: "Y-m-d",
+      altInput: true,
+      altFormat: "M j, Y",
+      disable: bookedDates,
+      onChange: function(selectedDates) {
+        if(selectedDates.length > 0) {
+          const selectedCheckIn = selectedDates[0];
+          
+          /* 
+           * BOOKING OVERLAP LOGIC (FRONTEND):
+           * To prevent selecting a checkout date that overlaps with an already booked date,
+           * we find the nearest booked date that is after the selected check-in date.
+           * We then set the maxDate of the checkOutPicker to this nearest booked date.
+           */
+          let nextBookedDate = null;
+          for (let range of bookedDates) {
+             const rangeStart = new Date(range.from);
+             if (rangeStart > selectedCheckIn) {
+                 if (!nextBookedDate || rangeStart < nextBookedDate) {
+                     nextBookedDate = rangeStart;
+                 }
+             }
+          }
+
+          checkOutPicker.set("minDate", selectedCheckIn);
+          if (nextBookedDate) {
+             checkOutPicker.set("maxDate", nextBookedDate);
+          } else {
+             checkOutPicker.set("maxDate", null);
+          }
+
+          setTimeout(() => checkOutPicker.open(), 100);
+        }
         updateTotal();
+      }
+    });
 
-      });
-      // When Check-out changes
-      checkOut.addEventListener("change", updateTotal);
-      guests.addEventListener("change", updateTotal);
+    const checkOutPicker = flatpickr(checkOut, {
+      minDate: "today",
+      dateFormat: "Y-m-d",
+      altInput: true,
+      altFormat: "M j, Y",
+      disable: bookedDates,
+      onChange: function() {
+        updateTotal();
+      }
+    });
 
-      document
-        .getElementById("bookingForm")
-        .addEventListener("submit", function (e) {
-          if (!checkIn.value || !checkOut.value) {
-            e.preventDefault();
-            alert("Please select both Check-In and Check-Out dates.");
-            return;
-          }
-          const inDate = new Date(checkIn.value);
-          const outDate = new Date(checkOut.value);
-          if (outDate <= inDate) {
-            e.preventDefault();
-            alert("Check-Out must be after Check-In.");
-            return;
-          }
-        });
-    </script>
+    function updateTotal() {
+      const guestCount = parseInt(guests.value);
+      const roomCount = parseInt(rooms.value);
+      
+      let extraCharge = 0;
+      if (guestCount > 1) {
+        extraCharge = (guestCount - 1) * 300;
+      }
+      document.getElementById("extraGuestCharge").innerText = extraCharge.toLocaleString("en-IN");
 
+      if (!checkIn.value || !checkOut.value) {
+        summaryBlock.style.display = 'none';
+        return;
+      }
 
+      const inDate = new Date(checkIn.value);
+      const outDate = new Date(checkOut.value);
+      const diff = Math.ceil((outDate - inDate) / (1000 * 60 * 60 * 24));
 
-  </body>
+      if (diff <= 0) {
+        summaryBlock.style.display = 'none';
+        return;
+      }
+
+      summaryBlock.style.display = 'block';
+      totalNights.innerText = diff;
+
+      const pricePerNight = price * roomCount;
+      const subtotal = (diff * pricePerNight) + extraCharge;
+      const gst = subtotal * 0.18;
+      const grandTotal = subtotal + gst;
+
+      document.getElementById("subtotal").innerText = subtotal.toLocaleString("en-IN");
+      document.getElementById("gst").innerText = gst.toLocaleString("en-IN");
+      document.getElementById("totalPrice").innerText = grandTotal.toLocaleString("en-IN");
+    }
+
+    guests.addEventListener("change", updateTotal);
+    rooms.addEventListener("change", updateTotal);
+
+    document.getElementById("bookingForm").addEventListener("submit", function (e) {
+      if (!checkIn.value || !checkOut.value) {
+        e.preventDefault();
+        alert("Please select both Check-In and Check-Out dates.");
+        return;
+      }
+      const inDate = new Date(checkIn.value);
+      const outDate = new Date(checkOut.value);
+      if (outDate <= inDate) {
+        e.preventDefault();
+        alert("Check-Out must be after Check-In.");
+        return;
+      }
+    });
+  </script>
+</body>
