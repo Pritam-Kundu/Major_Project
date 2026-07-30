@@ -230,7 +230,10 @@
                           <h4 class="mt-5 mb-3 fw-bold">Recently Viewed</h4>
                           <div
                             class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4 flex-nowrap overflow-auto pb-3 custom-scrollbar">
-                            <% let recent=[...recentlyViewed].reverse(); for(let listing of recent) { %>
+                            <% let recent = recentlyViewed || []; for(let item of recent) { 
+                                 if(!item.listing) continue; 
+                                 let listing = item.listing; 
+                            %>
                               <div class="col" style="min-width: 280px;">
                                 <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
                                   <div class="booking-card h-100 opacity-75 hover-opacity-100 transition">

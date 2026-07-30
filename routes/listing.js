@@ -48,6 +48,9 @@ router.get(
   wrapAsync(listingController.myProperties)
 );
 
+// Search Route
+router.get("/search", wrapAsync(listingController.searchPage));
+
 
 router
   .route("/:id")

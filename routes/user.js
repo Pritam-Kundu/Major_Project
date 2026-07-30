@@ -67,4 +67,22 @@ router.get(
   wrapAsync(userController.renderWishlist)
 );
 
+router.get(
+  "/history",
+  isLoggedIn,
+  wrapAsync(userController.viewHistory)
+);
+
+router.delete(
+  "/history",
+  isLoggedIn,
+  wrapAsync(userController.clearHistory)
+);
+
+router.delete(
+  "/history/:listingId",
+  isLoggedIn,
+  wrapAsync(userController.removeHistoryItem)
+);
+
 module.exports = router;

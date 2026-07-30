@@ -74,7 +74,7 @@
         padding: 15px 25px;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         width: 95%;
-        max-width: 1300px;
+        max-width: 1100px;
         margin-bottom: 20px;
       }
 
@@ -1125,22 +1125,151 @@
       }
     </style>
 
-    <div class="hero-section">
-      <div class="hero-overlay"></div>
-      <div class="hero-content">
-        <h1>Find Your Next Stay</h1>
-        <p>Search low prices on hotels, homes and much more...</p>
-      </div>
+    <style>
+      /* Search Summary Styles */
+      .search-summary-container {
+        background: #fff;
+        border-bottom: 1px solid #eef2f6;
+        padding: 20px 0;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      }
+      .search-summary-inner {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+      .search-criteria h1 {
+        font-size: 1.8rem;
+        color: #112a46;
+        margin-bottom: 5px;
+        font-weight: 700;
+        text-transform: capitalize;
+      }
+      .search-meta {
+        font-size: 1rem;
+        color: #555;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .search-meta-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .search-meta-divider {
+        width: 4px;
+        height: 4px;
+        background: #ccc;
+        border-radius: 50%;
+      }
+      .edit-search-btn {
+        background: #f0f4f8;
+        color: #007bff;
+        border: 1px solid #d9e2ec;
+        padding: 10px 24px;
+        border-radius: 30px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+      }
+      .edit-search-btn:hover {
+        background: #e2e8f0;
+        color: #0056b3;
+      }
 
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+      /* Active Filter Chips */
+      .active-filters-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+        align-items: center;
+      }
+      .filter-chip {
+        display: inline-flex;
+        align-items: center;
+        background: #f8f9fa;
+        border: 1px solid #ddd;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: #333;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .filter-chip:hover {
+        background: #e9ecef;
+        border-color: #ccc;
+      }
+      .filter-chip i {
+        margin-left: 8px;
+        color: #888;
+        font-size: 0.8rem;
+      }
+      .filter-chip:hover i {
+        color: #dc3545;
+      }
+      .clear-all-btn {
+        font-size: 0.85rem;
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 600;
+        margin-left: 10px;
+      }
+      .clear-all-btn:hover {
+        text-decoration: underline;
+      }
+      
+      /* Pagination */
+      .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 40px;
+        margin-bottom: 40px;
+      }
+      .pagination {
+        display: flex;
+        gap: 5px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .page-item .page-link {
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+        color: #333;
+        padding: 8px 16px;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+      .page-item.active .page-link {
+        background: #007bff;
+        border-color: #007bff;
+        color: white;
+      }
+      .page-item:not(.active) .page-link:hover {
+        background: #f8f9fa;
+        color: #007bff;
+      }
+    </style>
 
-      <div class="hero-search-container glass-panel">
+    <div class="search-summary-container">
+      <div class="search-summary-inner" style="display: block;">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <form class="wl-form" role="search" method="GET" action="/listings/search">
-
           <!-- Destination -->
           <div class="wl-group">
             <label class="wl-label">Destination</label>
-            <div class="wl-input-wrapper">
+            <div class="wl-input-wrapper" style="background: #f8f9fa; border: 1px solid #ced4da;">
               <i class="fa-solid fa-magnifying-glass"></i>
               <input type="search" id="search" name="search" placeholder="Search locations..." list="destinations"
                 autocomplete="off"
@@ -1158,18 +1287,18 @@
             </div>
           </div>
 
-          <div class="wl-divider"></div>
+          <div class="wl-divider" style="background: #e9ecef;"></div>
 
           <!-- Dates -->
           <div class="wl-group">
             <label class="wl-label">Dates</label>
             <div class="wl-dates-wrapper">
-              <div class="wl-date-box" onclick="document.getElementById('agodaCheckIn')._flatpickr.open()">
+              <div class="wl-date-box" onclick="document.getElementById('agodaCheckIn')._flatpickr.open()" style="background: #f8f9fa; border: 1px solid #ced4da;">
                 <span class="wl-date-title">Check-in</span>
                 <input type="text" id="agodaCheckIn" name="checkIn" class="wl-date-input" placeholder="Add dates"
                   value="<%= typeof searchParams !== 'undefined' && searchParams.checkIn ? searchParams.checkIn : '' %>">
               </div>
-              <div class="wl-date-box" onclick="document.getElementById('agodaCheckOut')._flatpickr.open()">
+              <div class="wl-date-box" onclick="document.getElementById('agodaCheckOut')._flatpickr.open()" style="background: #f8f9fa; border: 1px solid #ced4da;">
                 <span class="wl-date-title">Check-out</span>
                 <input type="text" id="agodaCheckOut" name="checkOut" class="wl-date-input" placeholder="Add dates"
                   value="<%= typeof searchParams !== 'undefined' && searchParams.checkOut ? searchParams.checkOut : '' %>">
@@ -1177,7 +1306,7 @@
             </div>
           </div>
 
-          <div class="wl-divider"></div>
+          <div class="wl-divider" style="background: #e9ecef;"></div>
 
           <!-- Guests -->
           <div class="wl-group">
@@ -1185,7 +1314,7 @@
             <div class="wl-guests-wrapper">
               <div class="wl-guest-row">
                 <span>Adults</span>
-                <div class="wl-counter">
+                <div class="wl-counter" style="background: #f8f9fa; border: 1px solid #ced4da;">
                   <button type="button" class="wl-btn"
                     onclick="const i=document.getElementById('guests-adults'); if(i.value>1)i.value--">-</button>
                   <input type="number" id="guests-adults" name="guests"
@@ -1197,10 +1326,10 @@
               </div>
               <div class="wl-guest-row">
                 <span>Children</span>
-                <div class="wl-counter">
+                <div class="wl-counter" style="background: #f8f9fa; border: 1px solid #ced4da;">
                   <button type="button" class="wl-btn"
                     onclick="const i=document.getElementById('guests-children'); if(i.value>0)i.value--">-</button>
-                  <input type="number" id="guests-children" name="children" value="0" readonly>
+                  <input type="number" id="guests-children" name="children" value="<%= typeof searchParams !=='undefined' && searchParams.children ? searchParams.children : '0' %>" readonly>
                   <button type="button" class="wl-btn"
                     onclick="document.getElementById('guests-children').value++">+</button>
                 </div>
@@ -1208,12 +1337,12 @@
             </div>
           </div>
 
-          <div class="wl-divider"></div>
+          <div class="wl-divider" style="background: #e9ecef;"></div>
 
           <!-- Property Type -->
           <div class="wl-group">
             <label class="wl-label">Property Type</label>
-            <div class="wl-input-wrapper wl-property-type wl-custom-dropdown" id="propertyTypeDropdown">
+            <div class="wl-input-wrapper wl-property-type wl-custom-dropdown" id="propertyTypeDropdown" style="background: #f8f9fa; border: 1px solid #ced4da;">
               <div class="wl-dropdown-selected">
                 <span id="selected-property-text">Villas, Boutique Hotels, Eco-lodges</span>
                 <i class="fa-solid fa-chevron-down wl-chevron"></i>
@@ -1235,6 +1364,7 @@
 
           <button class="wl-search-btn" type="submit">Search</button>
         </form>
+
         <script>
           document.addEventListener('DOMContentLoaded', () => {
             const dropdown = document.getElementById('propertyTypeDropdown');
@@ -1242,27 +1372,29 @@
             const hiddenInput = document.getElementById('propertyTypeInput');
             const options = document.querySelectorAll('.wl-dropdown-option');
 
-            dropdown.addEventListener('click', (e) => {
-              dropdown.classList.toggle('active');
-            });
-
-            options.forEach(opt => {
-              opt.addEventListener('click', (e) => {
-                const val = opt.getAttribute('data-value');
-                hiddenInput.value = val;
-                selectedText.textContent = opt.textContent;
+            if(dropdown) {
+              dropdown.addEventListener('click', (e) => {
+                dropdown.classList.toggle('active');
               });
-            });
 
-            document.addEventListener('click', (e) => {
-              if (!dropdown.contains(e.target)) {
-                dropdown.classList.remove('active');
+              options.forEach(opt => {
+                opt.addEventListener('click', (e) => {
+                  const val = opt.getAttribute('data-value');
+                  hiddenInput.value = val;
+                  selectedText.textContent = opt.textContent;
+                });
+              });
+
+              document.addEventListener('click', (e) => {
+                if (!dropdown.contains(e.target)) {
+                  dropdown.classList.remove('active');
+                }
+              });
+
+              const initialVal = hiddenInput.value;
+              if (initialVal && initialVal !== 'Any') {
+                selectedText.textContent = initialVal;
               }
-            });
-
-            const initialVal = hiddenInput.value;
-            if (initialVal && initialVal !== 'Any') {
-              selectedText.textContent = initialVal;
             }
 
             // --- Date Validation for Search Form ---
@@ -1324,212 +1456,11 @@
       </div>
     </div>
 
-    <% // Check if any search or filter parameters exist (meaning a search was performed) let
-      isSearchActive=searchParams && Object.keys(searchParams).length> 0;
-      %>
-
-      <% if (!isSearchActive) { %>
-        <% if(currUser && typeof recentlyViewedListings !== 'undefined' && recentlyViewedListings.length > 0) { %>
-        <style>
-          .continue-search-section {
-            max-width: 1300px;
-            margin: 4rem auto;
-            padding: 0 20px;
-          }
-          .cs-header {
-            margin-bottom: 1.5rem;
-          }
-          .cs-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 0.25rem;
-          }
-          .cs-subtitle {
-            font-size: 1rem;
-            color: #666;
-            margin-bottom: 0;
-          }
-          .cs-scroll-container {
-            display: flex;
-            gap: 1.25rem;
-            overflow-x: auto;
-            padding-bottom: 1rem;
-            scroll-behavior: smooth;
-          }
-          .cs-scroll-container::-webkit-scrollbar {
-            height: 8px;
-          }
-          .cs-scroll-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-          }
-          .cs-scroll-container::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 4px;
-          }
-          .cs-scroll-container::-webkit-scrollbar-thumb:hover {
-            background: #aaa;
-          }
-          .cs-card {
-            min-width: 280px;
-            flex: 0 0 auto;
-            display: flex;
-            background: #fff;
-            border-radius: 12px;
-            border: 1px solid #e0e0e0;
-            text-decoration: none;
-            color: inherit;
-            transition: transform 0.2s, box-shadow 0.2s;
-            overflow: hidden;
-            height: 110px;
-          }
-          .cs-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-          }
-          .cs-img {
-            width: 110px;
-            height: 100%;
-            object-fit: cover;
-          }
-          .cs-body {
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            flex: 1;
-            overflow: hidden;
-          }
-          .cs-title-text {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #1a1a1a;
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-          .cs-loc {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 4px;
-          }
-          .cs-price {
-            font-weight: 600;
-            color: #0071c2;
-            font-size: 0.95rem;
-          }
-        </style>
-
-        <div class="continue-search-section">
-          <div class="cs-header">
-            <h2 class="cs-title">Continue Your Search</h2>
-            <p class="cs-subtitle">Pick up where you left off.</p>
-          </div>
-          <div class="cs-scroll-container">
-            <% for(let item of recentlyViewedListings) { 
-                let rv = item.listing;
-                if(!rv) continue;
-            %>
-            <a href="/listings/<%= rv._id %>" class="cs-card">
-              <img src="<%= (rv.image && rv.image.url) ? rv.image.url : (typeof rv.image === 'string' ? rv.image : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80') %>" class="cs-img" alt="<%= rv.title %>">
-              <div class="cs-body">
-                <div class="cs-title-text"><%= rv.title %></div>
-                <div class="cs-loc"><%= rv.location %>, <%= rv.country %></div>
-                <div class="cs-price">&#8377;<%= rv.price.toLocaleString("en-IN") %></div>
-              </div>
-            </a>
-            <% } %>
-          </div>
-        </div>
-        <% } %>
-
-        <div class="promo-banner mt-5 mb-5 mx-auto" style="max-width: 1300px; width: 95%; margin-top: 60px !important; margin-bottom: 60px !important;">
-          <div>
-            <h3>Save 15% on your next getaway</h3>
-            <p class="mb-0">Book your dream stay before the month ends and get an exclusive discount.</p>
-          </div>
-          <a href="/offers" class="promo-btn">Explore Deals <i class="fa-solid fa-arrow-right ms-2"></i></a>
-        </div>
-        <div class="dashboard-container" style="margin-top: 60px; margin-bottom: 60px;">
-          <!-- Handpicked Collections -->
-          <div class="handpicked-section">
-            <h3>Handpicked Collections</h3>
-            <div class="handpicked-grid">
-              <% if (listings && listings.length>= 5) { %>
-                <% for(let i=0; i<5; i++) { let l=listings[i]; let idStr=l._id.toString(); let ratingScore=(8 +
-                  (idStr.charCodeAt(1) % 20) / 10).toFixed(1); let imageUrl=(l.image && l.image.url) ? l.image.url :
-                  (typeof l.image==='string' ? l.image
-                  : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80' ); %>
-                  <a href="/listings/<%= l._id %>" class="hp-card">
-                    <img src="<%= imageUrl %>" alt="<%= l.title %>"
-                      onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80';">
-                    <div class="hp-overlay">
-                      <div class="hp-title">
-                        <%= l.title %>
-                      </div>
-                      <div class="hp-rating"><i class="fa-solid fa-star"></i>
-                        <%= ratingScore %>
-                      </div>
-                    </div>
-                  </a>
-                  <% } %>
-                    <% } %>
-            </div>
-          </div>
-
-          <!-- Right Column -->
-          <div class="right-dashboard">
-            <!-- Global Explorer -->
-            <div class="global-explorer">
-              <div class="ge-content">
-                <h3>Global Explorer</h3>
-                <p>Interactive map (preview regions).</p>
-                <button class="ge-btn">Explore Map</button>
-              </div>
-              <img src="/images/global_map.png" alt="World Map" class="ge-map-bg">
-            </div>
-
-            <!-- Trending Now -->
-            <div class="trending-now">
-              <h3>Trending Now</h3>
-              <div class="trending-scroll">
-                <% if (listings && listings.length> 5) { %>
-                  <% let maxTrending=Math.min(listings.length, 25); %>
-                    <% for(let i=5; i<maxTrending; i++) { let l=listings[i]; let idStr=l._id.toString(); let
-                      ratingScore=(8 + (idStr.charCodeAt(1) % 20) / 10).toFixed(1); let imageUrl=(l.image &&
-                      l.image.url) ? l.image.url : (typeof l.image==='string' ? l.image
-                      : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80'
-                      ); %>
-                      <a href="/listings/<%= l._id %>" class="tn-card">
-                        <img src="<%= imageUrl %>" alt="<%= l.title %>"
-                          onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80';">
-                        <div class="tn-overlay">
-                          <div class="tn-title">
-                            <%= l.title %>
-                          </div>
-                          <div class="tn-price-rating">
-                            <span class="tn-price">&#8377;<%= l.price.toLocaleString("en-IN") %> /avg</span>
-                            <span class="tn-rating"><i class="fa-solid fa-star"></i>
-                              <%= ratingScore %>
-                            </span>
-                          </div>
-                        </div>
-                      </a>
-                      <% } %>
-                        <% } %>
-              </div>
-            </div>
-          </div>
-        </div>
-        <% } %>
-
           <div class="row mt-4">
             <!-- Sidebar Filters -->
             <div class="col-lg-3 d-none d-lg-block">
               <form class="sidebar-filter sticky-top" style="top: 20px; z-index: 1;" action="/listings/search" method="GET" id="filterForm">
-                <% if(typeof searchParams !=='undefined' && searchParams) { %>
+                <% if(typeof searchParams !=='undefined' ) { %>
                   <% for(let key in searchParams) { %>
                     <% if(!['category', 'stars', 'rating', 'amenity', 'priceMin', 'priceMax', 'page'].includes(key)) { %>
                       <input type="hidden" name="<%= key %>" value="<%= searchParams[key] %>">
@@ -1544,7 +1475,7 @@
                     <% for(let type of sidebarTypes) { %>
                       <label class="custom-checkbox">
                         <input type="checkbox" name="category" class="sidebar-chk" value="<%= type %>"
-                          <%= (typeof searchParams !== 'undefined' && searchParams && searchParams.category && (Array.isArray(searchParams.category) ? searchParams.category.includes(type) : searchParams.category === type)) || (!(typeof searchParams !== 'undefined' && searchParams && searchParams.category) && selectedCategory === type) ? 'checked' : '' %>>
+                          <%= (searchParams.category && (Array.isArray(searchParams.category) ? searchParams.category.includes(type) : searchParams.category === type)) || (!searchParams.category && selectedCategory === type) ? 'checked' : '' %>>
                         <div class="checkmark"></div>
                         <span class="checkbox-label">
                           <%= type %>
@@ -1556,8 +1487,8 @@
                 <div class="filter-section">
                   <h4 class="filter-title">Price Range</h4>
                   <div class="price-inputs">
-                    <input type="number" name="priceMin" id="sidebarPriceMin" placeholder="Min ₹" min="0" value="<%= typeof searchParams !== 'undefined' && searchParams && searchParams.priceMin ? searchParams.priceMin : '' %>">
-                    <input type="number" name="priceMax" id="sidebarPriceMax" placeholder="Max ₹" min="0" value="<%= typeof searchParams !== 'undefined' && searchParams && searchParams.priceMax ? searchParams.priceMax : '' %>">
+                    <input type="number" name="priceMin" id="sidebarPriceMin" placeholder="Min ₹" min="0" value="<%= searchParams.priceMin || '' %>">
+                    <input type="number" name="priceMax" id="sidebarPriceMax" placeholder="Max ₹" min="0" value="<%= searchParams.priceMax || '' %>">
                   </div>
                 </div>
 
@@ -1567,7 +1498,7 @@
                   <% for(let s of starChecks) { %>
                   <label class="custom-checkbox">
                     <input type="checkbox" name="stars" class="sidebar-chk" value="<%= s %>"
-                      <%= typeof searchParams !== 'undefined' && searchParams && searchParams.stars && (Array.isArray(searchParams.stars) ? searchParams.stars.includes(s.toString()) : searchParams.stars === s.toString()) ? 'checked' : '' %>>
+                      <%= searchParams.stars && (Array.isArray(searchParams.stars) ? searchParams.stars.includes(s.toString()) : searchParams.stars === s.toString()) ? 'checked' : '' %>>
                     <div class="checkmark"></div>
                     <span class="checkbox-label"><i class="fa-solid fa-star text-warning"></i> <%= s %> Stars</span>
                   </label>
@@ -1580,7 +1511,7 @@
                   <% for(let r of ratingChecks) { %>
                   <label class="custom-checkbox">
                     <input type="checkbox" name="rating" class="sidebar-chk" value="<%= r.val %>"
-                      <%= typeof searchParams !== 'undefined' && searchParams && searchParams.rating && (Array.isArray(searchParams.rating) ? searchParams.rating.includes(r.val.toString()) : searchParams.rating === r.val.toString()) ? 'checked' : '' %>>
+                      <%= searchParams.rating && (Array.isArray(searchParams.rating) ? searchParams.rating.includes(r.val.toString()) : searchParams.rating === r.val.toString()) ? 'checked' : '' %>>
                     <div class="checkmark"></div>
                     <span class="checkbox-label"><%= r.label %></span>
                   </label>
@@ -1593,7 +1524,7 @@
                   <% for(let am of amenitiesList) { %>
                   <label class="custom-checkbox">
                     <input type="checkbox" name="amenity" class="sidebar-chk" value="<%= am.val %>"
-                      <%= typeof searchParams !== 'undefined' && searchParams && searchParams.amenity && (Array.isArray(searchParams.amenity) ? searchParams.amenity.includes(am.val) : searchParams.amenity === am.val) ? 'checked' : '' %>>
+                      <%= searchParams.amenity && (Array.isArray(searchParams.amenity) ? searchParams.amenity.includes(am.val) : searchParams.amenity === am.val) ? 'checked' : '' %>>
                     <div class="checkmark"></div>
                     <span class="checkbox-label"><%= am.label %></span>
                   </label>
@@ -1604,26 +1535,25 @@
               <script>
                 document.addEventListener('DOMContentLoaded', () => {
                   const filterForm = document.getElementById('filterForm');
-                  if (filterForm) {
-                    const filterInputs = filterForm.querySelectorAll('.sidebar-chk');
-                    let debounceTimer;
+                  const filterInputs = filterForm.querySelectorAll('.sidebar-chk');
+                  let debounceTimer;
 
-                    filterInputs.forEach(input => {
-                      input.addEventListener('change', () => {
+                  filterInputs.forEach(input => {
+                    input.addEventListener('change', () => {
+                      filterForm.submit();
+                    });
+                  });
+
+                  // Add debounce for price inputs
+                  const priceInputs = filterForm.querySelectorAll('input[type="number"]');
+                  priceInputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                      clearTimeout(debounceTimer);
+                      debounceTimer = setTimeout(() => {
                         filterForm.submit();
-                      });
+                      }, 1000);
                     });
-
-                    const priceInputs = filterForm.querySelectorAll('input[type="number"]');
-                    priceInputs.forEach(input => {
-                      input.addEventListener('input', () => {
-                        clearTimeout(debounceTimer);
-                        debounceTimer = setTimeout(() => {
-                          filterForm.submit();
-                        }, 1000);
-                      });
-                    });
-                  }
+                  });
                 });
               </script>
             </div>
@@ -1631,7 +1561,7 @@
             <!-- Listings Grid -->
             <div class="col-lg-9">
               <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-                <h2 class="section-title mb-0">Featured Hotels</h2>
+                <h2 class="section-title mb-0">Featured Hotels <span class="fs-5 text-muted ms-2 fw-normal">(<%= totalCount %> Results Found)</span></h2>
 
                 <div class="d-flex gap-3 align-items-center">
                   <!-- 
@@ -1641,7 +1571,7 @@
             * creating hidden input fields for them. This ensures filters and sort work together!
           -->
                   <div class="sort-container">
-                    <form action="/listings" method="GET" id="sortForm" class="d-flex align-items-center m-0">
+                    <form action="/listings/search" method="GET" id="sortForm" class="d-flex align-items-center m-0">
                       <% if(typeof searchParams !=='undefined' ) { %>
                         <% for(let key in searchParams) { %>
                           <% if(key !=='sort' ) { %>
@@ -1707,7 +1637,7 @@
                     style="border-radius: 30px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Clear Search
                     & Explore All</a>
                 </div>
-                <% } %>
+                <% } else { %>
 
                   <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-2 row-cols-1 g-4" id="listings-grid">
                     <% for(let listing of listings) { let idStr=listing._id.toString(); let starCount=listing.avgRating
@@ -1848,6 +1778,47 @@
                       </div>
                       <% } %>
                   </div>
+
+                  <!-- Pagination -->
+                  <% if (totalPages > 1) { %>
+                  <div class="pagination-container">
+                    <ul class="pagination">
+                      <% 
+                        // Function to generate url with all current searchParams plus the new page
+                        const getPageUrl = (p) => {
+                          let params = new URLSearchParams();
+                          for (let key in searchParams) {
+                            if (key !== 'page') {
+                              if (Array.isArray(searchParams[key])) {
+                                searchParams[key].forEach(val => params.append(key, val));
+                              } else {
+                                params.append(key, searchParams[key]);
+                              }
+                            }
+                          }
+                          params.append('page', p);
+                          return `/listings/search?${params.toString()}`;
+                        }
+                      %>
+                      
+                      <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                        <a class="page-link" href="<%= currentPage === 1 ? '#' : getPageUrl(currentPage - 1) %>">Previous</a>
+                      </li>
+                      
+                      <% for(let i = 1; i <= totalPages; i++) { %>
+                        <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                          <a class="page-link" href="<%= getPageUrl(i) %>"><%= i %></a>
+                        </li>
+                      <% } %>
+                      
+                      <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                        <a class="page-link" href="<%= currentPage === totalPages ? '#' : getPageUrl(currentPage + 1) %>">Next</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <% } %>
+
+                <% } %>
             </div>
           </div>
 
@@ -1861,8 +1832,6 @@
                     }
                   });
                 }
-
-                // Client-side filtering replaced with backend /listings/search route
               </script>
 
               <script>

@@ -25,12 +25,12 @@ module.exports.signup = async (req, res, next) => {
       await createNotification(
           registeredUser._id,
           'general',
-          'Welcome to Wanderlust!',
+          'Welcome to Homigo!',
           `Hi ${username}, your account has been successfully created.`,
           `/account`
       );
 
-      req.flash("success", "Welcome to Wanderlust");
+      req.flash("success", "Welcome to Homigo");
       return res.redirect("/listings");
     })
   } catch (e) {
@@ -46,7 +46,7 @@ module.exports.renderLoginForm = (req, res) => {
 
 
 module.exports.login = async (req, res) => {
-  req.flash("success", "Welcome back in Wanderlust");
+  req.flash("success", "Welcome back to Homigo");
   let redirectUrl = res.locals.redirectUrl || "/listings"         //if there is not any redirectUrl then we will redirect to the /listings route
   return res.redirect(redirectUrl);
 }
@@ -172,7 +172,7 @@ module.exports.toggleWishlist = async (req, res) => {
 module.exports.renderWishlist = async (req, res) => {
   const user = await User.findById(req.user._id)
     .populate("wishlist")
-    .populate("recentlyViewed")
+    .populate("recentlyViewed.listing")
     .populate("collections.listings");
     
   res.render("users/wishlist", { 
@@ -180,6 +180,37 @@ module.exports.renderWishlist = async (req, res) => {
     recentlyViewed: user.recentlyViewed,
     collections: user.collections
   });
+};
+
+module.exports.viewHistory = async (req, res) => {
+  const user = await User.findById(req.user._id).populate("recentlyViewed.listing");
+  // Filter out null listings just in case they were deleted from the database
+  let history = user.recentlyViewed ? user.recentlyViewed.filter(item => item.listing != null) : [];
+  res.render("users/history", { history });
+};
+
+module.exports.removeHistoryItem = async (req, res) => {
+  const { listingId } = req.params;
+  const user = await User.findById(req.user._id);
+  
+  if (user && user.recentlyViewed) {
+    user.recentlyViewed = user.recentlyViewed.filter(
+      item => item.listing && item.listing.toString() !== listingId
+    );
+    await user.save();
+    return res.json({ success: true, message: "Removed from history." });
+  }
+  return res.status(400).json({ success: false, message: "Could not remove item." });
+};
+
+module.exports.clearHistory = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    user.recentlyViewed = [];
+    await user.save();
+    return res.json({ success: true, message: "Viewing history cleared successfully." });
+  }
+  return res.status(400).json({ success: false, message: "Could not clear history." });
 };
 
 module.exports.createCollection = async (req, res) => {

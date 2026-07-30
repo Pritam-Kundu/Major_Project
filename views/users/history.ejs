@@ -1,0 +1,285 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+  .section-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  .booking-card {
+    border: 1px solid #e7e7e7;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .booking-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  .booking-card-img-container {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+  }
+
+  .booking-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+
+  .booking-card:hover .booking-card-img {
+    transform: scale(1.05);
+  }
+
+  .btn-remove {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    color: #666;
+    z-index: 10;
+    transition: all 0.2s;
+    border: none;
+  }
+
+  .btn-remove:hover {
+    background: #f8f9fa;
+    color: #dc3545;
+    transform: scale(1.1);
+  }
+
+  .booking-card-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .booking-card-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 0.25rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .booking-card-location {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.75rem;
+  }
+  
+  .viewed-time {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .booking-price-section {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+  }
+
+  .price-current {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 4rem 1rem;
+    background: #f8f9fa;
+    border-radius: 16px;
+    margin-top: 2rem;
+  }
+  
+  .empty-state i {
+    font-size: 4rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+  }
+</style>
+
+<div class="container mt-4 mb-5">
+  <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+    <div>
+      <h2 class="section-title mb-1">Continue Your Search</h2>
+      <p class="text-muted mb-0">Pick up where you left off. Here are the properties you recently viewed.</p>
+    </div>
+    <% if(history && history.length > 0) { %>
+      <button class="btn btn-outline-danger fw-bold px-4 rounded-pill" onclick="clearHistory()">
+        <i class="fa-solid fa-trash-can me-1"></i> Clear History
+      </button>
+    <% } %>
+  </div>
+
+  <% if(!history || history.length === 0) { %>
+    <div class="empty-state">
+      <i class="fa-solid fa-clock-rotate-left"></i>
+      <h4 class="fw-bold text-dark mb-2">Continue Your Search</h4>
+      <p class="text-muted mb-4">Start exploring hotels to build your viewing history.</p>
+      <a href="/listings" class="btn btn-primary rounded-pill px-4 fw-bold">Explore Hotels</a>
+    </div>
+  <% } else { %>
+    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4" id="history-container">
+      <% for(let item of history) { 
+           if(!item.listing) continue;
+           let listing = item.listing; 
+      %>
+        <div class="col" id="history-card-<%= listing._id %>">
+          <div class="booking-card h-100">
+            <button class="btn-remove" onclick="removeHistoryItem('<%= listing._id %>')" title="Remove from history">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+            <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark d-block h-100 d-flex flex-column">
+              <div class="booking-card-img-container">
+                <% let imgUrl = listing.images && listing.images.length > 0 ? listing.images[0].url : (listing.image ? listing.image.url : ''); %>
+                <img src="<%= imgUrl %>" class="booking-card-img" alt="listing_image">
+              </div>
+              <div class="booking-card-body">
+                <div class="viewed-time" data-time="<%= item.viewedAt.toISOString() %>">
+                  <i class="fa-regular fa-clock"></i> <span>Viewed</span>
+                </div>
+                <h5 class="booking-card-title pe-2"><%= listing.title %></h5>
+                <div class="booking-card-location"><%= listing.location %>, <%= listing.country %></div>
+                <div class="booking-price-section">
+                  <span class="price-current">&#8377;<%= listing.price.toLocaleString("en-IN") %></span> / night
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+</div>
+
+<script>
+  // Relative Time Formatter
+  function timeAgo(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const secondsPast = (now.getTime() - date.getTime()) / 1000;
+    
+    if (secondsPast < 60) {
+      return 'Just now';
+    }
+    if (secondsPast < 3600) {
+      return `Viewed ${parseInt(secondsPast / 60)} minutes ago`;
+    }
+    if (secondsPast <= 86400) {
+      return `Viewed ${parseInt(secondsPast / 3600)} hours ago`;
+    }
+    if (secondsPast > 86400 && secondsPast <= 172800) {
+      return 'Viewed Yesterday';
+    }
+    if (secondsPast > 172800) {
+      return `Viewed ${parseInt(secondsPast / 86400)} days ago`;
+    }
+  }
+
+  // Update timestamps on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    const timeElements = document.querySelectorAll('.viewed-time');
+    timeElements.forEach(el => {
+      const isoTime = el.getAttribute('data-time');
+      if (isoTime) {
+        el.querySelector('span').textContent = timeAgo(isoTime);
+      }
+    });
+  });
+
+  // AJAX Remove single item
+  async function removeHistoryItem(listingId) {
+    try {
+      const res = await fetch(`/history/${listingId}`, {
+        method: 'DELETE',
+        headers: { 'Accept': 'application/json' }
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        const card = document.getElementById(`history-card-${listingId}`);
+        if (card) {
+          card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+          card.style.opacity = '0';
+          card.style.transform = 'scale(0.95)';
+          
+          setTimeout(() => {
+            card.remove();
+            
+            // Show toast
+            const toastDiv = document.createElement('div');
+            toastDiv.className = 'toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 p-3 m-3';
+            toastDiv.style.zIndex = '1100';
+            toastDiv.innerHTML = `
+              <div class="d-flex">
+                <div class="toast-body"><i class="fa-solid fa-check-circle me-2"></i>Removed from history.</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+              </div>`;
+            document.body.appendChild(toastDiv);
+            const toast = new bootstrap.Toast(toastDiv);
+            toast.show();
+            
+            // Remove toast element after hide
+            toastDiv.addEventListener('hidden.bs.toast', () => {
+              toastDiv.remove();
+            });
+
+            // Reload if empty
+            if (document.querySelectorAll('#history-container .col').length === 0) {
+              window.location.reload();
+            }
+          }, 300);
+        }
+      }
+    } catch (err) {
+      console.error("Error removing from history", err);
+    }
+  }
+
+  // AJAX Clear all history
+  async function clearHistory() {
+    if (confirm("Are you sure you want to clear your entire viewing history?")) {
+      try {
+        const res = await fetch(`/history`, {
+          method: 'DELETE',
+          headers: { 'Accept': 'application/json' }
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          alert("Viewing history cleared successfully.");
+          window.location.reload();
+        }
+      } catch (err) {
+        console.error("Error clearing history", err);
+      }
+    }
+  }
+</script>

@@ -57,7 +57,7 @@ const sampleOffers = [
     maxClaims: 500
   },
   {
-    title: "Welcome to Wanderlust!",
+    title: "Welcome to Homigo!",
     description: "First time booking with us? Enjoy a massive discount on your first stay.",
     discount: "50% OFF",
     promoCode: "WELCOME50",

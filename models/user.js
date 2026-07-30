@@ -18,8 +18,14 @@ const userSchema = new Schema({
     ],
     recentlyViewed: [
         {
-            type: Schema.Types.ObjectId,
-            ref: "Listing"
+            listing: {
+                type: Schema.Types.ObjectId,
+                ref: "Listing"
+            },
+            viewedAt: {
+                type: Date,
+                default: Date.now
+            }
         }
     ],
     collections: [

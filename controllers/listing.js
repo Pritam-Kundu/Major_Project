@@ -2,35 +2,43 @@ const Listing = require("../models/listing.js");
 const User = require("../models/user.js");
 const { createNotification } = require("./notification");
 
-module.exports.index = async (req, res) => {
+const buildAggregationPipeline = (query) => {
   const {
-    category,
-    search,
-    checkIn,
-    checkOut,
-    guests,
-    priceMin,
-    priceMax,
-    propertyType,
-    sort
-  } = req.query;
-  
+    category, search, propertyType, priceMin, priceMax, sort,
+    stars, rating, amenity // Used in searchPage
+  } = query;
+
   let filter = {};
 
-  if (category) filter.category = category;
-  if (propertyType && propertyType !== "Any") filter.category = propertyType;
+  if (category) {
+    if (Array.isArray(category)) filter.category = { $in: category };
+    else filter.category = category;
+  }
+  if (propertyType && propertyType !== "Any") {
+    filter.category = propertyType;
+  }
 
-  /*
-   * ADVANCED SEARCH LOGIC (MongoDB):
-   * We check if the user provided a 'search' query in the URL (e.g., ?search=Goa).
-   * If 'search' exists, we use MongoDB's '$or' operator to look for matches in multiple fields.
-   * This means: "Find listings where the search term matches title OR location OR country OR category."
-   * 
-   * How it works:
-   * - '$regex: search' matches partial words instead of requiring an exact match.
-   * - '$options: "i"' makes the search case-insensitive (so "goa", "Goa", and "GOA" are treated the same).
-   * - Since our database schema doesn't have an 'address' field, 'location' acts as the address search.
-   */
+  // Handle pseudo amenities (wifi and breakfast are always true, so we ignore them for filtering)
+  if (amenity) {
+    const amenitiesList = Array.isArray(amenity) ? amenity : [amenity];
+    let amenityConditions = [];
+    
+    if (amenitiesList.includes("cancel")) {
+      amenityConditions.push({ 
+        $in: [ { $substrCP: [ { $toString: "$_id" }, 3, 1 ] }, ["0", "2", "4", "6", "8", "b", "d", "f"] ] 
+      });
+    }
+    if (amenitiesList.includes("pool")) {
+      amenityConditions.push({ 
+        $in: [ { $substrCP: [ { $toString: "$_id" }, 4, 1 ] }, ["0", "2", "4", "6", "8", "b", "d", "f"] ] 
+      });
+    }
+    
+    if (amenityConditions.length > 0) {
+      filter.$expr = { $and: amenityConditions };
+    }
+  }
+
   if (search) {
     filter.$or = [
       { title: { $regex: search, $options: "i" } },
@@ -46,17 +54,8 @@ module.exports.index = async (req, res) => {
     if (priceMax) filter.price.$lte = Number(priceMax);
   }
 
-  /*
-   * PROFESSIONAL SORTING SYSTEM (MongoDB Aggregation):
-   * Instead of a basic `Listing.find()`, we use a powerful aggregation pipeline.
-   * This allows us to join the "reviews" collection to calculate the average rating
-   * and total review count dynamically, so we can sort by "Highest Rated" or "Most Reviewed".
-   */
-  
-  // 1. Define the dynamic sort stage based on user input
-  // We use tie-breakers (_id) to ensure stable sorting for items with identical values.
   const safeSort = typeof sort === 'string' ? sort.trim() : "";
-  let sortStage = { _id: -1 }; // Default: "newest"
+  let sortStage = { _id: -1 };
   if (safeSort === "priceLow") sortStage = { price: 1, _id: 1 };
   else if (safeSort === "priceHigh") sortStage = { price: -1, _id: 1 };
   else if (safeSort === "alphabetical") sortStage = { lowerTitle: 1, _id: 1 };
@@ -64,11 +63,8 @@ module.exports.index = async (req, res) => {
   else if (safeSort === "mostReviewed") sortStage = { reviewCount: -1, _id: -1 };
   else if (safeSort === "newest") sortStage = { _id: -1 };
 
-  const listings = await Listing.aggregate([
-    // Step 1: Filter listings using the same match logic as before
+  let pipeline = [
     { $match: filter },
-    
-    // Step 2: Lookup actual reviews to calculate ratings dynamically
     {
       $lookup: {
         from: "reviews", 
@@ -77,8 +73,6 @@ module.exports.index = async (req, res) => {
         as: "populatedReviews"
       }
     },
-    
-    // Step 3: Add new fields for average rating, review count, and safe numeric/string fields for sorting
     {
       $addFields: {
         reviewCount: { $size: { $ifNull: ["$populatedReviews", []] } },
@@ -86,21 +80,103 @@ module.exports.index = async (req, res) => {
         sortRating: { $ifNull: [{ $avg: "$populatedReviews.rating" }, 0] },
         lowerTitle: { $toLower: { $ifNull: ["$title", ""] } }
       }
-    },
+    }
+  ];
+
+  // Post-aggregation match for dynamic ratings/stars if provided
+  let postMatch = {};
+  
+  if (rating) {
+    // Array of ratings (e.g. ['9', '8'])
+    const ratingValues = Array.isArray(rating) ? rating : [rating];
+    const minRating = Math.min(...ratingValues.map(r => Number(r)));
+    if (!isNaN(minRating)) {
+      postMatch.avgRating = { $gte: minRating };
+    }
+  }
+
+  if (stars) {
+    const starValues = Array.isArray(stars) ? stars : [stars];
+    const starQueries = starValues.map(s => {
+      const sNum = Number(s);
+      return { avgRating: { $gte: sNum - 0.5, $lt: sNum + 0.5 } };
+    });
+    // If a listing has no reviews (avgRating is null), we treat it as 5 stars in the view.
+    if (starValues.includes('5')) {
+      starQueries.push({ avgRating: { $type: "null" } });
+      starQueries.push({ avgRating: { $exists: false } });
+    }
     
-    // Step 4: Apply the dynamic sort with tie-breakers
-    { $sort: sortStage },
+    if (starQueries.length > 0) {
+      if (postMatch.$or) {
+        postMatch.$and = [{ $or: postMatch.$or }, { $or: starQueries }];
+        delete postMatch.$or;
+      } else {
+        postMatch.$or = starQueries;
+      }
+    }
+  }
 
-    // Step 5: Remove temporary sorting fields to save memory
-    { $project: { populatedReviews: 0, sortRating: 0, lowerTitle: 0 } }
-  ]);
+  if (Object.keys(postMatch).length > 0) {
+    pipeline.push({ $match: postMatch });
+  }
 
-  return res.render("listings/index.ejs", { 
+  pipeline.push({ $sort: sortStage });
+  pipeline.push({ $project: { populatedReviews: 0, sortRating: 0, lowerTitle: 0 } });
+
+  return pipeline;
+};
+
+module.exports.index = async (req, res) => {
+  const pipeline = buildAggregationPipeline(req.query);
+  const listings = await Listing.aggregate(pipeline);
+
+  let recentlyViewedListings = [];
+  if (req.user) {
+    const user = await User.findById(req.user._id).populate("recentlyViewed.listing");
+    if (user && user.recentlyViewed) {
+      recentlyViewedListings = user.recentlyViewed.filter(item => item.listing);
+    }
+  }
+
+  res.render("listings/index.ejs", { 
     listings, 
-    selectedCategory: category || propertyType,
-    searchParams: req.query
+    searchParams: req.query,
+    selectedCategory: req.query.category || 'Trending',
+    recentlyViewedListings 
   });
 };
+
+module.exports.searchPage = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 20;
+  const skip = (page - 1) * limit;
+
+  const pipeline = buildAggregationPipeline(req.query);
+  
+  // We use $facet to get both the paginated data and the total count in one query
+  pipeline.push({
+    $facet: {
+      metadata: [{ $count: "total" }],
+      data: [{ $skip: skip }, { $limit: limit }]
+    }
+  });
+
+  const result = await Listing.aggregate(pipeline);
+  const totalCount = result[0].metadata[0] ? result[0].metadata[0].total : 0;
+  const listings = result[0].data;
+  const totalPages = Math.ceil(totalCount / limit);
+
+  res.render("listings/search.ejs", { 
+    listings, 
+    searchParams: req.query,
+    totalCount,
+    currentPage: page,
+    totalPages,
+    selectedCategory: req.query.category || 'Trending'
+  });
+};
+
 
 
 module.exports.renderNewForm = async (req, res) => {
@@ -162,11 +238,14 @@ module.exports.showListing = async (req, res) => {
   if (req.user) {
     const user = await User.findById(req.user._id);
     if (user) {
-      // Track recently viewed
-      user.recentlyViewed.pull(listing._id); // Remove if already exists
-      user.recentlyViewed.push(listing._id); // Add to end (most recent)
+      // Track recently viewed with timestamp
+      user.recentlyViewed = user.recentlyViewed.filter(
+        item => item.listing && item.listing.toString() !== listing._id.toString()
+      );
+      // Add to beginning (most recent first)
+      user.recentlyViewed.unshift({ listing: listing._id, viewedAt: new Date() });
       if (user.recentlyViewed.length > 10) {
-        user.recentlyViewed.shift(); // Keep only last 10
+        user.recentlyViewed.pop(); // Keep only last 10
       }
       await user.save();
     }
