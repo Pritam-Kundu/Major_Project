@@ -9,11 +9,22 @@ module.exports.isLoggedIn = (req, res, next) => {
 
 //Usually passport refresh its content when a new thing happen so basically when we save redirectUrl in req.session then it will be stored there but after login this information will be removed so we can't access it so we are going to save this in res.locals and passport can't delete this
 module.exports.saveRedirectUrl = (req, res, next) => {
-  if(req.session.redirectUrl){
+  if (req.session.redirectUrl) {
     res.locals.redirectUrl = req.session.redirectUrl
   }
   next()
 }
 
+module.exports.isAdmin = (req, res, next) => {
 
+  if (!req.user || !req.user.isAdmin) {
+
+    req.flash("error", "Access Denied!");
+
+    return res.redirect("/listings");
+  }
+
+  next();
+
+};
 

@@ -1,0 +1,57 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="container mt-5">
+
+        <h2 class="mb-4">
+
+            Contact Support
+
+        </h2>
+
+        <form action="/help/contact" method="POST">
+
+            <div class="mb-3">
+
+                <label>Subject</label>
+
+                <input type="text" name="subject" class="form-control" required>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>Category</label>
+
+                <select name="category" class="form-select">
+
+                    <option>Booking</option>
+
+                    <option>Payment</option>
+
+                    <option>Property</option>
+
+                    <option>Account</option>
+
+                    <option>Other</option>
+
+                </select>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>Message</label>
+
+                <textarea name="message" rows="6" class="form-control" required></textarea>
+
+            </div>
+
+            <button class="btn btn-success">
+
+                Submit Ticket
+
+            </button>
+
+        </form>
+
+    </div>

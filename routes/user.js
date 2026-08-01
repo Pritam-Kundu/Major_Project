@@ -22,6 +22,7 @@ router
   .get(userController.renderLoginForm)
   .post(
     saveRedirectUrl,
+    userController.loginWithEmail,
     passport.authenticate("local", {
       failureRedirect: "/login",
       failureFlash: true,
@@ -60,6 +61,8 @@ router.post(
   isLoggedIn,
   wrapAsync(userController.toggleWishlist)
 );
+
+router.post("/auth/firebase", userController.firebaseLogin);
 
 router.get(
   "/wishlist",

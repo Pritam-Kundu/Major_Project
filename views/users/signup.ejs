@@ -1,296 +1,454 @@
 <% layout("layouts/boilerplate") %>
 
-<style>
-  /* Base Container overriding standard margins */
-  .auth-split-container {
-    display: flex;
-    min-height: 85vh;
-    background-color: #fbfaf8; /* Soft cream/off-white background */
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-    margin: 1rem 0 3rem 0;
-  }
-
-  /* Left Side: Form Panel */
-  .auth-form-panel {
-    flex: 1;
-    padding: 2rem 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  @media (min-width: 768px) {
-    .auth-form-panel {
-      padding: 3rem 5rem;
+  <style>
+    /* Base Container overriding standard margins */
+    .auth-split-container {
+      display: flex;
+      min-height: 85vh;
+      background-color: #fbfaf8;
+      /* Soft cream/off-white background */
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+      margin: 1rem 0 3rem 0;
     }
-  }
 
-  /* Right Side: Image Panel (Hidden on mobile) */
-  .auth-image-panel {
-    display: none;
-    flex: 1;
-    background-image: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop');
-    background-size: cover;
-    background-position: center;
-  }
-  @media (min-width: 992px) {
+    /* Left Side: Form Panel */
+    .auth-form-panel {
+      flex: 1;
+      padding: 2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .auth-form-panel {
+        padding: 3rem 5rem;
+      }
+    }
+
+    /* Right Side: Image Panel (Hidden on mobile) */
     .auth-image-panel {
+      display: none;
+      flex: 1;
+      background-image: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+    }
+
+    @media (min-width: 992px) {
+      .auth-image-panel {
+        display: block;
+      }
+    }
+
+    /* Typography */
+    .auth-brand {
+      font-size: 1.25rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      font-weight: 500;
+      color: #222;
+    }
+
+    .auth-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 3.5rem;
+      color: #111;
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-subtitle {
+      color: #555;
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Form Elements */
+    .auth-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #222;
+    }
+
+    .auth-input {
+      width: 100%;
+      background: transparent;
+      border: 1px solid #c4c4c4;
+      padding: 14px 50px 14px 16px;
+      /* Extra space on the right */
+      font-size: 1rem;
+      color: #333;
+      border-radius: 2px;
+      margin-bottom: 1.25rem;
+      transition: border-color 0.2s;
+    }
+
+    .auth-input:focus {
+      outline: none;
+      border-color: #222;
+      background: #fff;
+    }
+
+    /* Buttons */
+    .auth-btn-dark {
+      width: 100%;
+      background: #000;
+      color: #fff;
+      border: 1px solid #000;
+      padding: 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-radius: 2px;
+      margin-top: 0.5rem;
+    }
+
+    .auth-btn-dark:hover {
+      background: #333;
+    }
+
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 1.5rem 0;
+      color: #888;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+    }
+
+    .auth-divider::before,
+    .auth-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .auth-divider:not(:empty)::before {
+      margin-right: 1.5em;
+    }
+
+    .auth-divider:not(:empty)::after {
+      margin-left: 1.5em;
+    }
+
+    .auth-btn-google {
+      width: 100%;
+      background: transparent;
+      color: #222;
+      border: 1px solid #c4c4c4;
+      padding: 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+      border-radius: 2px;
+    }
+
+    .auth-btn-google:hover {
+      background: #f0f0f0;
+    }
+
+    /* Footer */
+    .auth-footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .auth-footer a {
+      color: #8c7355;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .auth-footer a:hover {
+      color: #6a563f;
+    }
+
+    .invalid-feedback {
+      display: none;
+      color: #d93025;
+      font-size: 0.85rem;
+      margin-top: -1rem;
+      margin-bottom: 1rem;
+    }
+
+    .valid-feedback {
+      display: none;
+      color: #198754;
+      font-size: 0.85rem;
+      margin-top: -1rem;
+      margin-bottom: 1rem;
+    }
+
+    .was-validated .form-control:invalid~.invalid-feedback {
       display: block;
     }
-  }
 
-  /* Typography */
-  .auth-brand {
-    font-size: 1.25rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-bottom: 2rem;
-    font-weight: 500;
-    color: #222;
-  }
+    .was-validated .form-control:valid~.valid-feedback {
+      display: block;
+    }
 
-  .auth-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 3.5rem;
-    color: #111;
-    margin-bottom: 0.5rem;
-  }
+    .progress {
+      height: 10px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
 
-  .auth-subtitle {
-    color: #555;
-    font-size: 1.05rem;
-    margin-bottom: 2rem;
-  }
+    .progress-bar {
+      transition: width 0.4s ease;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
 
-  /* Form Elements */
-  .auth-label-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 0.5rem;
-  }
-  
-  .auth-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: #222;
-  }
+    .small {
+      margin-bottom: 1.8rem;
+    }
 
-  .auth-input {
-    width: 100%;
-    background: transparent;
-    border: 1px solid #c4c4c4;
-    padding: 14px 16px;
-    font-size: 1rem;
-    color: #333;
-    border-radius: 2px;
-    margin-bottom: 1.25rem;
-    transition: border-color 0.2s;
-  }
-  
-  .auth-input:focus {
-    outline: none;
-    border-color: #222;
-    background: #fff;
-  }
+    .password-toggle {
 
-  /* Buttons */
-  .auth-btn-dark {
-    width: 100%;
-    background: #000;
-    color: #fff;
-    border: 1px solid #000;
-    padding: 16px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: all 0.3s;
-    border-radius: 2px;
-    margin-top: 0.5rem;
-  }
-  .auth-btn-dark:hover {
-    background: #333;
-  }
+      position: absolute;
 
-  .auth-divider {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    margin: 1.5rem 0;
-    color: #888;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-  }
-  .auth-divider::before,
-  .auth-divider::after {
-    content: '';
-    flex: 1;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  .auth-divider:not(:empty)::before {
-    margin-right: 1.5em;
-  }
-  .auth-divider:not(:empty)::after {
-    margin-left: 1.5em;
-  }
+      right: 40px;
 
-  .auth-btn-google {
-    width: 100%;
-    background: transparent;
-    color: #222;
-    border: 1px solid #c4c4c4;
-    padding: 14px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    transition: background 0.2s;
-    border-radius: 2px;
-  }
-  .auth-btn-google:hover {
-    background: #f0f0f0;
-  }
+      top: 50%;
 
-  /* Footer */
-  .auth-footer {
-    margin-top: 2rem;
-    text-align: center;
-    font-size: 0.95rem;
-    color: #555;
-  }
-  .auth-footer a {
-    color: #8c7355;
-    font-weight: 600;
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-  .auth-footer a:hover {
-    color: #6a563f;
-  }
-  
-  .invalid-feedback {
-    display: none;
-    color: #d93025;
-    font-size: 0.85rem;
-    margin-top: -1rem;
-    margin-bottom: 1rem;
-  }
-  .valid-feedback {
-    display: none;
-    color: #198754;
-    font-size: 0.85rem;
-    margin-top: -1rem;
-    margin-bottom: 1rem;
-  }
-  
-  .was-validated .form-control:invalid ~ .invalid-feedback {
-    display: block;
-  }
-  .was-validated .form-control:valid ~ .valid-feedback {
-    display: block;
-  }
-</style>
+      transform: translateY(-50%);
 
-<div class="auth-split-container">
-  
-  <!-- Left Form Panel -->
-  <div class="auth-form-panel">
-    <a href="/listings" class="auth-brand" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px;">
-          <svg class="homigo-logo-icon" viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
-  <defs>
-    <clipPath id="homigo-pin-clip">
-      <path d="M 50 95 C 50 95 95 65 95 45 A 45 45 0 0 0 5 45 C 5 65 50 95 50 95 Z" />
-    </clipPath>
-  </defs>
-  <g clip-path="url(#homigo-pin-clip)">
-    <rect x="0" y="0" width="100" height="100" fill="#d59d8c" />
-    <polygon points="0,65 50,25 100,65 100,100 0,100" fill="#5f788b" />
-    <rect x="70" y="25" width="8" height="20" fill="#ffffff" />
-    <polyline points="-10,72 50,25 110,72" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
-  </g>
-  <g fill="#ffffff">
-    <rect x="41" y="48" width="7" height="7" rx="1" />
-    <rect x="52" y="48" width="7" height="7" rx="1" />
-    <rect x="41" y="59" width="7" height="7" rx="1" />
-    <rect x="52" y="59" width="7" height="7" rx="1" />
-  </g>
-</svg>
-          <span style="font-family: 'Nunito', sans-serif; color: #5f788b; font-weight:800; font-size: 2rem; text-transform:none; letter-spacing:0;">Homigo</span>
-        </a>
-    <h1 class="auth-title">Create Account</h1>
-    <p class="auth-subtitle">Join us to curate your next exquisite stay.</p>
-    
-    <form action="/signup" method="post" novalidate class="needs-validation">
-      
-      <div class="auth-label-row">
-        <label for="username" class="auth-label">Username</label>
-      </div>
-      <input
-        type="text"
-        name="username"
-        id="username"
-        class="auth-input form-control"
-        required
-      />
-      <div class="invalid-feedback">Please enter a valid username.</div>
+      cursor: pointer;
 
-      <div class="auth-label-row">
-        <label for="email" class="auth-label">Email Address</label>
-      </div>
-      <input
-        type="email"
-        name="email"
-        id="email"
-        class="auth-input form-control"
-        required
-      />
-      <div class="invalid-feedback">Please provide a valid email.</div>
+      color: #666;
 
-      <div class="auth-label-row">
-        <label for="password" class="auth-label">Password</label>
-      </div>
-      <input
-        type="password"
-        name="password"
-        id="password"
-        class="auth-input form-control"
-        required
-      />
-      <div class="invalid-feedback">Please enter a password.</div>
+      transition: color .2s;
 
-      <button type="submit" class="auth-btn-dark">
-        Sign Up <i class="fa-solid fa-arrow-right"></i>
-      </button>
-      
-      <div class="auth-divider">OR</div>
-      
-      <button type="button" class="auth-btn-google">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" width="18" height="18">
-        Continue with Google
-      </button>
-      
-      <div class="auth-footer">
-        Already have an account? <a href="/login">Log in</a>
-      </div>
-    </form>
+    }
+
+    .password-toggle:hover {
+
+      color: #000;
+
+    }
+
+    /* Remove Bootstrap's default validation icons */
+    .form-control.is-valid,
+    .was-validated .form-control:valid,
+    .form-control.is-invalid,
+    .was-validated .form-control:invalid {
+
+      background-image: none !important;
+      padding-right: 50px !important;
+
+    }
+
+    .auth-input.is-invalid {
+      border-color: #dc3545 !important;
+    }
+
+    .auth-input.is-valid {
+      border-color: #198754 !important;
+    }
+
+    .invalid-feedback {
+      display: none;
+      color: #dc3545;
+      font-size: 0.85rem;
+      margin-top: -12px;
+      margin-bottom: 15px;
+    }
+
+    .auth-input.is-invalid~.invalid-feedback {
+      display: block;
+    }
+  </style>
+
+  <div class="auth-split-container">
+
+    <!-- Left Form Panel -->
+    <div class="auth-form-panel">
+      <a href="/listings" class="auth-brand"
+        style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px;">
+        <svg class="homigo-logo-icon" viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg"
+          style="vertical-align: middle;">
+          <defs>
+            <clipPath id="homigo-pin-clip">
+              <path d="M 50 95 C 50 95 95 65 95 45 A 45 45 0 0 0 5 45 C 5 65 50 95 50 95 Z" />
+            </clipPath>
+          </defs>
+          <g clip-path="url(#homigo-pin-clip)">
+            <rect x="0" y="0" width="100" height="100" fill="#d59d8c" />
+            <polygon points="0,65 50,25 100,65 100,100 0,100" fill="#5f788b" />
+            <rect x="70" y="25" width="8" height="20" fill="#ffffff" />
+            <polyline points="-10,72 50,25 110,72" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </g>
+          <g fill="#ffffff">
+            <rect x="41" y="48" width="7" height="7" rx="1" />
+            <rect x="52" y="48" width="7" height="7" rx="1" />
+            <rect x="41" y="59" width="7" height="7" rx="1" />
+            <rect x="52" y="59" width="7" height="7" rx="1" />
+          </g>
+        </svg>
+        <span
+          style="font-family: 'Nunito', sans-serif; color: #5f788b; font-weight:800; font-size: 2rem; text-transform:none; letter-spacing:0;">Homigo</span>
+      </a>
+      <h1 class="auth-title">Create Account</h1>
+      <p class="auth-subtitle">Join us to curate your next exquisite stay.</p>
+
+      <form action="/signup" method="post" novalidate class="needs-validation">
+
+        <div class="auth-label-row">
+          <label for="username" class="auth-label">Username</label>
+        </div>
+        <input type="text" name="username" id="username" class="auth-input form-control" required />
+        <div class="invalid-feedback">Please enter a valid username.</div>
+
+        <div class="auth-label-row">
+          <label for="email" class="auth-label">Email Address</label>
+        </div>
+        <input type="email" name="email" id="email" class="auth-input form-control" required />
+        <div class="invalid-feedback">Please provide a valid email.</div>
+
+        <!-- Password -->
+
+        <div class="auth-label-row">
+          <label for="password" class="auth-label">
+            Password
+          </label>
+        </div>
+
+        <div class="position-relative mb-3">
+
+          <input type="password" name="password" id="password" class="auth-input form-control pe-5" required>
+
+          <i id="togglePassword" class="fa-solid fa-eye password-toggle position-absolute"
+            style="right:18px; top:50%; transform:translateY(-50%); cursor:pointer; color:#666;">
+          </i>
+
+        </div>
+
+        <div class="invalid-feedback">
+          Please enter a password.
+        </div>
+
+
+        <!-- Password Strength Meter -->
+
+        <div class="progress mt-3">
+
+          <div id="passwordStrength" class="progress-bar bg-danger" role="progressbar" style="width: 0%;">
+
+            Weak
+
+          </div>
+
+        </div>
+
+        <!-- Password Requirements -->
+
+        <ul class="small mt-3 ps-3">
+
+          <li id="length" class="text-danger">
+            At least 8 characters
+          </li>
+
+          <li id="upper" class="text-danger">
+            One uppercase letter (A-Z)
+          </li>
+
+          <li id="lower" class="text-danger">
+            One lowercase letter (a-z)
+          </li>
+
+          <li id="number" class="text-danger">
+            One number (0-9)
+          </li>
+
+          <li id="special" class="text-danger">
+            One special character (!@#$%^&*)
+          </li>
+
+        </ul>
+
+        <!-- Confirm Password -->
+
+        <div class="auth-label-row mt-4">
+          <label for="confirmPassword" class="auth-label">
+            Confirm Password
+          </label>
+        </div>
+
+        <div class="position-relative mb-3">
+
+          <input type="password" id="confirmPassword" name="confirmPassword" class="auth-input form-control pe-5"
+            placeholder="Re-enter your password" required>
+
+          <i id="toggleConfirmPassword" class="fa-solid fa-eye password-toggle position-absolute"
+            style="right:18px; top:50%; transform:translateY(-50%); cursor:pointer; color:#666;">
+          </i>
+
+        </div>
+
+        <div class="invalid-feedback">
+          Passwords do not match.
+        </div>
+
+        <button type="submit" class="auth-btn-dark">
+          Sign Up <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+        <div class="auth-divider">OR</div>
+
+        <button id="googleLogin" type="button" class="auth-btn-google">
+
+          <img src="https://developers.google.com/identity/images/g-logo.png" width="18">
+
+          Continue with Google
+
+        </button>
+
+        <div class="auth-footer">
+          Already have an account?
+          <a href="/login">Log in</a>
+        </div>
+
+      </form>
+
+    </div>
+
+    <!-- Right Image Panel -->
+    <div class="auth-image-panel"></div>
+
   </div>
-  
-  <!-- Right Image Panel -->
-  <div class="auth-image-panel"></div>
 
-</div>
+
+  <script type="module" src="/js/firebase.js"></script>
+  <script type="module" src="/js/googleAuth.js"></script>
+  <script src="/js/passwordValidation.js"></script>

@@ -1,0 +1,105 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="container mt-5">
+
+        <h2>
+
+            Support Tickets
+
+        </h2>
+
+        <table class="table table-bordered mt-4">
+
+            <thead>
+
+                <tr>
+
+                    <th>User</th>
+
+                    <th>Subject</th>
+
+                    <th>Status</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <% tickets.forEach(ticket=>{ %>
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                <%= ticket.user.username %>
+                            </strong><br>
+                            <small class="text-muted">
+                                <i class="fa-solid fa-envelope"></i>
+                                <%= ticket.user.email %>
+                            </small>
+                        </td>
+
+                        <td>
+
+                            <%= ticket.subject %>
+
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-primary">
+
+                                <%= ticket.status %>
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <form action="/help/<%= ticket._id %>?_method=PUT" method="POST">
+
+                                <select name="status" class="form-select mb-2">
+
+                                    <option <%=ticket.status==="Open" ?"selected":"" %>>
+
+                                        Open
+
+                                    </option>
+
+                                    <option <%=ticket.status==="In Progress" ?"selected":"" %>>
+
+                                        In Progress
+
+                                    </option>
+
+                                    <option <%=ticket.status==="Resolved" ?"selected":"" %>>
+
+                                        Resolved
+
+                                    </option>
+
+                                </select>
+
+                                <button class="btn btn-success btn-sm">
+
+                                    Update
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    <% }) %>
+
+            </tbody>
+
+        </table>
+
+    </div>

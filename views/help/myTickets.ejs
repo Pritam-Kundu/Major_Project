@@ -1,0 +1,67 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="container mt-5">
+
+        <h2>
+
+            My Support Tickets
+
+        </h2>
+
+        <table class="table table-bordered mt-4">
+
+            <thead>
+
+                <tr>
+
+                    <th>Subject</th>
+
+                    <th>Category</th>
+
+                    <th>Status</th>
+
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <% tickets.forEach(ticket=>{ %>
+
+                    <tr>
+
+                        <td>
+                            <%= ticket.subject %>
+                        </td>
+
+                        <td>
+                            <%= ticket.category %>
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-primary">
+
+                                <%= ticket.status %>
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <%= ticket.createdAt.toDateString() %>
+
+                        </td>
+
+                    </tr>
+
+                    <% }) %>
+
+            </tbody>
+
+        </table>
+
+    </div>

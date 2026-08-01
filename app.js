@@ -20,6 +20,7 @@ const bookingRouter = require("./routes/booking.js");
 const notificationRouter = require("./routes/notification.js");
 const offerRouter = require("./routes/offer.js");
 const importRouter = require("./routes/import.js");
+const helpRouter = require("./routes/help.js");
 
 
 const Listing = require("./models/listing.js");
@@ -45,9 +46,11 @@ async function main() {
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
+
 
 
 const sessionOptions = {
@@ -98,6 +101,7 @@ app.use("/bookings", bookingRouter);
 app.use("/notifications", notificationRouter);
 app.use("/offers", offerRouter);
 app.use("/import", importRouter);
+app.use("/help", helpRouter);
 
 
 
