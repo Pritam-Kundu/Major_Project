@@ -1,0 +1,1942 @@
+<% layout("layouts/boilerplate") %>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f8f9fc;
+            overflow-x: hidden;
+        }
+
+        /* HERO */
+
+        .accessibility-hero {
+
+            height: 80vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            color: white;
+
+            background:
+                linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .55)),
+                url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+
+            background-position: center;
+
+        }
+
+        .hero-content {
+
+            max-width: 900px;
+
+            padding: 20px;
+
+            animation: fadeUp 1s ease;
+
+        }
+
+        .hero-content h1 {
+
+            font-size: 4rem;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+
+        }
+
+        .hero-content p {
+
+            font-size: 1.15rem;
+
+            line-height: 2;
+
+            color: #eee;
+
+        }
+
+        /* COMMON */
+
+        .section {
+
+            padding: 100px 8%;
+
+        }
+
+        .section-title {
+
+            text-align: center;
+
+            font-size: 2.8rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .divider {
+
+            width: 120px;
+
+            height: 5px;
+
+            background: #2f80ed;
+
+            margin: 0 auto 60px;
+
+            border-radius: 30px;
+
+        }
+
+        /* OVERVIEW */
+
+        .overview {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .overview img {
+
+            width: 100%;
+
+            border-radius: 20px;
+
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+
+        }
+
+        .overview-content h2 {
+
+            font-size: 2.5rem;
+
+            margin-bottom: 20px;
+
+        }
+
+        .overview-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* FEATURE GRID */
+
+        .feature-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .feature-card {
+
+            background: white;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .feature-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .feature-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .feature-card h3 {
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+
+        }
+
+        .feature-card p {
+
+            line-height: 1.9;
+
+            color: #666;
+
+        }
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(40px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+        @media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+
+            .overview {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        /* Website */
+
+        .website-wrapper {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .website-content h2 {
+
+            margin-bottom: 20px;
+
+            font-weight: 700;
+
+        }
+
+        .website-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        .website-content ul {
+
+            list-style: none;
+
+            padding: 0;
+
+        }
+
+        .website-content li {
+
+            margin-bottom: 18px;
+
+        }
+
+        .website-content li i {
+
+            color: #2f80ed;
+
+            margin-right: 10px;
+
+        }
+
+        /* Property Cards */
+
+        .accessibility-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .accessibility-card {
+
+            background: white;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .accessibility-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .accessibility-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Mobile */
+
+        .mobile-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .mobile-card {
+
+            background: white;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .mobile-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .mobile-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Improvement */
+
+        .improvement-section {
+
+            background: white;
+
+        }
+
+        .improvement-box {
+
+            display: flex;
+
+            gap: 30px;
+
+            background: #eef5ff;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .improvement-icon i {
+
+            font-size: 60px;
+
+            color: #2f80ed;
+
+        }
+
+        @media(max-width:992px) {
+
+            .website-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .improvement-box {
+
+                flex-direction: column;
+
+            }
+
+        }
+
+        /* Standards */
+
+        .standard-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .standard-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .standard-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .standard-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Principles */
+
+        .principle-wrapper {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .principle-content h2 {
+
+            margin-bottom: 20px;
+
+            font-weight: 700;
+
+        }
+
+        .principle-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        .principle-content ul {
+
+            list-style: none;
+
+            padding: 0;
+
+        }
+
+        .principle-content li {
+
+            margin-bottom: 18px;
+
+        }
+
+        .principle-content i {
+
+            color: #2f80ed;
+
+            margin-right: 10px;
+
+        }
+
+        /* Feedback */
+
+        .feedback-box {
+
+            display: flex;
+
+            gap: 30px;
+
+            background: #eef5ff;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .feedback-icon i {
+
+            font-size: 60px;
+
+            color: #2f80ed;
+
+        }
+
+        /* Resources */
+
+        .resource-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 25px;
+
+        }
+
+        .resource-card {
+
+            background: white;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            text-decoration: none;
+
+            color: #333;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .resource-card:hover {
+
+            background: #2f80ed;
+
+            color: white;
+
+            transform: translateY(-10px);
+
+        }
+
+        .resource-card i {
+
+            font-size: 45px;
+
+            margin-bottom: 15px;
+
+        }
+
+        /* Commitment */
+
+        .commitment-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .commitment-card {
+
+            background: white;
+
+            padding: 40px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .commitment-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .commitment-card h2 {
+
+            font-size: 2.8rem;
+
+            font-weight: 800;
+
+            color: #2f80ed;
+
+            margin-bottom: 10px;
+
+        }
+
+        @media(max-width:992px) {
+
+            .principle-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .feedback-box {
+
+                flex-direction: column;
+
+            }
+
+        }
+
+        /* FAQ */
+
+        .faq-section {
+
+            background: #f8f9fc;
+
+        }
+
+        .accordion-button {
+
+            font-weight: 600;
+
+            font-size: 1.05rem;
+
+        }
+
+        /* Statement */
+
+        .statement-box {
+
+            display: flex;
+
+            gap: 30px;
+
+            align-items: flex-start;
+
+            background: #eef5ff;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .statement-box i {
+
+            font-size: 60px;
+
+            color: #2f80ed;
+
+            margin-top: 5px;
+
+        }
+
+        .statement-box h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+        }
+
+        .statement-box p {
+
+            line-height: 1.9;
+
+            color: #555;
+
+        }
+
+        /* Last Updated */
+
+        .last-update {
+
+            max-width: 450px;
+
+            margin: auto;
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .last-update i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 15px;
+
+        }
+
+        .last-update h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 10px;
+
+        }
+
+        .last-update p {
+
+            margin: 0;
+
+            font-size: 1.1rem;
+
+            color: #666;
+
+        }
+
+        /* CTA */
+
+        .accessibility-contact {
+
+            padding: 120px 8%;
+
+            background: linear-gradient(135deg, #2f80ed, #56ccf2);
+
+            text-align: center;
+
+            color: white;
+
+        }
+
+        .accessibility-contact h2 {
+
+            font-size: 3rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .accessibility-contact p {
+
+            max-width: 760px;
+
+            margin: 0 auto 40px;
+
+            line-height: 2;
+
+        }
+
+        .contact-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .contact-buttons .btn {
+
+            padding: 16px 36px;
+
+            border-radius: 50px;
+
+            font-weight: 600;
+
+            transition: .3s;
+
+        }
+
+        .contact-buttons .btn:hover {
+
+            transform: translateY(-5px);
+
+        }
+
+        @media(max-width:768px) {
+
+            .statement-box {
+
+                flex-direction: column;
+
+            }
+
+            .accessibility-contact h2 {
+
+                font-size: 2.2rem;
+
+            }
+
+            .contact-buttons {
+
+                flex-direction: column;
+
+                align-items: center;
+
+            }
+
+            .contact-buttons .btn {
+
+                width: 260px;
+
+            }
+
+        }
+    </style>
+
+    <!-- HERO -->
+
+    <section class="accessibility-hero">
+
+        <div class="hero-content">
+
+            <h1>
+
+                Accessibility
+
+            </h1>
+
+            <p>
+
+                Homigo is committed to creating an inclusive experience by improving accessibility across our website
+                and encouraging accessible accommodations for every traveler.
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- OVERVIEW -->
+
+    <section class="section">
+
+        <div class="overview">
+
+            <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1000&q=80">
+
+            <div class="overview-content">
+
+                <h2>
+
+                    Travel For Everyone
+
+                </h2>
+
+                <p>
+
+                    We believe travel should be accessible to as many people as possible. Homigo aims to improve
+                    usability for guests with diverse abilities through thoughtful design and clear information.
+
+                </p>
+
+                <p>
+
+                    We continuously review and enhance our platform to support accessibility, usability, and inclusive
+                    experiences.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FEATURES -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Accessibility Features
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <i class="fa-solid fa-eye"></i>
+
+                <h3>
+
+                    Readable Design
+
+                </h3>
+
+                <p>
+
+                    Clear typography, structured layouts, and strong visual hierarchy improve readability.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <i class="fa-solid fa-keyboard"></i>
+
+                <h3>
+
+                    Keyboard Friendly
+
+                </h3>
+
+                <p>
+
+                    Important navigation and interactive elements are designed to work with keyboard navigation.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <i class="fa-solid fa-universal-access"></i>
+
+                <h3>
+
+                    Inclusive Experience
+
+                </h3>
+
+                <p>
+
+                    We strive to make Homigo welcoming and usable for people with a wide range of abilities.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <i class="fa-solid fa-headset"></i>
+
+                <h3>
+
+                    Support Available
+
+                </h3>
+
+                <p>
+
+                    Our support team is available to help if you encounter accessibility-related issues while using
+                    Homigo.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- WEBSITE ACCESSIBILITY -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Website Accessibility
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="website-wrapper">
+
+            <div>
+
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80"
+                    class="img-fluid rounded-4 shadow">
+
+            </div>
+
+            <div class="website-content">
+
+                <h2>
+
+                    Designed For Better Usability
+
+                </h2>
+
+                <p>
+
+                    Homigo is designed with accessibility in mind by providing a clean interface, readable typography,
+                    logical navigation, and responsive layouts that work across different devices.
+
+                </p>
+
+                <ul>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Responsive design for desktop, tablet, and mobile devices
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Consistent navigation across pages
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Clear headings and content organization
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Readable fonts with sufficient spacing
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ACCESSIBLE PROPERTIES -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Accessible Property Information
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="accessibility-grid">
+
+            <div class="accessibility-card">
+
+                <i class="fa-solid fa-wheelchair"></i>
+
+                <h3>
+
+                    Step-Free Access
+
+                </h3>
+
+                <p>
+
+                    Where available, hosts are encouraged to specify whether entrances and important areas are
+                    accessible without stairs.
+
+                </p>
+
+            </div>
+
+            <div class="accessibility-card">
+
+                <i class="fa-solid fa-door-open"></i>
+
+                <h3>
+
+                    Wide Entrances
+
+                </h3>
+
+                <p>
+
+                    Hosts should clearly mention doorway widths and accessibility-friendly entrances whenever
+                    applicable.
+
+                </p>
+
+            </div>
+
+            <div class="accessibility-card">
+
+                <i class="fa-solid fa-bath"></i>
+
+                <h3>
+
+                    Accessible Bathrooms
+
+                </h3>
+
+                <p>
+
+                    Information about grab bars, walk-in showers, and other accessible bathroom features helps guests
+                    plan confidently.
+
+                </p>
+
+            </div>
+
+            <div class="accessibility-card">
+
+                <i class="fa-solid fa-bed"></i>
+
+                <h3>
+
+                    Accessible Bedrooms
+
+                </h3>
+
+                <p>
+
+                    Listings may include details about bedroom accessibility, bed height, and mobility-friendly layouts.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- MOBILE ACCESSIBILITY -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Mobile Accessibility
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="mobile-grid">
+
+            <div class="mobile-card">
+
+                <i class="fa-solid fa-mobile-screen-button"></i>
+
+                <h3>
+
+                    Responsive Interface
+
+                </h3>
+
+                <p>
+
+                    Homigo adapts to different screen sizes, making browsing and booking easier across smartphones and
+                    tablets.
+
+                </p>
+
+            </div>
+
+            <div class="mobile-card">
+
+                <i class="fa-solid fa-hand-pointer"></i>
+
+                <h3>
+
+                    Touch Friendly
+
+                </h3>
+
+                <p>
+
+                    Interactive elements are designed with adequate spacing to improve touch interactions on mobile
+                    devices.
+
+                </p>
+
+            </div>
+
+            <div class="mobile-card">
+
+                <i class="fa-solid fa-magnifying-glass-plus"></i>
+
+                <h3>
+
+                    Readable Content
+
+                </h3>
+
+                <p>
+
+                    Layouts and typography are designed to remain clear and easy to read without excessive zooming.
+
+                </p>
+
+            </div>
+
+            <div class="mobile-card">
+
+                <i class="fa-solid fa-rotate"></i>
+
+                <h3>
+
+                    Adaptive Layouts
+
+                </h3>
+
+                <p>
+
+                    Responsive components help ensure a consistent experience regardless of screen orientation or device
+                    type.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CONTINUOUS IMPROVEMENT -->
+
+    <section class="section improvement-section">
+
+        <h2 class="section-title">
+
+            Continuous Improvement
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="improvement-box">
+
+            <div class="improvement-icon">
+
+                <i class="fa-solid fa-arrows-rotate"></i>
+
+            </div>
+
+            <div>
+
+                <h3>
+
+                    Accessibility Is An Ongoing Journey
+
+                </h3>
+
+                <p>
+
+                    We regularly review our website to identify opportunities for improvement. User feedback helps us
+                    prioritize accessibility enhancements and create a better experience for everyone using Homigo.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ACCESSIBILITY STANDARDS -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Accessibility Standards
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="standard-grid">
+
+            <div class="standard-card">
+
+                <i class="fa-solid fa-globe"></i>
+
+                <h3>
+
+                    Inclusive Design
+
+                </h3>
+
+                <p>
+
+                    Homigo aims to design experiences that are usable by people with diverse abilities and technology
+                    preferences.
+
+                </p>
+
+            </div>
+
+            <div class="standard-card">
+
+                <i class="fa-solid fa-laptop-code"></i>
+
+                <h3>
+
+                    Responsive Experience
+
+                </h3>
+
+                <p>
+
+                    Pages are designed to adapt across desktops, tablets, and smartphones for a consistent browsing
+                    experience.
+
+                </p>
+
+            </div>
+
+            <div class="standard-card">
+
+                <i class="fa-solid fa-font"></i>
+
+                <h3>
+
+                    Readable Content
+
+                </h3>
+
+                <p>
+
+                    We prioritize clear language, logical page structure, readable typography, and meaningful visual
+                    hierarchy.
+
+                </p>
+
+            </div>
+
+            <div class="standard-card">
+
+                <i class="fa-solid fa-arrows-up-down-left-right"></i>
+
+                <h3>
+
+                    Easy Navigation
+
+                </h3>
+
+                <p>
+
+                    Navigation is organized to help visitors locate important information quickly and efficiently.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- INCLUSIVE TRAVEL -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Our Inclusive Travel Principles
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="principle-wrapper">
+
+            <div>
+
+                <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1000&q=80"
+                    class="img-fluid rounded-4 shadow">
+
+            </div>
+
+            <div class="principle-content">
+
+                <h2>
+
+                    Travel Should Be Accessible
+
+                </h2>
+
+                <p>
+
+                    We encourage hosts to provide detailed accessibility information whenever possible so travelers can
+                    make informed booking decisions.
+
+                </p>
+
+                <ul>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Clear accessibility information
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Respectful communication
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Inclusive accommodation practices
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Equal access to travel opportunities
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FEEDBACK -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Accessibility Feedback
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="feedback-box">
+
+            <div class="feedback-icon">
+
+                <i class="fa-solid fa-comments"></i>
+
+            </div>
+
+            <div>
+
+                <h3>
+
+                    Help Us Improve
+
+                </h3>
+
+                <p>
+
+                    If you experience any accessibility barriers while using Homigo, we'd appreciate hearing from you.
+                    Your feedback helps us identify issues and prioritize future improvements to create a better
+                    experience for everyone.
+
+                </p>
+
+                <a href="/help" class="btn btn-primary mt-3">
+
+                    Send Feedback
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- RESOURCES -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Helpful Resources
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="resource-grid">
+
+            <a href="/help" class="resource-card">
+
+                <i class="fa-solid fa-headset"></i>
+
+                <h4>
+
+                    Help Center
+
+                </h4>
+
+            </a>
+
+            <a href="/privacy" class="resource-card">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+                <h4>
+
+                    Privacy Policy
+
+                </h4>
+
+            </a>
+
+            <a href="/safety" class="resource-card">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <h4>
+
+                    Safety Center
+
+                </h4>
+
+            </a>
+
+            <a href="/contact" class="resource-card">
+
+                <i class="fa-solid fa-envelope"></i>
+
+                <h4>
+
+                    Contact Support
+
+                </h4>
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- COMMITMENT -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Our Accessibility Commitment
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="commitment-grid">
+
+            <div class="commitment-card">
+
+                <h2>
+
+                    100%
+
+                </h2>
+
+                <p>
+
+                    Commitment to Continuous Improvement
+
+                </p>
+
+            </div>
+
+            <div class="commitment-card">
+
+                <h2>
+
+                    24×7
+
+                </h2>
+
+                <p>
+
+                    Support Assistance
+
+                </p>
+
+            </div>
+
+            <div class="commitment-card">
+
+                <h2>
+
+                    All Devices
+
+                </h2>
+
+                <p>
+
+                    Responsive Website Experience
+
+                </p>
+
+            </div>
+
+            <div class="commitment-card">
+
+                <h2>
+
+                    Every User
+
+                </h2>
+
+                <p>
+
+                    Inclusive Design Philosophy
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FAQ -->
+
+    <section class="section faq-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Frequently Asked Questions
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="accordion" id="accessibilityFAQ">
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#access1">
+
+                            Does Homigo support keyboard navigation?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="access1" class="accordion-collapse collapse show" data-bs-parent="#accessibilityFAQ">
+
+                        <div class="accordion-body">
+
+                            Homigo is designed with keyboard-friendly navigation in mind wherever practical, allowing
+                            users to move through important sections without relying solely on a mouse.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#access2">
+
+                            Can I request accessibility assistance?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="access2" class="accordion-collapse collapse" data-bs-parent="#accessibilityFAQ">
+
+                        <div class="accordion-body">
+
+                            Yes. If you experience accessibility barriers or require assistance while using Homigo,
+                            please contact our Support Team through the Help Center.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#access3">
+
+                            How do I know if a property is accessible?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="access3" class="accordion-collapse collapse" data-bs-parent="#accessibilityFAQ">
+
+                        <div class="accordion-body">
+
+                            Hosts are encouraged to provide accessibility-related information within their property
+                            listings whenever available. Review listing details carefully before making a reservation.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#access4">
+
+                            How can I report an accessibility issue?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="access4" class="accordion-collapse collapse" data-bs-parent="#accessibilityFAQ">
+
+                        <div class="accordion-body">
+
+                            Visit the Help Center and submit your feedback. We carefully review accessibility
+                            suggestions to improve future versions of Homigo.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- STATEMENT -->
+
+    <section class="section" style="background:white;">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Accessibility Statement Updates
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="statement-box">
+
+                <i class="fa-solid fa-file-circle-check"></i>
+
+                <div>
+
+                    <h3>
+
+                        Improving Accessibility Over Time
+
+                    </h3>
+
+                    <p>
+
+                        This Accessibility Statement may be updated as Homigo introduces new features, improves
+                        usability, and enhances accessibility across the platform. We encourage users to revisit this
+                        page for the latest information.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- LAST UPDATED -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="last-update">
+
+                <i class="fa-solid fa-calendar-days"></i>
+
+                <h3>
+
+                    Last Updated
+
+                </h3>
+
+                <p>
+
+                    August 2026
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CTA -->
+
+    <section class="accessibility-contact">
+
+        <div class="container">
+
+            <h2>
+
+                Accessibility Matters To Us
+
+            </h2>
+
+            <p>
+
+                We are committed to improving accessibility and creating an inclusive experience for everyone who uses
+                Homigo. Your suggestions help us continue making meaningful improvements.
+
+            </p>
+
+            <div class="contact-buttons">
+
+                <a href="/help" class="btn btn-light btn-lg">
+
+                    <i class="fa-solid fa-headset"></i>
+
+                    Accessibility Support
+
+                </a>
+
+                <a href="/contact" class="btn btn-outline-light btn-lg">
+
+                    <i class="fa-solid fa-envelope"></i>
+
+                    Contact Us
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>

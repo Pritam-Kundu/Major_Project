@@ -1,4 +1,5 @@
-const Support = require("../models/support");
+const Support = require("../models/support.js");
+const Booking = require("../models/booking.js");
 
 module.exports.index = (req, res) => {
 
@@ -6,9 +7,27 @@ module.exports.index = (req, res) => {
 
 };
 
-module.exports.contactForm = (req, res) => {
+module.exports.contactForm = async (req, res) => {
 
-    res.render("help/contact");
+    const bookings = await Booking.find({
+
+        user: req.user._id
+
+    })
+
+        .populate("listing")
+
+        .sort({
+
+            createdAt: -1
+
+        });
+
+    res.render("help/contact", {
+
+        bookings
+
+    });
 
 };
 
@@ -16,7 +35,13 @@ module.exports.createTicket = async (req, res) => {
 
     const ticket = new Support({
 
-        ...req.body,
+        subject: req.body.subject,
+
+        message: req.body.message,
+
+        category: req.body.category,
+
+        booking: req.body.booking || null,
 
         user: req.user._id,
 
@@ -62,6 +87,18 @@ module.exports.adminTickets = async (req, res) => {
     const tickets = await Support.find()
 
         .populate("user")
+
+        .populate({
+
+            path: "booking",
+
+            populate: {
+
+                path: "listing"
+
+            }
+
+        })
 
         .sort({
 

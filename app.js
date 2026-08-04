@@ -21,6 +21,7 @@ const notificationRouter = require("./routes/notification.js");
 const offerRouter = require("./routes/offer.js");
 const importRouter = require("./routes/import.js");
 const helpRouter = require("./routes/help.js");
+const pagesRouter = require("./routes/pages.js");
 
 
 const Listing = require("./models/listing.js");
@@ -102,7 +103,7 @@ app.use("/notifications", notificationRouter);
 app.use("/offers", offerRouter);
 app.use("/import", importRouter);
 app.use("/help", helpRouter);
-
+app.use("/", pagesRouter);
 
 
 app.get('/privacy', (req, res) => {

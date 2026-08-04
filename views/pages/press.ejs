@@ -1,0 +1,1417 @@
+<% layout("layouts/boilerplate") %>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f8f9fc;
+            overflow-x: hidden;
+        }
+
+        /* HERO */
+
+        .press-hero {
+
+            height: 80vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            color: white;
+
+            background:
+                linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .55)),
+                url("https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+
+            background-position: center;
+
+        }
+
+        .hero-content {
+
+            max-width: 850px;
+
+            padding: 20px;
+
+            animation: fadeUp 1s ease;
+
+        }
+
+        .hero-content h1 {
+
+            font-size: 4rem;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+
+        }
+
+        .hero-content p {
+
+            font-size: 1.15rem;
+
+            line-height: 2;
+
+            color: #eee;
+
+        }
+
+        /* COMMON */
+
+        .section {
+
+            padding: 100px 8%;
+
+        }
+
+        .section-title {
+
+            text-align: center;
+
+            font-size: 2.8rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .divider {
+
+            width: 120px;
+
+            height: 5px;
+
+            background: #2f80ed;
+
+            margin: 0 auto 60px;
+
+            border-radius: 30px;
+
+        }
+
+        /* INTRO */
+
+        .press-intro {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .press-intro img {
+
+            width: 100%;
+
+            border-radius: 20px;
+
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+
+        }
+
+        .press-content h2 {
+
+            font-size: 2.5rem;
+
+            margin-bottom: 20px;
+
+        }
+
+        .press-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* NEWS */
+
+        .news-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .news-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .news-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .news-card i {
+
+            font-size: 48px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .news-card h3 {
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+
+        }
+
+        .news-card p {
+
+            line-height: 1.9;
+
+            color: #666;
+
+        }
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(50px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+        @media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+
+            .press-intro {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        /* Timeline */
+
+        .timeline {
+
+            max-width: 900px;
+
+            margin: auto;
+
+        }
+
+        .timeline-item {
+
+            display: flex;
+
+            gap: 30px;
+
+            margin-bottom: 40px;
+
+            align-items: flex-start;
+
+        }
+
+        .timeline-year {
+
+            min-width: 100px;
+
+            padding: 15px;
+
+            background: #2f80ed;
+
+            color: white;
+
+            text-align: center;
+
+            font-weight: 700;
+
+            border-radius: 12px;
+
+        }
+
+        .timeline-content {
+
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            flex: 1;
+
+        }
+
+        .timeline-content h3 {
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+
+        }
+
+        .timeline-content p {
+
+            line-height: 1.9;
+
+            color: #666;
+
+        }
+
+        /* Gallery */
+
+        .gallery-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+            gap: 25px;
+
+        }
+
+        .gallery-grid img {
+
+            width: 100%;
+
+            height: 260px;
+
+            object-fit: cover;
+
+            border-radius: 20px;
+
+            transition: .35s;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .gallery-grid img:hover {
+
+            transform: scale(1.05);
+
+        }
+
+        /* Stats */
+
+        .stats-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .stat-card {
+
+            background: white;
+
+            padding: 40px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .stat-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .stat-card h2 {
+
+            font-size: 3rem;
+
+            font-weight: 800;
+
+            color: #2f80ed;
+
+            margin-bottom: 10px;
+
+        }
+
+        /* Leadership */
+
+        .leader-box {
+
+            max-width: 900px;
+
+            margin: auto;
+
+            background: #eef5ff;
+
+            padding: 50px;
+
+            text-align: center;
+
+            border-radius: 25px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .leader-box i {
+
+            font-size: 55px;
+
+            color: #2f80ed;
+
+            margin-bottom: 25px;
+
+        }
+
+        .leader-box p {
+
+            font-size: 1.1rem;
+
+            line-height: 2;
+
+            color: #555;
+
+            margin-bottom: 30px;
+
+        }
+
+        .leader-box h4 {
+
+            font-weight: 700;
+
+            margin-bottom: 5px;
+
+        }
+
+        .leader-box span {
+
+            color: #777;
+
+        }
+
+        @media(max-width:768px) {
+
+            .timeline-item {
+
+                flex-direction: column;
+
+            }
+
+            .timeline-year {
+
+                width: 100px;
+
+            }
+
+        }
+
+        /* Press Releases */
+
+        .release-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .release-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .release-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .release-date {
+
+            display: inline-block;
+
+            padding: 8px 18px;
+
+            background: #2f80ed;
+
+            color: white;
+
+            border-radius: 30px;
+
+            font-size: .85rem;
+
+            margin-bottom: 20px;
+
+        }
+
+        .release-card h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 18px;
+
+        }
+
+        .release-card p {
+
+            line-height: 1.9;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        .read-more {
+
+            font-weight: 600;
+
+            text-decoration: none;
+
+        }
+
+        /* Press Kit */
+
+        .press-kit {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .kit-item {
+
+            background: #f8f9fc;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            transition: .35s;
+
+        }
+
+        .kit-item:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .kit-item i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .kit-item h3 {
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+
+        }
+
+        .kit-item p {
+
+            line-height: 1.8;
+
+            color: #666;
+
+        }
+
+        /* Contact */
+
+        .press-contact {
+
+            padding: 120px 8%;
+
+            background: linear-gradient(135deg, #2f80ed, #56ccf2);
+
+            text-align: center;
+
+            color: white;
+
+        }
+
+        .press-contact h2 {
+
+            font-size: 3rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .press-contact p {
+
+            max-width: 750px;
+
+            margin: 0 auto 40px;
+
+            line-height: 2;
+
+        }
+
+        .contact-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .contact-buttons .btn {
+
+            padding: 15px 35px;
+
+            border-radius: 50px;
+
+            font-weight: 600;
+
+            transition: .3s;
+
+        }
+
+        .contact-buttons .btn:hover {
+
+            transform: translateY(-5px);
+
+        }
+
+        @media(max-width:768px) {
+
+            .press-contact h2 {
+
+                font-size: 2.2rem;
+
+            }
+
+            .contact-buttons {
+
+                flex-direction: column;
+
+                align-items: center;
+
+            }
+
+            .contact-buttons .btn {
+
+                width: 260px;
+
+            }
+
+        }
+    </style>
+
+    <!-- HERO -->
+
+    <section class="press-hero">
+
+        <div class="hero-content">
+
+            <h1>
+
+                Press & Media
+
+            </h1>
+
+            <p>
+
+                Stay informed with the latest news,
+                announcements,
+                product updates,
+                and company milestones from Homigo.
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- INTRO -->
+
+    <section class="section">
+
+        <div class="press-intro">
+
+            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1000&q=80">
+
+            <div class="press-content">
+
+                <h2>
+
+                    Building Better Travel Experiences
+
+                </h2>
+
+                <p>
+
+                    Homigo is committed to making travel easier,
+                    safer,
+                    and more enjoyable through technology,
+                    innovation,
+                    and exceptional customer experiences.
+
+                </p>
+
+                <p>
+
+                    Our Press & Media page highlights major product launches,
+                    company updates,
+                    industry insights,
+                    and important announcements.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- LATEST NEWS -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Latest News
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="news-grid">
+
+            <div class="news-card">
+
+                <i class="fa-solid fa-rocket"></i>
+
+                <h3>
+
+                    Platform Expansion
+
+                </h3>
+
+                <p>
+
+                    Homigo continues to expand its property listings and improve the booking experience for travelers.
+
+                </p>
+
+            </div>
+
+            <div class="news-card">
+
+                <i class="fa-solid fa-mobile-screen"></i>
+
+                <h3>
+
+                    Product Improvements
+
+                </h3>
+
+                <p>
+
+                    New platform enhancements focus on faster search,
+                    better booking management,
+                    and improved user experience.
+
+                </p>
+
+            </div>
+
+            <div class="news-card">
+
+                <i class="fa-solid fa-award"></i>
+
+                <h3>
+
+                    Community Focus
+
+                </h3>
+
+                <p>
+
+                    Homigo is dedicated to supporting travelers,
+                    hosts,
+                    and local communities through responsible tourism.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- COMPANY MILESTONES -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Company Milestones
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="timeline">
+
+            <div class="timeline-item">
+
+                <div class="timeline-year">
+
+                    2024
+
+                </div>
+
+                <div class="timeline-content">
+
+                    <h3>
+
+                        Homigo Concept Born
+
+                    </h3>
+
+                    <p>
+
+                        The vision of creating a modern travel booking platform focused on simplicity,
+                        security,
+                        and seamless experiences began.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="timeline-item">
+
+                <div class="timeline-year">
+
+                    2025
+
+                </div>
+
+                <div class="timeline-content">
+
+                    <h3>
+
+                        Platform Development
+
+                    </h3>
+
+                    <p>
+
+                        Core booking,
+                        property listing,
+                        authentication,
+                        and management modules were successfully developed.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="timeline-item">
+
+                <div class="timeline-year">
+
+                    2026
+
+                </div>
+
+                <div class="timeline-content">
+
+                    <h3>
+
+                        Public Demonstration
+
+                    </h3>
+
+                    <p>
+
+                        Homigo showcased its premium travel platform with advanced booking,
+                        support,
+                        and property management features.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- MEDIA GALLERY -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Media Gallery
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="gallery-grid">
+
+            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80">
+
+            <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80">
+
+            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80">
+
+            <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80">
+
+        </div>
+
+    </section>
+
+    <!-- COMPANY STATS -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Homigo By Numbers
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <h2>
+
+                    5000+
+
+                </h2>
+
+                <p>
+
+                    Verified Properties
+
+                </p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <h2>
+
+                    120+
+
+                </h2>
+
+                <p>
+
+                    Destinations
+
+                </p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <h2>
+
+                    100K+
+
+                </h2>
+
+                <p>
+
+                    Happy Travelers
+
+                </p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <h2>
+
+                    99%
+
+                </h2>
+
+                <p>
+
+                    Booking Success Rate
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- LEADERSHIP MESSAGE -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Message From Our Team
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="leader-box">
+
+            <i class="fa-solid fa-quote-left"></i>
+
+            <p>
+
+                "Our goal is to make discovering and booking accommodations simple,
+                secure,
+                and enjoyable.
+                Every feature we build is designed to create a better travel experience for guests while helping
+                property owners reach more travelers."
+
+            </p>
+
+            <h4>
+
+                Homigo Development Team
+
+            </h4>
+
+            <span>
+
+                Building Better Travel Experiences
+
+            </span>
+
+        </div>
+
+    </section>
+
+    <!-- PRESS RELEASES -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Official Press Releases
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="release-grid">
+
+                <div class="release-card">
+
+                    <span class="release-date">
+
+                        July 2026
+
+                    </span>
+
+                    <h3>
+
+                        Homigo Launches Enhanced Booking Experience
+
+                    </h3>
+
+                    <p>
+
+                        New platform improvements deliver faster property search,
+                        simplified reservations,
+                        and an improved user experience.
+
+                    </p>
+
+                    <a href="#" class="read-more">
+
+                        Read Release →
+
+                    </a>
+
+                </div>
+
+                <div class="release-card">
+
+                    <span class="release-date">
+
+                        May 2026
+
+                    </span>
+
+                    <h3>
+
+                        Improved Property Verification Process
+
+                    </h3>
+
+                    <p>
+
+                        Homigo introduces additional verification measures to improve transparency and build trust
+                        between guests and hosts.
+
+                    </p>
+
+                    <a href="#" class="read-more">
+
+                        Read Release →
+
+                    </a>
+
+                </div>
+
+                <div class="release-card">
+
+                    <span class="release-date">
+
+                        January 2026
+
+                    </span>
+
+                    <h3>
+
+                        Expanding Travel Opportunities
+
+                    </h3>
+
+                    <p>
+
+                        The platform continues to grow its collection of hotels,
+                        villas,
+                        resorts,
+                        and vacation rentals across multiple destinations.
+
+                    </p>
+
+                    <a href="#" class="read-more">
+
+                        Read Release →
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- PRESS KIT -->
+
+    <section class="section" style="background:white;">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Press Kit
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="press-kit">
+
+                <div class="kit-item">
+
+                    <i class="fa-solid fa-image"></i>
+
+                    <h3>
+
+                        Brand Assets
+
+                    </h3>
+
+                    <p>
+
+                        Company logo,
+                        brand colors,
+                        and promotional graphics.
+
+                    </p>
+
+                </div>
+
+                <div class="kit-item">
+
+                    <i class="fa-solid fa-camera"></i>
+
+                    <h3>
+
+                        Media Photos
+
+                    </h3>
+
+                    <p>
+
+                        Official product screenshots
+                        and promotional images.
+
+                    </p>
+
+                </div>
+
+                <div class="kit-item">
+
+                    <i class="fa-solid fa-file-lines"></i>
+
+                    <h3>
+
+                        Fact Sheet
+
+                    </h3>
+
+                    <p>
+
+                        Key company information,
+                        statistics,
+                        and platform overview.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FAQ -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Frequently Asked Questions
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="accordion" id="pressFAQ">
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#press1">
+
+                            How can journalists contact Homigo?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="press1" class="accordion-collapse collapse show" data-bs-parent="#pressFAQ">
+
+                        <div class="accordion-body">
+
+                            Media representatives may contact our communications team through the Help Center or the
+                            media contact information provided below.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#press2">
+
+                            Can I use the Homigo logo?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="press2" class="accordion-collapse collapse" data-bs-parent="#pressFAQ">
+
+                        <div class="accordion-body">
+
+                            Brand assets should only be used in accordance with Homigo's branding guidelines and with
+                            appropriate permission where required.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#press3">
+
+                            Where can I find official announcements?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="press3" class="accordion-collapse collapse" data-bs-parent="#pressFAQ">
+
+                        <div class="accordion-body">
+
+                            All official announcements are published on this Press & Media page.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CONTACT -->
+
+    <section class="press-contact">
+
+        <div class="container">
+
+            <h2>
+
+                Media Contact
+
+            </h2>
+
+            <p>
+
+                For interviews,
+                media inquiries,
+                partnership opportunities,
+                or press-related information,
+                our communications team is happy to help.
+
+            </p>
+
+            <div class="contact-buttons">
+
+                <a href="/help" class="btn btn-light btn-lg">
+
+                    <i class="fa-solid fa-envelope"></i>
+
+                    Contact Us
+
+                </a>
+
+                <a href="/about" class="btn btn-outline-light btn-lg">
+
+                    <i class="fa-solid fa-building"></i>
+
+                    About Homigo
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>

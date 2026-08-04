@@ -1,0 +1,1947 @@
+<% layout("layouts/boilerplate") %>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+
+            background: #f8f9fc;
+
+            overflow-x: hidden;
+
+        }
+
+        /* HERO */
+
+        .gift-hero {
+
+            height: 85vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            color: white;
+
+            background:
+
+                linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .55)),
+
+                url("https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+
+            background-position: center;
+
+        }
+
+        .hero-content {
+
+            max-width: 900px;
+
+            padding: 20px;
+
+            animation: fadeUp 1s ease;
+
+        }
+
+        .hero-content h1 {
+
+            font-size: 4rem;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+
+        }
+
+        .hero-content p {
+
+            font-size: 1.2rem;
+
+            line-height: 2;
+
+            margin-bottom: 35px;
+
+            color: #eee;
+
+        }
+
+        .hero-btn {
+
+            display: inline-block;
+
+            padding: 16px 40px;
+
+            background: white;
+
+            color: #2f80ed;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            border-radius: 50px;
+
+            transition: .35s;
+
+        }
+
+        .hero-btn:hover {
+
+            background: #2f80ed;
+
+            color: white;
+
+            transform: translateY(-5px);
+
+        }
+
+        /* COMMON */
+
+        .section {
+
+            padding: 100px 8%;
+
+        }
+
+        .section-title {
+
+            text-align: center;
+
+            font-size: 2.8rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .divider {
+
+            width: 120px;
+
+            height: 5px;
+
+            background: #2f80ed;
+
+            margin: 0 auto 60px;
+
+            border-radius: 30px;
+
+        }
+
+        /* INTRO */
+
+        .intro {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .intro img {
+
+            width: 100%;
+
+            border-radius: 20px;
+
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+
+        }
+
+        .intro-content h2 {
+
+            font-size: 2.5rem;
+
+            margin-bottom: 20px;
+
+        }
+
+        .intro-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* OCCASIONS */
+
+        .occasion-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .occasion-card {
+
+            background: white;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .occasion-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .occasion-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .occasion-card h3 {
+
+            margin-bottom: 15px;
+
+        }
+
+        .occasion-card p {
+
+            line-height: 1.8;
+
+            color: #666;
+
+        }
+
+        /* Animation */
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(50px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+        @media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+
+            .intro {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        /* Gift Cards */
+
+        .gift-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+            gap: 35px;
+
+        }
+
+        .gift-card {
+
+            background: white;
+
+            padding: 40px;
+
+            border-radius: 22px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            position: relative;
+
+            transition: .35s;
+
+            overflow: hidden;
+
+        }
+
+        .gift-card:hover {
+
+            transform: translateY(-12px);
+
+        }
+
+        .gift-banner {
+
+            font-size: 2.2rem;
+
+            font-weight: 700;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .gift-card h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+        }
+
+        .gift-card p {
+
+            color: #666;
+
+            line-height: 1.9;
+
+            margin-bottom: 20px;
+
+        }
+
+        .gift-card ul {
+
+            list-style: none;
+
+            padding: 0;
+
+            margin-bottom: 30px;
+
+        }
+
+        .gift-card li {
+
+            margin-bottom: 12px;
+
+        }
+
+        .gift-card li i {
+
+            color: #2f80ed;
+
+            margin-right: 10px;
+
+        }
+
+        .gift-btn {
+
+            display: inline-block;
+
+            padding: 14px 30px;
+
+            background: #2f80ed;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 40px;
+
+            font-weight: 600;
+
+            transition: .3s;
+
+        }
+
+        .gift-btn:hover {
+
+            background: #111;
+
+            color: white;
+
+        }
+
+        .popular {
+
+            border: 3px solid #2f80ed;
+
+        }
+
+        .popular-tag {
+
+            position: absolute;
+
+            top: 20px;
+
+            right: -35px;
+
+            background: #ff9800;
+
+            color: white;
+
+            padding: 8px 40px;
+
+            transform: rotate(45deg);
+
+            font-size: .75rem;
+
+            font-weight: 700;
+
+        }
+
+        /* Features */
+
+        .feature-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .feature-card {
+
+            background: #f8f9fc;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            transition: .35s;
+
+        }
+
+        .feature-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .feature-card i {
+
+            font-size: 48px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .feature-card h4 {
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+
+        }
+
+        .feature-card p {
+
+            line-height: 1.8;
+
+            color: #666;
+
+        }
+
+        /* Steps */
+
+        .steps-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .step-card {
+
+            background: white;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .step-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .step-number {
+
+            width: 70px;
+
+            height: 70px;
+
+            background: #2f80ed;
+
+            color: white;
+
+            font-size: 28px;
+
+            font-weight: 700;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            border-radius: 50%;
+
+            margin: 0 auto 20px;
+
+        }
+
+        /* Preview */
+
+        .preview-wrapper {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 70px;
+
+            align-items: center;
+
+        }
+
+        .gift-preview {
+
+            background: linear-gradient(135deg, #2f80ed, #56ccf2);
+
+            color: white;
+
+            padding: 45px;
+
+            border-radius: 25px;
+
+            box-shadow: 0 20px 40px rgba(0, 0, 0, .18);
+
+        }
+
+        .gift-logo {
+
+            font-size: 1.3rem;
+
+            font-weight: 700;
+
+            margin-bottom: 40px;
+
+        }
+
+        .gift-price {
+
+            font-size: 3rem;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+
+        }
+
+        .gift-footer {
+
+            margin-top: 40px;
+
+            opacity: .9;
+
+        }
+
+        /* Reviews */
+
+        .review-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .review-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .review-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .review-card i {
+
+            font-size: 40px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .review-card p {
+
+            line-height: 1.9;
+
+            color: #666;
+
+            margin-bottom: 25px;
+
+        }
+
+        .review-card h4 {
+
+            font-weight: 700;
+
+            margin-bottom: 5px;
+
+        }
+
+        /* Stats */
+
+        .stats-section {
+
+            background: white;
+
+        }
+
+        .stats-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 30px;
+
+            text-align: center;
+
+        }
+
+        .stats-grid div {
+
+            background: #f8f9fc;
+
+            padding: 40px;
+
+            border-radius: 20px;
+
+            transition: .35s;
+
+        }
+
+        .stats-grid div:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .stats-grid h2 {
+
+            font-size: 3rem;
+
+            font-weight: 800;
+
+            color: #2f80ed;
+
+            margin-bottom: 10px;
+
+        }
+
+        @media(max-width:992px) {
+
+            .preview-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        /* FAQ */
+
+        .faq-section {
+
+            background: #f7f9fc;
+
+        }
+
+        .accordion-button {
+
+            font-weight: 600;
+
+        }
+
+        /* Terms */
+
+        .terms-box {
+
+            background: #eef5ff;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .06);
+
+        }
+
+        .terms-box ul {
+
+            margin: 0;
+
+            padding-left: 20px;
+
+        }
+
+        .terms-box li {
+
+            margin-bottom: 18px;
+
+            line-height: 1.9;
+
+        }
+
+        /* Corporate */
+
+        .corporate-card {
+
+            background: white;
+
+            padding: 50px;
+
+            text-align: center;
+
+            border-radius: 25px;
+
+            box-shadow: 0 12px 30px rgba(0, 0, 0, .08);
+
+        }
+
+        .corporate-card i {
+
+            font-size: 60px;
+
+            color: #2f80ed;
+
+            margin-bottom: 25px;
+
+        }
+
+        .corporate-card h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .corporate-card p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 35px;
+
+        }
+
+        /* CTA */
+
+        .gift-cta {
+
+            padding: 120px 8%;
+
+            background: linear-gradient(135deg, #2f80ed, #56ccf2);
+
+            text-align: center;
+
+            color: white;
+
+        }
+
+        .gift-cta h2 {
+
+            font-size: 3rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .gift-cta p {
+
+            max-width: 750px;
+
+            margin: 0 auto 40px;
+
+            line-height: 2;
+
+        }
+
+        .cta-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .cta-buttons .btn {
+
+            padding: 16px 35px;
+
+            border-radius: 50px;
+
+            font-weight: 600;
+
+            transition: .3s;
+
+        }
+
+        .cta-buttons .btn:hover {
+
+            transform: translateY(-5px);
+
+        }
+
+        @media(max-width:768px) {
+
+            .gift-cta h2 {
+
+                font-size: 2.2rem;
+
+            }
+
+            .cta-buttons {
+
+                flex-direction: column;
+
+                align-items: center;
+
+            }
+
+            .cta-buttons .btn {
+
+                width: 260px;
+
+            }
+
+        }
+    </style>
+
+    <!-- HERO -->
+
+    <section class="gift-hero">
+
+        <div class="hero-content">
+
+            <h1>
+
+                Give the Gift of Travel
+
+            </h1>
+
+            <p>
+
+                Surprise your loved ones with unforgettable experiences.
+
+                Homigo Gift Cards let friends and family choose their perfect destination.
+
+            </p>
+
+            <a href="#giftcards" class="hero-btn">
+
+                Explore Gift Cards
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- INTRO -->
+
+    <section class="section">
+
+        <div class="intro">
+
+            <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=1000&q=80">
+
+            <div class="intro-content">
+
+                <h2>
+
+                    One Gift.
+
+                    Endless Destinations.
+
+                </h2>
+
+                <p>
+
+                    Whether it's a birthday,
+                    anniversary,
+                    graduation,
+                    or holiday,
+                    a Homigo Gift Card gives the freedom to choose from thousands of hotels,
+                    resorts,
+                    villas,
+                    and unique stays.
+
+                </p>
+
+                <p>
+
+                    Gift unforgettable memories instead of ordinary presents.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- OCCASIONS -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Perfect For Every Occasion
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="occasion-grid">
+
+            <div class="occasion-card">
+
+                <i class="fa-solid fa-cake-candles"></i>
+
+                <h3>
+
+                    Birthdays
+
+                </h3>
+
+                <p>
+
+                    Celebrate with unforgettable travel experiences.
+
+                </p>
+
+            </div>
+
+            <div class="occasion-card">
+
+                <i class="fa-solid fa-heart"></i>
+
+                <h3>
+
+                    Anniversaries
+
+                </h3>
+
+                <p>
+
+                    Create romantic memories together.
+
+                </p>
+
+            </div>
+
+            <div class="occasion-card">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+                <h3>
+
+                    Graduation
+
+                </h3>
+
+                <p>
+
+                    Reward success with the gift of exploration.
+
+                </p>
+
+            </div>
+
+            <div class="occasion-card">
+
+                <i class="fa-solid fa-gift"></i>
+
+                <h3>
+
+                    Festivals
+
+                </h3>
+
+                <p>
+
+                    A thoughtful present for every celebration.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- GIFT CARD DESIGNS -->
+
+    <section class="section" id="giftcards">
+
+        <h2 class="section-title">
+
+            Choose Your Gift Card
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="gift-grid">
+
+            <div class="gift-card">
+
+                <div class="gift-banner">
+
+                    ₹1,000
+
+                </div>
+
+                <h3>
+
+                    Starter Gift Card
+
+                </h3>
+
+                <p>
+
+                    Perfect for weekend getaways,
+                    staycations,
+                    or budget-friendly travel experiences.
+
+                </p>
+
+                <ul>
+
+                    <li><i class="fa-solid fa-check"></i> Valid for 12 Months</li>
+
+                    <li><i class="fa-solid fa-check"></i> Redeem Online</li>
+
+                    <li><i class="fa-solid fa-check"></i> Instant Email Delivery</li>
+
+                </ul>
+
+                <a href="#" class="gift-btn">
+
+                    Buy Now
+
+                </a>
+
+            </div>
+
+            <div class="gift-card popular">
+
+                <span class="popular-tag">
+
+                    Most Popular
+
+                </span>
+
+                <div class="gift-banner">
+
+                    ₹2,500
+
+                </div>
+
+                <h3>
+
+                    Explorer Gift Card
+
+                </h3>
+
+                <p>
+
+                    A perfect gift for family vacations,
+                    couple trips,
+                    and adventure lovers.
+
+                </p>
+
+                <ul>
+
+                    <li><i class="fa-solid fa-check"></i> Valid for 12 Months</li>
+
+                    <li><i class="fa-solid fa-check"></i> Redeem Online</li>
+
+                    <li><i class="fa-solid fa-check"></i> Instant Email Delivery</li>
+
+                </ul>
+
+                <a href="#" class="gift-btn">
+
+                    Buy Now
+
+                </a>
+
+            </div>
+
+            <div class="gift-card">
+
+                <div class="gift-banner">
+
+                    ₹5,000
+
+                </div>
+
+                <h3>
+
+                    Premium Gift Card
+
+                </h3>
+
+                <p>
+
+                    Ideal for luxury hotels,
+                    resorts,
+                    and memorable holiday experiences.
+
+                </p>
+
+                <ul>
+
+                    <li><i class="fa-solid fa-check"></i> Valid for 18 Months</li>
+
+                    <li><i class="fa-solid fa-check"></i> Redeem Online</li>
+
+                    <li><i class="fa-solid fa-check"></i> Instant Email Delivery</li>
+
+                </ul>
+
+                <a href="#" class="gift-btn">
+
+                    Buy Now
+
+                </a>
+
+            </div>
+
+            <div class="gift-card">
+
+                <div class="gift-banner">
+
+                    ₹10,000
+
+                </div>
+
+                <h3>
+
+                    Luxury Gift Card
+
+                </h3>
+
+                <p>
+
+                    Give the ultimate travel experience
+                    with premium stays,
+                    villas,
+                    and luxury resorts.
+
+                </p>
+
+                <ul>
+
+                    <li><i class="fa-solid fa-check"></i> Valid for 24 Months</li>
+
+                    <li><i class="fa-solid fa-check"></i> Redeem Online</li>
+
+                    <li><i class="fa-solid fa-check"></i> Priority Support</li>
+
+                </ul>
+
+                <a href="#" class="gift-btn">
+
+                    Buy Now
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FEATURES -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Why Choose Homigo Gift Cards?
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <i class="fa-solid fa-bolt"></i>
+
+                <h4>
+
+                    Instant Delivery
+
+                </h4>
+
+                <p>
+
+                    Gift cards are delivered instantly via email after purchase.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <i class="fa-solid fa-mobile-screen"></i>
+
+                <h4>
+
+                    Digital Redemption
+
+                </h4>
+
+                <p>
+
+                    Redeem directly while booking hotels and vacation stays.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <i class="fa-solid fa-infinity"></i>
+
+                <h4>
+
+                    Thousands of Stays
+
+                </h4>
+
+                <p>
+
+                    Use your gift card across thousands of verified Homigo properties.
+
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <h4>
+
+                    Secure Purchase
+
+                </h4>
+
+                <p>
+
+                    Protected payments and reliable redemption process.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- HOW IT WORKS -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            How It Works
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="steps-grid">
+
+            <div class="step-card">
+
+                <div class="step-number">
+
+                    1
+
+                </div>
+
+                <h3>
+
+                    Choose
+
+                </h3>
+
+                <p>
+
+                    Select the perfect gift card value that matches your budget and occasion.
+
+                </p>
+
+            </div>
+
+            <div class="step-card">
+
+                <div class="step-number">
+
+                    2
+
+                </div>
+
+                <h3>
+
+                    Personalize
+
+                </h3>
+
+                <p>
+
+                    Add the recipient's name,
+                    email,
+                    and a heartfelt message.
+
+                </p>
+
+            </div>
+
+            <div class="step-card">
+
+                <div class="step-number">
+
+                    3
+
+                </div>
+
+                <h3>
+
+                    Send
+
+                </h3>
+
+                <p>
+
+                    The digital gift card is delivered instantly to the recipient's inbox.
+
+                </p>
+
+            </div>
+
+            <div class="step-card">
+
+                <div class="step-number">
+
+                    4
+
+                </div>
+
+                <h3>
+
+                    Redeem
+
+                </h3>
+
+                <p>
+
+                    The recipient uses the gift card during checkout on Homigo.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- GIFT CARD PREVIEW -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Gift Card Preview
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="preview-wrapper">
+
+            <div class="gift-preview">
+
+                <div class="gift-logo">
+
+                    <i class="fa-solid fa-plane"></i>
+
+                    HOMIGO
+
+                </div>
+
+                <div class="gift-price">
+
+                    ₹5,000
+
+                </div>
+
+                <h3>
+
+                    Travel Gift Card
+
+                </h3>
+
+                <p>
+
+                    Give the gift of unforgettable journeys.
+
+                </p>
+
+                <div class="gift-footer">
+
+                    Valid for 18 Months
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <h2>
+
+                    A Gift They'll Always Remember
+
+                </h2>
+
+                <p>
+
+                    Unlike traditional gifts,
+                    a Homigo Gift Card lets your loved ones choose exactly where and when they want to travel.
+
+                </p>
+
+                <p>
+
+                    From luxury resorts
+                    to cozy mountain cabins,
+                    every booking becomes a memorable experience.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- REVIEWS -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            What Customers Say
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="review-grid">
+
+            <div class="review-card">
+
+                <i class="fa-solid fa-quote-left"></i>
+
+                <p>
+
+                    I gifted a Homigo Gift Card to my parents for their anniversary.
+                    They loved choosing their own resort!
+
+                </p>
+
+                <h4>
+
+                    Ananya S.
+
+                </h4>
+
+                <span>
+
+                    Verified Customer
+
+                </span>
+
+            </div>
+
+            <div class="review-card">
+
+                <i class="fa-solid fa-quote-left"></i>
+
+                <p>
+
+                    Instant delivery,
+                    beautiful design,
+                    and very easy redemption.
+
+                    Highly recommended!
+
+                </p>
+
+                <h4>
+
+                    Rahul M.
+
+                </h4>
+
+                <span>
+
+                    Verified Customer
+
+                </span>
+
+            </div>
+
+            <div class="review-card">
+
+                <i class="fa-solid fa-quote-left"></i>
+
+                <p>
+
+                    Perfect corporate gift for our employees.
+
+                    Everyone appreciated the flexibility.
+
+                </p>
+
+                <h4>
+
+                    Sneha P.
+
+                </h4>
+
+                <span>
+
+                    Verified Customer
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- STATS -->
+
+    <section class="section stats-section">
+
+        <div class="stats-grid">
+
+            <div>
+
+                <h2>
+
+                    50K+
+
+                </h2>
+
+                <p>
+
+                    Gift Cards Sold
+
+                </p>
+
+            </div>
+
+            <div>
+
+                <h2>
+
+                    98%
+
+                </h2>
+
+                <p>
+
+                    Customer Satisfaction
+
+                </p>
+
+            </div>
+
+            <div>
+
+                <h2>
+
+                    5000+
+
+                </h2>
+
+                <p>
+
+                    Properties Available
+
+                </p>
+
+            </div>
+
+            <div>
+
+                <h2>
+
+                    120+
+
+                </h2>
+
+                <p>
+
+                    Destinations
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FAQ -->
+
+    <section class="section faq-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Frequently Asked Questions
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="accordion" id="giftFAQ">
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#gift1">
+
+                            How do I redeem my Gift Card?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="gift1" class="accordion-collapse collapse show" data-bs-parent="#giftFAQ">
+
+                        <div class="accordion-body">
+
+                            Enter your Gift Card code during checkout while booking a stay on Homigo. The available
+                            balance will automatically be applied to your booking.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#gift2">
+
+                            Can I use multiple Gift Cards?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="gift2" class="accordion-collapse collapse" data-bs-parent="#giftFAQ">
+
+                        <div class="accordion-body">
+
+                            Depending on the booking value, multiple Gift Cards may be combined if supported during
+                            checkout.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#gift3">
+
+                            Do Gift Cards expire?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="gift3" class="accordion-collapse collapse" data-bs-parent="#giftFAQ">
+
+                        <div class="accordion-body">
+
+                            Each Gift Card displays its validity period. Please redeem it before the expiry date.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#gift4">
+
+                            Can I get a refund?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="gift4" class="accordion-collapse collapse" data-bs-parent="#giftFAQ">
+
+                        <div class="accordion-body">
+
+                            Gift Cards are generally non-refundable once purchased, except where required by applicable
+                            law or platform policy.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- TERMS -->
+
+    <section class="section" style="background:white;">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Gift Card Terms
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="terms-box">
+
+                <ul>
+
+                    <li>Gift Cards can only be redeemed on Homigo.</li>
+
+                    <li>Gift Cards cannot be exchanged for cash.</li>
+
+                    <li>Lost or stolen Gift Cards may not be replaceable.</li>
+
+                    <li>Gift Cards may be used until the available balance becomes zero or they expire.</li>
+
+                    <li>Additional terms may apply depending on the promotion or offer.</li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CORPORATE -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Corporate & Bulk Gift Cards
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="corporate-card">
+
+                <i class="fa-solid fa-building"></i>
+
+                <h3>
+
+                    Reward Employees & Clients
+
+                </h3>
+
+                <p>
+
+                    Homigo Gift Cards are ideal for employee recognition,
+                    client appreciation,
+                    contest prizes,
+                    holiday gifting,
+                    and corporate rewards.
+
+                    Contact our business team for customized bulk purchasing options.
+
+                </p>
+
+                <a href="/help" class="gift-btn">
+
+                    Contact Business Team
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CTA -->
+
+    <section class="gift-cta">
+
+        <div class="container">
+
+            <h2>
+
+                Ready to Surprise Someone?
+
+            </h2>
+
+            <p>
+
+                Give the freedom to travel with a Homigo Gift Card and create memories that last a lifetime.
+
+            </p>
+
+            <div class="cta-buttons">
+
+                <a href="#giftcards" class="btn btn-light btn-lg">
+
+                    <i class="fa-solid fa-gift"></i>
+
+                    Buy Gift Card
+
+                </a>
+
+                <a href="/listings" class="btn btn-outline-light btn-lg">
+
+                    <i class="fa-solid fa-plane"></i>
+
+                    Explore Destinations
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>

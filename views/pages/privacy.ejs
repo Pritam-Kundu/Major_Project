@@ -1,0 +1,1822 @@
+<% layout("layouts/boilerplate") %>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f8f9fc;
+            overflow-x: hidden;
+        }
+
+        /* HERO */
+
+        .privacy-hero {
+
+            height: 80vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            color: white;
+
+            background:
+                linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .55)),
+                url("https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+
+            background-position: center;
+
+        }
+
+        .hero-content {
+
+            max-width: 850px;
+
+            padding: 20px;
+
+            animation: fadeUp 1s ease;
+
+        }
+
+        .hero-content h1 {
+
+            font-size: 4rem;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+
+        }
+
+        .hero-content p {
+
+            font-size: 1.15rem;
+
+            line-height: 2;
+
+            color: #eee;
+
+        }
+
+        /* COMMON */
+
+        .section {
+
+            padding: 100px 8%;
+
+        }
+
+        .section-title {
+
+            text-align: center;
+
+            font-size: 2.8rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .divider {
+
+            width: 120px;
+
+            height: 5px;
+
+            background: #2f80ed;
+
+            margin: 0 auto 60px;
+
+            border-radius: 30px;
+
+        }
+
+        /* OVERVIEW */
+
+        .privacy-overview {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .privacy-overview img {
+
+            width: 100%;
+
+            border-radius: 20px;
+
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+
+        }
+
+        .overview-content h2 {
+
+            font-size: 2.4rem;
+
+            margin-bottom: 20px;
+
+        }
+
+        .overview-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* INFO CARDS */
+
+        .info-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .info-card {
+
+            background: white;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .info-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .info-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .info-card h3 {
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+
+        }
+
+        .info-card p {
+
+            line-height: 1.9;
+
+            color: #666;
+
+        }
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(40px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+        @media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+
+            .privacy-overview {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        /* Use Grid */
+
+        .use-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .use-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .use-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .use-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Sharing */
+
+        .sharing-wrapper {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .sharing-content h2 {
+
+            margin-bottom: 20px;
+
+            font-weight: 700;
+
+        }
+
+        .sharing-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 25px;
+
+        }
+
+        .sharing-content ul {
+
+            list-style: none;
+
+            padding: 0;
+
+        }
+
+        .sharing-content li {
+
+            margin-bottom: 18px;
+
+            font-size: 1.05rem;
+
+        }
+
+        .sharing-content i {
+
+            color: #2f80ed;
+
+            margin-right: 12px;
+
+        }
+
+        /* Security */
+
+        .security-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .security-card {
+
+            background: white;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .security-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .security-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Retention */
+
+        .retention-section {
+
+            background: white;
+
+        }
+
+        .retention-box {
+
+            display: flex;
+
+            gap: 30px;
+
+            align-items: flex-start;
+
+            background: #eef5ff;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .06);
+
+        }
+
+        .retention-icon i {
+
+            font-size: 60px;
+
+            color: #2f80ed;
+
+        }
+
+        @media(max-width:992px) {
+
+            .sharing-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .retention-box {
+
+                flex-direction: column;
+
+            }
+
+        }
+
+        /* Rights */
+
+        .rights-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .rights-card {
+
+            background: white;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .rights-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .rights-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Cookies */
+
+        .cookie-wrapper {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .cookie-content h2 {
+
+            margin-bottom: 20px;
+
+            font-weight: 700;
+
+        }
+
+        .cookie-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Transfer */
+
+        .transfer-box {
+
+            display: flex;
+
+            gap: 30px;
+
+            background: white;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .transfer-icon i {
+
+            font-size: 60px;
+
+            color: #2f80ed;
+
+        }
+
+        /* Legal */
+
+        .legal-section {
+
+            background: white;
+
+        }
+
+        .legal-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .legal-card {
+
+            background: #f8f9fc;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            transition: .35s;
+
+        }
+
+        .legal-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .legal-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        @media(max-width:992px) {
+
+            .cookie-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .transfer-box {
+
+                flex-direction: column;
+
+            }
+
+        }
+
+        /* FAQ */
+
+        .faq-section {
+
+            background: #f7f9fc;
+
+        }
+
+        .accordion-button {
+
+            font-weight: 600;
+
+            font-size: 1.05rem;
+
+        }
+
+        /* Policy Updates */
+
+        .update-box {
+
+            display: flex;
+
+            gap: 30px;
+
+            align-items: flex-start;
+
+            background: #eef5ff;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .06);
+
+        }
+
+        .update-box i {
+
+            font-size: 60px;
+
+            color: #2f80ed;
+
+            margin-top: 5px;
+
+        }
+
+        .update-box h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+        }
+
+        .update-box p {
+
+            line-height: 1.9;
+
+            color: #555;
+
+        }
+
+        /* Last Updated */
+
+        .last-updated {
+
+            max-width: 500px;
+
+            margin: auto;
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .last-updated h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 10px;
+
+        }
+
+        .last-updated i {
+
+            color: #2f80ed;
+
+            margin-right: 10px;
+
+        }
+
+        .last-updated p {
+
+            font-size: 1.1rem;
+
+            color: #666;
+
+            margin: 0;
+
+        }
+
+        /* Contact */
+
+        .privacy-contact {
+
+            padding: 120px 8%;
+
+            background: linear-gradient(135deg, #2f80ed, #56ccf2);
+
+            text-align: center;
+
+            color: white;
+
+        }
+
+        .privacy-contact h2 {
+
+            font-size: 3rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .privacy-contact p {
+
+            max-width: 750px;
+
+            margin: 0 auto 40px;
+
+            line-height: 2;
+
+        }
+
+        .contact-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .contact-buttons .btn {
+
+            padding: 15px 35px;
+
+            border-radius: 50px;
+
+            font-weight: 600;
+
+            transition: .3s;
+
+        }
+
+        .contact-buttons .btn:hover {
+
+            transform: translateY(-5px);
+
+        }
+
+        @media(max-width:768px) {
+
+            .update-box {
+
+                flex-direction: column;
+
+            }
+
+            .privacy-contact h2 {
+
+                font-size: 2.2rem;
+
+            }
+
+            .contact-buttons {
+
+                flex-direction: column;
+
+                align-items: center;
+
+            }
+
+            .contact-buttons .btn {
+
+                width: 260px;
+
+            }
+
+        }
+    </style>
+
+    <!-- HERO -->
+
+    <section class="privacy-hero">
+
+        <div class="hero-content">
+
+            <h1>
+
+                Privacy Policy
+
+            </h1>
+
+            <p>
+
+                Your privacy matters to us.
+                Learn how Homigo collects,
+                uses,
+                stores,
+                and protects your information while providing a secure travel booking experience.
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- OVERVIEW -->
+
+    <section class="section">
+
+        <div class="privacy-overview">
+
+            <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1000&q=80">
+
+            <div class="overview-content">
+
+                <h2>
+
+                    Protecting Your Information
+
+                </h2>
+
+                <p>
+
+                    Homigo is committed to protecting your personal information and handling it responsibly.
+                    We collect only the information necessary to provide our services,
+                    improve the platform,
+                    and enhance your booking experience.
+
+                </p>
+
+                <p>
+
+                    We implement appropriate technical and organizational measures to help keep your data secure while
+                    you use Homigo.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- WHAT WE COLLECT -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Information We Collect
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="info-grid">
+
+            <div class="info-card">
+
+                <i class="fa-solid fa-user"></i>
+
+                <h3>
+
+                    Account Information
+
+                </h3>
+
+                <p>
+
+                    Name,
+                    email address,
+                    profile details,
+                    and login credentials.
+
+                </p>
+
+            </div>
+
+            <div class="info-card">
+
+                <i class="fa-solid fa-credit-card"></i>
+
+                <h3>
+
+                    Booking Information
+
+                </h3>
+
+                <p>
+
+                    Reservation details,
+                    guest information,
+                    and payment-related records.
+
+                </p>
+
+            </div>
+
+            <div class="info-card">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+                <h3>
+
+                    Usage Information
+
+                </h3>
+
+                <p>
+
+                    Recently viewed listings,
+                    search preferences,
+                    and browsing activity within Homigo.
+
+                </p>
+
+            </div>
+
+            <div class="info-card">
+
+                <i class="fa-solid fa-mobile-screen"></i>
+
+                <h3>
+
+                    Device Information
+
+                </h3>
+
+                <p>
+
+                    Browser type,
+                    device information,
+                    IP address,
+                    and technical diagnostics.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- HOW WE USE INFORMATION -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            How We Use Your Information
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="use-grid">
+
+            <div class="use-card">
+
+                <i class="fa-solid fa-calendar-check"></i>
+
+                <h3>
+
+                    Process Bookings
+
+                </h3>
+
+                <p>
+
+                    We use your information to create,
+                    manage,
+                    confirm,
+                    and support your reservations and travel experiences.
+
+                </p>
+
+            </div>
+
+            <div class="use-card">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+                <h3>
+
+                    Account Security
+
+                </h3>
+
+                <p>
+
+                    Your information helps us authenticate your identity,
+                    protect your account,
+                    and detect suspicious activity.
+
+                </p>
+
+            </div>
+
+            <div class="use-card">
+
+                <i class="fa-solid fa-sliders"></i>
+
+                <h3>
+
+                    Personalization
+
+                </h3>
+
+                <p>
+
+                    We remember your preferences,
+                    favorite destinations,
+                    and recently viewed listings to improve your experience.
+
+                </p>
+
+            </div>
+
+            <div class="use-card">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                <h3>
+
+                    Platform Improvement
+
+                </h3>
+
+                <p>
+
+                    Anonymous usage information helps us improve search,
+                    performance,
+                    and overall platform usability.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- INFORMATION SHARING -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            When We Share Information
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="sharing-wrapper">
+
+            <div>
+
+                <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1000&q=80"
+                    class="img-fluid rounded-4 shadow">
+
+            </div>
+
+            <div class="sharing-content">
+
+                <h2>
+
+                    We Respect Your Privacy
+
+                </h2>
+
+                <p>
+
+                    Homigo does not sell your personal information.
+
+                    Information may be shared only when necessary to provide our services,
+                    process bookings,
+                    or comply with legal obligations.
+
+                </p>
+
+                <ul>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Verified property owners
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Secure payment partners
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Customer support services
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Legal or regulatory authorities when required
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SECURITY -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            How We Protect Your Data
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="security-grid">
+
+            <div class="security-card">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <h3>
+
+                    Encrypted Connections
+
+                </h3>
+
+                <p>
+
+                    Sensitive information is transmitted using secure encrypted connections whenever possible.
+
+                </p>
+
+            </div>
+
+            <div class="security-card">
+
+                <i class="fa-solid fa-key"></i>
+
+                <h3>
+
+                    Secure Authentication
+
+                </h3>
+
+                <p>
+
+                    Account authentication and password protection help safeguard access to your Homigo account.
+
+                </p>
+
+            </div>
+
+            <div class="security-card">
+
+                <i class="fa-solid fa-server"></i>
+
+                <h3>
+
+                    Protected Infrastructure
+
+                </h3>
+
+                <p>
+
+                    Our platform is designed with security best practices to reduce unauthorized access risks.
+
+                </p>
+
+            </div>
+
+            <div class="security-card">
+
+                <i class="fa-solid fa-user-lock"></i>
+
+                <h3>
+
+                    Access Control
+
+                </h3>
+
+                <p>
+
+                    Only authorized personnel have access to information required to provide platform services.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- DATA RETENTION -->
+
+    <section class="section retention-section">
+
+        <h2 class="section-title">
+
+            Data Retention
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="retention-box">
+
+            <div class="retention-icon">
+
+                <i class="fa-solid fa-database"></i>
+
+            </div>
+
+            <div>
+
+                <h3>
+
+                    Keeping Information Only As Long As Necessary
+
+                </h3>
+
+                <p>
+
+                    Homigo retains account and booking information only for as long as reasonably necessary to provide
+                    services,
+                    meet legal obligations,
+                    resolve disputes,
+                    or improve platform functionality.
+                    When information is no longer required,
+                    it is securely deleted or anonymized where appropriate.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- PRIVACY RIGHTS -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Your Privacy Rights
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="rights-grid">
+
+            <div class="rights-card">
+
+                <i class="fa-solid fa-eye"></i>
+
+                <h3>
+
+                    Access
+
+                </h3>
+
+                <p>
+
+                    You may request access to the personal information associated with your Homigo account.
+
+                </p>
+
+            </div>
+
+            <div class="rights-card">
+
+                <i class="fa-solid fa-pen-to-square"></i>
+
+                <h3>
+
+                    Correction
+
+                </h3>
+
+                <p>
+
+                    You can update or correct your personal information whenever it becomes inaccurate.
+
+                </p>
+
+            </div>
+
+            <div class="rights-card">
+
+                <i class="fa-solid fa-trash"></i>
+
+                <h3>
+
+                    Deletion
+
+                </h3>
+
+                <p>
+
+                    You may request deletion of your account and personal information, subject to applicable legal
+                    obligations.
+
+                </p>
+
+            </div>
+
+            <div class="rights-card">
+
+                <i class="fa-solid fa-download"></i>
+
+                <h3>
+
+                    Data Portability
+
+                </h3>
+
+                <p>
+
+                    Where applicable, you may request a copy of the information associated with your account.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- COOKIE USAGE -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Cookies & Tracking Technologies
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="cookie-wrapper">
+
+            <div>
+
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80"
+                    class="img-fluid rounded-4 shadow">
+
+            </div>
+
+            <div class="cookie-content">
+
+                <h2>
+
+                    Improving Your Experience
+
+                </h2>
+
+                <p>
+
+                    Homigo uses cookies and similar technologies to remember your preferences,
+                    keep you signed in,
+                    enhance website performance,
+                    and improve security.
+
+                </p>
+
+                <p>
+
+                    You can manage your cookie preferences through your browser settings or review our detailed Cookie
+                    Policy for additional information.
+
+                </p>
+
+                <a href="/cookies" class="btn btn-primary mt-3">
+
+                    View Cookie Policy
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- INTERNATIONAL DATA -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            International Data Transfers
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="transfer-box">
+
+            <div class="transfer-icon">
+
+                <i class="fa-solid fa-earth-americas"></i>
+
+            </div>
+
+            <div>
+
+                <h3>
+
+                    Supporting Travelers Around the World
+
+                </h3>
+
+                <p>
+
+                    If Homigo expands its services internationally,
+                    certain information may be processed in different regions to provide bookings,
+                    customer support,
+                    or platform functionality.
+
+                    Appropriate safeguards would be implemented to protect personal information whenever required.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- LEGAL BASIS -->
+
+    <section class="section legal-section">
+
+        <h2 class="section-title">
+
+            Why We Process Information
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="legal-grid">
+
+            <div class="legal-card">
+
+                <i class="fa-solid fa-file-signature"></i>
+
+                <h3>
+
+                    Providing Services
+
+                </h3>
+
+                <p>
+
+                    To create accounts,
+                    process bookings,
+                    and provide customer support.
+
+                </p>
+
+            </div>
+
+            <div class="legal-card">
+
+                <i class="fa-solid fa-scale-balanced"></i>
+
+                <h3>
+
+                    Legal Compliance
+
+                </h3>
+
+                <p>
+
+                    To comply with applicable laws,
+                    regulations,
+                    and legal obligations.
+
+                </p>
+
+            </div>
+
+            <div class="legal-card">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                <h3>
+
+                    Platform Improvement
+
+                </h3>
+
+                <p>
+
+                    To understand usage patterns
+                    and improve platform functionality.
+
+                </p>
+
+            </div>
+
+            <div class="legal-card">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <h3>
+
+                    Security
+
+                </h3>
+
+                <p>
+
+                    To protect users,
+                    detect fraud,
+                    and maintain platform integrity.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FAQ -->
+
+    <section class="section faq-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Frequently Asked Questions
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="accordion" id="privacyFAQ">
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#privacy1">
+
+                            Can I update my personal information?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="privacy1" class="accordion-collapse collapse show" data-bs-parent="#privacyFAQ">
+
+                        <div class="accordion-body">
+
+                            Yes. You can update your profile information from your account settings at any time to keep
+                            your details accurate.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#privacy2">
+
+                            How do I delete my account?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="privacy2" class="accordion-collapse collapse" data-bs-parent="#privacyFAQ">
+
+                        <div class="accordion-body">
+
+                            You may request account deletion through the Help Center or account settings. Certain
+                            information may be retained where required by applicable laws.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#privacy3">
+
+                            Do you sell my personal information?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="privacy3" class="accordion-collapse collapse" data-bs-parent="#privacyFAQ">
+
+                        <div class="accordion-body">
+
+                            No. Homigo does not sell personal information. Information is used only to provide services,
+                            improve the platform, and comply with legal obligations.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#privacy4">
+
+                            Where can I learn more about cookies?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="privacy4" class="accordion-collapse collapse" data-bs-parent="#privacyFAQ">
+
+                        <div class="accordion-body">
+
+                            Please visit our Cookie Policy page to learn how cookies and similar technologies are used
+                            on Homigo.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- POLICY UPDATES -->
+
+    <section class="section" style="background:white;">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Policy Updates
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="update-box">
+
+                <i class="fa-solid fa-rotate"></i>
+
+                <div>
+
+                    <h3>
+
+                        Keeping You Informed
+
+                    </h3>
+
+                    <p>
+
+                        This Privacy Policy may be updated periodically to reflect improvements to our platform, new
+                        features, or changes in applicable regulations. Any significant changes will be communicated
+                        through our website or other appropriate channels.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- LAST UPDATED -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="last-updated">
+
+                <h3>
+
+                    <i class="fa-solid fa-calendar-days"></i>
+
+                    Last Updated
+
+                </h3>
+
+                <p>
+
+                    August 2026
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CONTACT -->
+
+    <section class="privacy-contact">
+
+        <div class="container">
+
+            <h2>
+
+                Questions About Your Privacy?
+
+            </h2>
+
+            <p>
+
+                If you have any questions about this Privacy Policy or how your information is handled, our support team
+                is here to help.
+
+            </p>
+
+            <div class="contact-buttons">
+
+                <a href="/help" class="btn btn-light btn-lg">
+
+                    <i class="fa-solid fa-headset"></i>
+
+                    Contact Support
+
+                </a>
+
+                <a href="/cookies" class="btn btn-outline-light btn-lg">
+
+                    <i class="fa-solid fa-cookie-bite"></i>
+
+                    Cookie Policy
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>

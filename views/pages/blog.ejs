@@ -1,0 +1,1389 @@
+<% layout("layouts/boilerplate") %>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f7f9fc;
+            overflow-x: hidden;
+        }
+
+        /* Hero */
+
+        .blog-hero {
+
+            height: 90vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            color: white;
+
+            background:
+
+                linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .55)),
+
+                url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+
+            background-position: center;
+
+        }
+
+        .hero-content {
+
+            max-width: 850px;
+
+            padding: 20px;
+
+        }
+
+        .hero-content h1 {
+
+            font-size: 4rem;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+
+        }
+
+        .hero-content p {
+
+            font-size: 1.15rem;
+
+            line-height: 2;
+
+            margin-bottom: 35px;
+
+            color: #eee;
+
+        }
+
+        .search-box {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .search-box input {
+
+            width: 420px;
+
+            max-width: 100%;
+
+            padding: 16px;
+
+            border: none;
+
+            border-radius: 50px;
+
+            outline: none;
+
+        }
+
+        .search-box button {
+
+            padding: 16px 35px;
+
+            border: none;
+
+            border-radius: 50px;
+
+            background: #2f80ed;
+
+            color: white;
+
+            font-weight: 700;
+
+            transition: .3s;
+
+        }
+
+        .search-box button:hover {
+
+            background: #111;
+
+        }
+
+        /* Common */
+
+        .section {
+
+            padding: 100px 8%;
+
+        }
+
+        .section-title {
+
+            text-align: center;
+
+            font-size: 2.8rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .divider {
+
+            width: 120px;
+
+            height: 5px;
+
+            background: #2f80ed;
+
+            margin: 0 auto 60px;
+
+            border-radius: 30px;
+
+        }
+
+        /* Categories */
+
+        .categories {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .category {
+
+            padding: 14px 28px;
+
+            background: white;
+
+            border-radius: 40px;
+
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+
+            transition: .3s;
+
+            cursor: pointer;
+
+            font-weight: 600;
+
+        }
+
+        .category:hover {
+
+            background: #2f80ed;
+
+            color: white;
+
+        }
+
+        /* Featured */
+
+        .featured {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .featured img {
+
+            width: 100%;
+
+            border-radius: 20px;
+
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .12);
+
+        }
+
+        .featured h2 {
+
+            font-size: 2.5rem;
+
+            margin-bottom: 20px;
+
+        }
+
+        .featured p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 30px;
+
+        }
+
+        .read-btn {
+
+            display: inline-block;
+
+            padding: 14px 35px;
+
+            background: #2f80ed;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 40px;
+
+            font-weight: 600;
+
+            transition: .3s;
+
+        }
+
+        .read-btn:hover {
+
+            background: #111;
+
+            color: white;
+
+        }
+
+        @media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.7rem;
+
+            }
+
+            .featured {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        /* Articles */
+
+        .article-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
+            gap: 35px;
+
+        }
+
+        .article-card {
+
+            background: white;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .article-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .article-card img {
+
+            width: 100%;
+
+            height: 230px;
+
+            object-fit: cover;
+
+        }
+
+        .article-body {
+
+            padding: 30px;
+
+        }
+
+        .article-category {
+
+            background: #2f80ed;
+
+            color: white;
+
+            padding: 6px 14px;
+
+            border-radius: 30px;
+
+            font-size: .8rem;
+
+        }
+
+        .article-body h3 {
+
+            margin: 20px 0;
+
+            font-size: 1.5rem;
+
+        }
+
+        .article-body p {
+
+            line-height: 1.8;
+
+            color: #666;
+
+        }
+
+        .article-link {
+
+            display: inline-block;
+
+            margin-top: 20px;
+
+            font-weight: 600;
+
+            text-decoration: none;
+
+        }
+
+        /* Destinations */
+
+        .destination-section {
+
+            background: white;
+
+        }
+
+        .destination-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 25px;
+
+        }
+
+        .destination-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            border-radius: 20px;
+
+            cursor: pointer;
+
+        }
+
+        .destination-card img {
+
+            width: 100%;
+
+            height: 350px;
+
+            object-fit: cover;
+
+            transition: .4s;
+
+        }
+
+        .destination-card:hover img {
+
+            transform: scale(1.08);
+
+        }
+
+        .destination-overlay {
+
+            position: absolute;
+
+            left: 0;
+
+            bottom: 0;
+
+            width: 100%;
+
+            padding: 30px;
+
+            background: linear-gradient(transparent, rgba(0, 0, 0, .8));
+
+            color: white;
+
+        }
+
+        /* Editor */
+
+        .editor-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .editor-card {
+
+            background: #fff;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .editor-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .editor-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Travel Tips */
+
+        .tips-section {
+
+            background: #fff;
+
+        }
+
+        .tips-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .tip-card {
+
+            background: #f8f9fc;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            transition: .35s;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .06);
+
+        }
+
+        .tip-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .tip-card i {
+
+            font-size: 48px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .tip-card p {
+
+            line-height: 1.8;
+
+            color: #666;
+
+        }
+
+        /* Gallery */
+
+        .gallery-section {
+
+            background: #f7f9fc;
+
+        }
+
+        .gallery-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+            gap: 20px;
+
+        }
+
+        .gallery-grid img {
+
+            width: 100%;
+
+            height: 240px;
+
+            object-fit: cover;
+
+            border-radius: 20px;
+
+            transition: .4s;
+
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+
+        }
+
+        .gallery-grid img:hover {
+
+            transform: scale(1.05);
+
+        }
+
+        /* Newsletter */
+
+        .newsletter {
+
+            padding: 100px 8%;
+
+            background: linear-gradient(135deg, #2f80ed, #56ccf2);
+
+            color: white;
+
+            text-align: center;
+
+        }
+
+        .newsletter h2 {
+
+            font-size: 2.8rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .newsletter p {
+
+            max-width: 700px;
+
+            margin: 0 auto 35px;
+
+            line-height: 2;
+
+        }
+
+        .newsletter-form {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .newsletter-form input {
+
+            width: 420px;
+
+            max-width: 100%;
+
+            padding: 16px;
+
+            border: none;
+
+            border-radius: 50px;
+
+            outline: none;
+
+        }
+
+        .newsletter-form button {
+
+            padding: 16px 35px;
+
+            border: none;
+
+            border-radius: 50px;
+
+            background: white;
+
+            color: #2f80ed;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: .3s;
+
+        }
+
+        .newsletter-form button:hover {
+
+            background: #111;
+
+            color: white;
+
+        }
+
+        /* CTA */
+
+        .blog-cta {
+
+            padding: 120px 8%;
+
+            text-align: center;
+
+            background: #111;
+
+            color: white;
+
+        }
+
+        .blog-cta h2 {
+
+            font-size: 3rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .blog-cta p {
+
+            max-width: 750px;
+
+            margin: 0 auto 35px;
+
+            line-height: 2;
+
+            color: #ddd;
+
+        }
+
+        .cta-btn {
+
+            display: inline-block;
+
+            padding: 16px 40px;
+
+            background: #2f80ed;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 50px;
+
+            font-weight: 600;
+
+            transition: .3s;
+
+        }
+
+        .cta-btn:hover {
+
+            background: #56ccf2;
+
+            color: white;
+
+            transform: translateY(-5px);
+
+        }
+
+        @media(max-width:768px) {
+
+            .newsletter h2 {
+
+                font-size: 2rem;
+
+            }
+
+            .blog-cta h2 {
+
+                font-size: 2.2rem;
+
+            }
+
+            .newsletter-form {
+
+                flex-direction: column;
+
+            }
+
+            .newsletter-form input {
+
+                width: 100%;
+
+            }
+
+        }
+    </style>
+
+    <!-- HERO -->
+
+    <section class="blog-hero">
+
+        <div class="hero-content">
+
+            <h1>
+
+                Travel Stories & Inspiration
+
+            </h1>
+
+            <p>
+
+                Explore destination guides,
+                travel tips,
+                hidden gems,
+                luxury stays,
+                and unforgettable experiences
+                from around the world.
+
+            </p>
+
+            <div class="search-box">
+
+                <input type="text" placeholder="Search travel articles...">
+
+                <button>
+
+                    Search
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CATEGORIES -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Explore Categories
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="categories">
+
+            <div class="category">Adventure</div>
+
+            <div class="category">Luxury</div>
+
+            <div class="category">Beach</div>
+
+            <div class="category">Mountains</div>
+
+            <div class="category">Family Trips</div>
+
+            <div class="category">Budget Travel</div>
+
+            <div class="category">Food</div>
+
+            <div class="category">Weekend Getaways</div>
+
+        </div>
+
+    </section>
+
+    <!-- FEATURED ARTICLE -->
+
+    <section class="section" style="background:white;">
+
+        <div class="featured">
+
+            <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1000&q=80">
+
+            <div>
+
+                <h2>
+
+                    Top 10 Hidden Destinations You Must Visit in India
+
+                </h2>
+
+                <p>
+
+                    From the breathtaking Valley of Flowers
+                    to the untouched beaches of Gokarna,
+                    discover incredible destinations
+                    that remain hidden from the usual tourist crowds.
+
+                    Experience authentic culture,
+                    stunning landscapes,
+                    and unforgettable adventures.
+
+                </p>
+
+                <a href="#" class="read-btn">
+
+                    Read Article
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- LATEST ARTICLES -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Latest Articles
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="article-grid">
+
+            <div class="article-card">
+
+                <img src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=900&q=80">
+
+                <div class="article-body">
+
+                    <span class="article-category">
+
+                        Adventure
+
+                    </span>
+
+                    <h3>
+
+                        A Complete Guide to Trekking in the Himalayas
+
+                    </h3>
+
+                    <p>
+
+                        Everything you need to know before planning your first Himalayan trek,
+                        from packing essentials to choosing the best season.
+
+                    </p>
+
+                    <a href="#" class="article-link">
+
+                        Read More →
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="article-card">
+
+                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80">
+
+                <div class="article-body">
+
+                    <span class="article-category">
+
+                        Beach
+
+                    </span>
+
+                    <h3>
+
+                        Best Beaches to Visit This Summer
+
+                    </h3>
+
+                    <p>
+
+                        Relax on crystal-clear shores,
+                        discover hidden coastal gems,
+                        and enjoy unforgettable sunsets.
+
+                    </p>
+
+                    <a href="#" class="article-link">
+
+                        Read More →
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="article-card">
+
+                <img src="https://images.unsplash.com/photo-1493558103817-58b2924bce98?auto=format&fit=crop&w=900&q=80">
+
+                <div class="article-body">
+
+                    <span class="article-category">
+
+                        Luxury
+
+                    </span>
+
+                    <h3>
+
+                        Luxury Resorts Worth Every Penny
+
+                    </h3>
+
+                    <p>
+
+                        Experience premium hospitality,
+                        private villas,
+                        and world-class amenities.
+
+                    </p>
+
+                    <a href="#" class="article-link">
+
+                        Read More →
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- POPULAR DESTINATIONS -->
+
+    <section class="section destination-section">
+
+        <h2 class="section-title">
+
+            Popular Destinations
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="destination-grid">
+
+            <div class="destination-card">
+
+                <img src="https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&w=800&q=80">
+
+                <div class="destination-overlay">
+
+                    <h3>
+
+                        Goa
+
+                    </h3>
+
+                    <p>
+
+                        Beaches • Nightlife • Water Sports
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="destination-card">
+
+                <img src="https://images.unsplash.com/photo-1593693411515-c20261bcad6e?auto=format&fit=crop&w=800&q=80">
+
+                <div class="destination-overlay">
+
+                    <h3>
+
+                        Kashmir
+
+                    </h3>
+
+                    <p>
+
+                        Mountains • Snow • Houseboats
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="destination-card">
+
+                <img src="https://images.unsplash.com/photo-1599661046827-dacde6976545?auto=format&fit=crop&w=800&q=80">
+
+                <div class="destination-overlay">
+
+                    <h3>
+
+                        Kerala
+
+                    </h3>
+
+                    <p>
+
+                        Backwaters • Nature • Ayurveda
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="destination-card">
+
+                <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=800&q=80">
+
+                <div class="destination-overlay">
+
+                    <h3>
+
+                        Darjeeling
+
+                    </h3>
+
+                    <p>
+
+                        Tea Gardens • Sunrise • Toy Train
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- EDITOR'S PICKS -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Editor's Picks
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="editor-grid">
+
+            <div class="editor-card">
+
+                <i class="fa-solid fa-fire"></i>
+
+                <h4>
+
+                    Top Budget Destinations in India
+
+                </h4>
+
+                <p>
+
+                    Explore amazing places without spending a fortune.
+
+                </p>
+
+            </div>
+
+            <div class="editor-card">
+
+                <i class="fa-solid fa-utensils"></i>
+
+                <h4>
+
+                    Best Local Foods Every Traveler Must Try
+
+                </h4>
+
+                <p>
+
+                    Discover authentic regional cuisines across India.
+
+                </p>
+
+            </div>
+
+            <div class="editor-card">
+
+                <i class="fa-solid fa-camera"></i>
+
+                <h4>
+
+                    Most Instagrammable Travel Spots
+
+                </h4>
+
+                <p>
+
+                    Capture stunning memories at these beautiful destinations.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- TRAVEL TIPS -->
+
+    <section class="section tips-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Travel Tips
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="tips-grid">
+
+                <div class="tip-card">
+
+                    <i class="fa-solid fa-suitcase-rolling"></i>
+
+                    <h4>
+
+                        Pack Smart
+
+                    </h4>
+
+                    <p>
+
+                        Carry only essentials,
+                        keep important documents handy,
+                        and always leave extra space for souvenirs.
+
+                    </p>
+
+                </div>
+
+                <div class="tip-card">
+
+                    <i class="fa-solid fa-wallet"></i>
+
+                    <h4>
+
+                        Plan Your Budget
+
+                    </h4>
+
+                    <p>
+
+                        Set a daily budget,
+                        book accommodations in advance,
+                        and keep emergency funds for unexpected expenses.
+
+                    </p>
+
+                </div>
+
+                <div class="tip-card">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    <h4>
+
+                        Explore Local Culture
+
+                    </h4>
+
+                    <p>
+
+                        Visit local markets,
+                        taste regional cuisine,
+                        and experience traditions beyond popular tourist attractions.
+
+                    </p>
+
+                </div>
+
+                <div class="tip-card">
+
+                    <i class="fa-solid fa-shield-heart"></i>
+
+                    <h4>
+
+                        Travel Safely
+
+                    </h4>
+
+                    <p>
+
+                        Keep emergency contacts,
+                        carry travel insurance,
+                        and stay informed about local guidelines.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- PHOTO GALLERY -->
+
+    <section class="section gallery-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Travel Gallery
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="gallery-grid">
+
+                <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80">
+
+                <img src="https://images.unsplash.com/photo-1493558103817-58b2924bce98?auto=format&fit=crop&w=800&q=80">
+
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80">
+
+                <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80">
+
+                <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80">
+
+                <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=800&q=80">
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- NEWSLETTER -->
+
+    <section class="newsletter">
+
+        <div class="container text-center">
+
+            <h2>
+
+                Never Miss a Travel Story
+
+            </h2>
+
+            <p>
+
+                Subscribe to receive travel inspiration,
+                exclusive offers,
+                destination guides,
+                and expert travel tips directly in your inbox.
+
+            </p>
+
+            <form class="newsletter-form">
+
+                <input type="email" placeholder="Enter your email address">
+
+                <button type="submit">
+
+                    Subscribe
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+    <!-- CTA -->
+
+    <section class="blog-cta">
+
+        <div class="container">
+
+            <h2>
+
+                Ready for Your Next Adventure?
+
+            </h2>
+
+            <p>
+
+                Find your perfect stay,
+                discover incredible destinations,
+                and create unforgettable memories with Homigo.
+
+            </p>
+
+            <a href="/listings" class="cta-btn">
+
+                Explore Properties
+
+            </a>
+
+        </div>
+
+    </section>

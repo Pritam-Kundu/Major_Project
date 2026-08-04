@@ -1,0 +1,1829 @@
+<% layout("layouts/boilerplate") %>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #2f80ed;
+            --secondary: #56ccf2;
+            --dark: #1d1d1d;
+            --light: #f8f9fa;
+            --text: #555;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f8f9fa;
+            overflow-x: hidden;
+        }
+
+        /* Hero */
+
+        .about-hero {
+
+            position: relative;
+
+            width: 100%;
+
+            height: 90vh;
+
+            background:
+                linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .55)),
+                url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+
+            background-position: center;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-align: center;
+
+            color: white;
+
+        }
+
+        .about-content {
+
+            max-width: 900px;
+
+            animation: fadeUp 1s ease;
+
+        }
+
+        .about-content h1 {
+
+            font-size: 4rem;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+
+        }
+
+        .about-content p {
+
+            font-size: 1.2rem;
+
+            line-height: 1.8;
+
+            color: #eee;
+
+            margin-bottom: 35px;
+
+        }
+
+        .about-btn {
+
+            display: inline-block;
+
+            padding: 16px 40px;
+
+            background: #fff;
+
+            color: #222;
+
+            border-radius: 50px;
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+            transition: .35s;
+
+        }
+
+        .about-btn:hover {
+
+            transform: translateY(-5px);
+
+            background: #2f80ed;
+
+            color: #fff;
+
+        }
+
+        /* Intro */
+
+        .intro {
+
+            padding: 90px 8%;
+
+            background: white;
+
+        }
+
+        .section-title {
+
+            font-size: 2.8rem;
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+            font-weight: 700;
+
+            color: #222;
+
+        }
+
+        .section-text {
+
+            text-align: center;
+
+            max-width: 950px;
+
+            margin: auto;
+
+            color: #666;
+
+            line-height: 2;
+
+            font-size: 1.05rem;
+
+        }
+
+        /* Stats */
+
+        .stats {
+
+            padding: 70px 8%;
+
+            background: #f5f7fb;
+
+        }
+
+        .stats-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .stat-card {
+
+            background: white;
+
+            border-radius: 18px;
+
+            text-align: center;
+
+            padding: 40px;
+
+            transition: .35s;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .06);
+
+        }
+
+        .stat-card:hover {
+
+            transform: translateY(-8px);
+
+        }
+
+        .stat-card i {
+
+            font-size: 3rem;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .stat-card h2 {
+
+            font-size: 2.7rem;
+
+            color: #222;
+
+            margin-bottom: 10px;
+
+        }
+
+        .stat-card p {
+
+            color: #777;
+
+            font-weight: 500;
+
+        }
+
+
+        /* Section Divider */
+
+        .divider {
+
+            width: 120px;
+
+            height: 5px;
+
+            background: #2f80ed;
+
+            margin: 25px auto 50px;
+
+            border-radius: 50px;
+
+        }
+
+        /* Animation */
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(60px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+        @media(max-width:768px) {
+
+            .about-content h1 {
+
+                font-size: 2.5rem;
+
+            }
+
+            .about-content p {
+
+                font-size: 1rem;
+
+            }
+
+            .section-title {
+
+                font-size: 2rem;
+
+            }
+
+        }
+
+        /* Story */
+
+        .story-section {
+
+            padding: 90px 8%;
+
+            background: white;
+
+        }
+
+        .story-text {
+
+            font-size: 1rem;
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Mission */
+
+        .mission-section {
+
+            padding: 90px 8%;
+
+            background: #f5f7fb;
+
+        }
+
+        .mission-card {
+
+            background: white;
+
+            padding: 45px;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            height: 100%;
+
+            transition: .35s;
+
+        }
+
+        .mission-card:hover {
+
+            transform: translateY(-8px);
+
+        }
+
+        .mission-icon {
+
+            width: 75px;
+
+            height: 75px;
+
+            background: #2f80ed;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+
+        }
+
+        .mission-icon i {
+
+            font-size: 30px;
+
+            color: white;
+
+        }
+
+        .mission-card h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .mission-card p {
+
+            line-height: 2;
+
+            color: #666;
+
+        }
+
+        /* Values */
+
+        .values-section {
+
+            padding: 90px 8%;
+
+            background: white;
+
+        }
+
+        .value-card {
+
+            background: #fff;
+
+            padding: 40px 30px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+
+            transition: .35s;
+
+            height: 100%;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+        }
+
+        .value-card:hover {
+
+            transform: translateY(-8px);
+
+        }
+
+        .value-card i {
+
+            font-size: 45px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .value-card h4 {
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+        }
+
+        .value-card p {
+
+            color: #666;
+
+            line-height: 1.8;
+
+        }
+
+        /* Features */
+
+        .features-section {
+
+            padding: 100px 8%;
+
+            background: #f5f7fb;
+
+        }
+
+        .feature-card {
+
+            background: white;
+
+            padding: 40px;
+
+            border-radius: 20px;
+
+            height: 100%;
+
+            text-align: center;
+
+            transition: .35s;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+
+        }
+
+        .feature-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .feature-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .feature-card h4 {
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+        }
+
+        .feature-card p {
+
+            line-height: 1.8;
+
+            color: #666;
+
+        }
+
+        /* Timeline */
+
+        .timeline-section {
+
+            padding: 100px 8%;
+
+            background: white;
+
+        }
+
+        .timeline {
+
+            max-width: 900px;
+
+            margin: auto;
+
+        }
+
+        .timeline-item {
+
+            display: flex;
+
+            gap: 25px;
+
+            margin-bottom: 40px;
+
+            align-items: flex-start;
+
+        }
+
+        .timeline-icon {
+
+            min-width: 70px;
+
+            height: 70px;
+
+            background: #2f80ed;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+        }
+
+        .timeline-icon i {
+
+            color: white;
+
+            font-size: 30px;
+
+        }
+
+        .timeline-content {
+
+            padding-top: 8px;
+
+        }
+
+        .timeline-content h4 {
+
+            font-weight: 700;
+
+            margin-bottom: 12px;
+
+        }
+
+        .timeline-content p {
+
+            line-height: 1.8;
+
+            color: #666;
+
+        }
+
+        /* Team */
+
+        .team-section {
+
+            padding: 100px 8%;
+
+            background: #f5f7fb;
+
+        }
+
+        .team-card {
+
+            background: white;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            transition: .35s;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+
+        }
+
+        .team-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .team-img {
+
+            width: 140px;
+
+            height: 140px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            margin-bottom: 20px;
+
+            border: 5px solid #2f80ed;
+
+        }
+
+        .team-role {
+
+            color: #2f80ed;
+
+            font-weight: 600;
+
+            margin-bottom: 15px;
+
+        }
+
+        /* Achievement */
+
+        .achievement-section {
+
+            padding: 100px 8%;
+
+            background: white;
+
+        }
+
+        .achievement-card {
+
+            background: #f8f9fa;
+
+            padding: 45px;
+
+            border-radius: 20px;
+
+            transition: .35s;
+
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .05);
+
+        }
+
+        .achievement-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .achievement-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .achievement-card h3 {
+
+            font-size: 2.5rem;
+
+            font-weight: 700;
+
+            margin-bottom: 10px;
+
+        }
+
+        .achievement-card p {
+
+            color: #666;
+
+        }
+
+        /* Newsletter */
+
+        .newsletter-section {
+
+            padding: 100px 8%;
+
+            background: linear-gradient(135deg, #2f80ed, #56ccf2);
+
+            text-align: center;
+
+            color: white;
+
+        }
+
+        .newsletter-section h2 {
+
+            font-size: 2.8rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .newsletter-section p {
+
+            max-width: 700px;
+
+            margin: auto auto 40px;
+
+            line-height: 1.8;
+
+        }
+
+        .newsletter-form {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .newsletter-form input {
+
+            width: 420px;
+
+            max-width: 100%;
+
+            padding: 16px;
+
+            border: none;
+
+            border-radius: 50px;
+
+            outline: none;
+
+        }
+
+        .newsletter-form button {
+
+            padding: 16px 35px;
+
+            border: none;
+
+            border-radius: 50px;
+
+            background: white;
+
+            color: #2f80ed;
+
+            font-weight: 700;
+
+            transition: .3s;
+
+        }
+
+        .newsletter-form button:hover {
+
+            background: #222;
+
+            color: white;
+
+        }
+
+        /* CTA */
+
+        .cta-section {
+
+            padding: 120px 8%;
+
+            background: #111;
+
+            color: white;
+
+            text-align: center;
+
+        }
+
+        .cta-section h2 {
+
+            font-size: 3rem;
+
+            font-weight: 700;
+
+            margin-bottom: 25px;
+
+        }
+
+        .cta-section p {
+
+            max-width: 800px;
+
+            margin: auto auto 40px;
+
+            line-height: 2;
+
+            color: #ddd;
+
+        }
+
+        .cta-btn {
+
+            display: inline-block;
+
+            padding: 18px 45px;
+
+            background: #2f80ed;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 50px;
+
+            font-weight: 600;
+
+            transition: .35s;
+
+        }
+
+        .cta-btn:hover {
+
+            background: #56ccf2;
+
+            transform: translateY(-5px);
+
+        }
+
+        /* Animation */
+
+        .feature-card,
+        .value-card,
+        .team-card,
+        .stat-card,
+        .achievement-card,
+        .mission-card {
+
+            transition: all .35s ease;
+
+        }
+
+        img {
+
+            transition: .4s;
+
+        }
+
+        img:hover {
+
+            transform: scale(1.03);
+
+        }
+
+        @media(max-width:768px) {
+
+            .newsletter-form {
+
+                flex-direction: column;
+
+            }
+
+            .newsletter-form input {
+
+                width: 100%;
+
+            }
+
+            .about-content h1 {
+
+                font-size: 2.4rem;
+
+            }
+
+            .cta-section h2 {
+
+                font-size: 2rem;
+
+            }
+
+            .newsletter-section h2 {
+
+                font-size: 2rem;
+
+            }
+
+        }
+    </style>
+
+    <!-- HERO -->
+
+    <section class="about-hero">
+
+        <div class="about-content">
+
+            <h1>Discover the World with Homigo</h1>
+
+            <p>
+
+                Homigo is more than a booking platform.
+
+                We connect travelers with memorable stays, premium experiences,
+                and trusted hosts across the globe.
+
+                From luxury resorts to cozy homestays,
+                our mission is to make every journey effortless,
+                secure and unforgettable.
+
+            </p>
+
+            <a href="/listings" class="about-btn">
+
+                Explore Properties
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- INTRO -->
+
+    <section class="intro">
+
+        <h2 class="section-title">
+
+            Welcome to Homigo
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <p class="section-text">
+
+            At Homigo, we believe that travel is more than simply reaching a destination—
+            it's about discovering new cultures, creating lifelong memories,
+            and feeling at home wherever you go.
+
+            Our platform brings together carefully verified properties,
+            secure payment systems, and exceptional customer support,
+            making every booking experience simple, transparent, and stress-free.
+
+            Whether you're planning a family vacation,
+            a romantic getaway,
+            a business trip,
+            or a solo adventure,
+            Homigo helps you find the perfect place to stay.
+
+        </p>
+
+    </section>
+
+    <!-- STATS -->
+
+    <section class="stats">
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <i class="fa-solid fa-hotel"></i>
+
+                <h2>5000+</h2>
+
+                <p>Verified Properties</p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <i class="fa-solid fa-users"></i>
+
+                <h2>100K+</h2>
+
+                <p>Happy Travelers</p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <i class="fa-solid fa-earth-asia"></i>
+
+                <h2>120+</h2>
+
+                <p>Cities Covered</p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <i class="fa-solid fa-star"></i>
+
+                <h2>4.9</h2>
+
+                <p>Average Rating</p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- OUR STORY -->
+
+    <section class="story-section">
+
+        <div class="container">
+
+            <div class="row align-items-center g-5">
+
+                <div class="col-lg-6">
+
+                    <img src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=1000&q=80"
+                        class="img-fluid rounded-4 shadow-lg">
+
+                </div>
+
+                <div class="col-lg-6">
+
+                    <h2 class="section-title text-start">
+
+                        Our Story
+
+                    </h2>
+
+                    <div class="divider ms-0"></div>
+
+                    <p class="story-text">
+
+                        Homigo was founded with a simple yet ambitious goal:
+                        to redefine how people discover and book accommodations.
+
+                        We noticed that travelers often struggled with
+                        complicated booking platforms,
+                        hidden charges,
+                        unreliable property information,
+                        and poor customer support.
+
+                    </p>
+
+                    <p class="story-text">
+
+                        That's why we built Homigo—
+                        a platform that combines
+                        trust,
+                        transparency,
+                        technology,
+                        and hospitality
+                        into one seamless experience.
+
+                    </p>
+
+                    <p class="story-text">
+
+                        Every property listed on Homigo is carefully verified,
+                        every booking is protected,
+                        and every traveler receives dedicated customer support,
+                        ensuring peace of mind throughout the journey.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- MISSION & VISION -->
+
+    <section class="mission-section">
+
+        <div class="container">
+
+            <div class="row g-4">
+
+                <div class="col-lg-6">
+
+                    <div class="mission-card">
+
+                        <div class="mission-icon">
+
+                            <i class="fa-solid fa-bullseye"></i>
+
+                        </div>
+
+                        <h3>
+
+                            Our Mission
+
+                        </h3>
+
+                        <p>
+
+                            To empower travelers by providing a secure,
+                            easy-to-use,
+                            and innovative booking platform
+                            that connects people with exceptional stays,
+                            verified hosts,
+                            and unforgettable experiences.
+
+                            We strive to eliminate uncertainty from travel planning
+                            through transparency,
+                            technology,
+                            and world-class customer support.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-6">
+
+                    <div class="mission-card">
+
+                        <div class="mission-icon">
+
+                            <i class="fa-solid fa-eye"></i>
+
+                        </div>
+
+                        <h3>
+
+                            Our Vision
+
+                        </h3>
+
+                        <p>
+
+                            To become one of the world's most trusted travel platforms,
+                            where every journey begins with confidence
+                            and every destination feels like home.
+
+                            We envision a future where booking accommodations
+                            is effortless,
+                            secure,
+                            and personalized for every traveler.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CORE VALUES -->
+
+    <section class="values-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Our Core Values
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="row g-4">
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="value-card">
+
+                        <i class="fa-solid fa-shield-heart"></i>
+
+                        <h4>
+
+                            Trust
+
+                        </h4>
+
+                        <p>
+
+                            Every listing is verified,
+                            every transaction is secure,
+                            and every traveler deserves complete transparency.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="value-card">
+
+                        <i class="fa-solid fa-lightbulb"></i>
+
+                        <h4>
+
+                            Innovation
+
+                        </h4>
+
+                        <p>
+
+                            We continuously improve our technology
+                            to make discovering and booking stays
+                            faster,
+                            smarter,
+                            and more enjoyable.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="value-card">
+
+                        <i class="fa-solid fa-handshake"></i>
+
+                        <h4>
+
+                            Hospitality
+
+                        </h4>
+
+                        <p>
+
+                            Great hospitality begins with respect,
+                            care,
+                            and meaningful relationships
+                            between travelers and hosts.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+
+                    <div class="value-card">
+
+                        <i class="fa-solid fa-earth-americas"></i>
+
+                        <h4>
+
+                            Sustainability
+
+                        </h4>
+
+                        <p>
+
+                            We encourage responsible tourism
+                            that benefits travelers,
+                            local communities,
+                            and the environment.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- WHY CHOOSE US -->
+
+    <section class="features-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Why Choose Homigo?
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="row g-4">
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="feature-card">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        <h4>Verified Properties</h4>
+
+                        <p>
+
+                            Every property undergoes quality verification to ensure a safe,
+                            comfortable and authentic stay.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="feature-card">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <h4>Secure Payments</h4>
+
+                        <p>
+
+                            Advanced encrypted payment gateways protect every transaction,
+                            keeping your information secure.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="feature-card">
+
+                        <i class="fa-solid fa-headset"></i>
+
+                        <h4>24×7 Support</h4>
+
+                        <p>
+
+                            Our support specialists are available around the clock
+                            to help you whenever you need assistance.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="feature-card">
+
+                        <i class="fa-solid fa-calendar-check"></i>
+
+                        <h4>Instant Booking</h4>
+
+                        <p>
+
+                            Book your perfect stay within minutes
+                            and receive instant booking confirmation.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="feature-card">
+
+                        <i class="fa-solid fa-tags"></i>
+
+                        <h4>Best Price Guarantee</h4>
+
+                        <p>
+
+                            Competitive pricing ensures you always receive
+                            excellent value for your travel budget.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="feature-card">
+
+                        <i class="fa-solid fa-globe"></i>
+
+                        <h4>Worldwide Destinations</h4>
+
+                        <p>
+
+                            Explore thousands of hotels,
+                            villas,
+                            apartments
+                            and unique stays across the globe.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- HOW IT WORKS -->
+
+    <section class="timeline-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                How Homigo Works
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="timeline">
+
+                <div class="timeline-item">
+
+                    <div class="timeline-icon">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                    </div>
+
+                    <div class="timeline-content">
+
+                        <h4>
+
+                            Search
+
+                        </h4>
+
+                        <p>
+
+                            Discover hotels,
+                            resorts,
+                            apartments
+                            and vacation rentals
+                            tailored to your destination and budget.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="timeline-item">
+
+                    <div class="timeline-icon">
+
+                        <i class="fa-solid fa-calendar-days"></i>
+
+                    </div>
+
+                    <div class="timeline-content">
+
+                        <h4>
+
+                            Book
+
+                        </h4>
+
+                        <p>
+
+                            Choose your travel dates,
+                            select guests,
+                            and complete your booking
+                            through our secure payment system.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="timeline-item">
+
+                    <div class="timeline-icon">
+
+                        <i class="fa-solid fa-plane-departure"></i>
+
+                    </div>
+
+                    <div class="timeline-content">
+
+                        <h4>
+
+                            Travel
+
+                        </h4>
+
+                        <p>
+
+                            Receive instant confirmation
+                            and enjoy a smooth,
+                            stress-free travel experience.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="timeline-item">
+
+                    <div class="timeline-icon">
+
+                        <i class="fa-solid fa-star"></i>
+
+                    </div>
+
+                    <div class="timeline-content">
+
+                        <h4>
+
+                            Review
+
+                        </h4>
+
+                        <p>
+
+                            Share your experience,
+                            help future travelers,
+                            and become part of our trusted community.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- TEAM -->
+
+    <section class="team-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Project Contributors
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+
+                    <div class="team-card">
+
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="team-img">
+
+                        <h4>
+
+                            Alex Carter
+
+                        </h4>
+
+                        <p class="team-role">
+
+                            Founder & CEO
+
+                        </p>
+
+                        <p>
+
+                            Passionate about transforming travel through innovation
+                            and customer-first experiences.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="team-card">
+
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" class="team-img">
+
+                        <h4>
+
+                            Sophia Wilson
+
+                        </h4>
+
+                        <p class="team-role">
+
+                            Head of Operations
+
+                        </p>
+
+                        <p>
+
+                            Ensuring every booking
+                            is seamless,
+                            secure
+                            and memorable.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="team-card">
+
+                        <img src="https://randomuser.me/api/portraits/men/52.jpg" class="team-img">
+
+                        <h4>
+
+                            Daniel Lee
+
+                        </h4>
+
+                        <p class="team-role">
+
+                            Technology Lead
+
+                        </p>
+
+                        <p>
+
+                            Building innovative travel solutions
+                            powered by modern technologies.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ACHIEVEMENTS -->
+
+    <section class="achievement-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Trusted by Thousands
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="row g-4 text-center">
+
+                <div class="col-md-3">
+
+                    <div class="achievement-card">
+
+                        <i class="fa-solid fa-award"></i>
+
+                        <h3>50+</h3>
+
+                        <p>Travel Awards</p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="achievement-card">
+
+                        <i class="fa-solid fa-building"></i>
+
+                        <h3>5000+</h3>
+
+                        <p>Verified Hotels</p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="achievement-card">
+
+                        <i class="fa-solid fa-heart"></i>
+
+                        <h3>100K+</h3>
+
+                        <p>Happy Customers</p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="achievement-card">
+
+                        <i class="fa-solid fa-earth-asia"></i>
+
+                        <h3>120+</h3>
+
+                        <p>Destinations</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- NEWSLETTER -->
+
+    <section class="newsletter-section">
+
+        <div class="container">
+
+            <h2>
+
+                Stay Inspired
+
+            </h2>
+
+            <p>
+
+                Receive exclusive travel offers, destination guides and special discounts directly in your inbox.
+
+            </p>
+
+            <form class="newsletter-form">
+
+                <input type="email" placeholder="Enter your email">
+
+                <button type="submit">
+
+                    Subscribe
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+    <!-- CTA -->
+
+    <section class="cta-section">
+
+        <div class="container text-center">
+
+            <h2>
+
+                Your Next Adventure Starts Here
+
+            </h2>
+
+            <p>
+
+                Whether you're planning a romantic escape,
+                family vacation,
+                business trip
+                or weekend getaway,
+                Homigo helps you discover extraordinary stays
+                at the best prices.
+
+            </p>
+
+            <a href="/listings" class="cta-btn">
+
+                Explore Properties
+
+            </a>
+
+        </div>
+
+    </section>

@@ -1,0 +1,2016 @@
+<% layout("layouts/boilerplate") %>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+
+            --primary: #2f80ed;
+
+            --secondary: #56ccf2;
+
+            --dark: #1d1d1d;
+
+            --light: #f8f9fa;
+
+        }
+
+        * {
+
+            margin: 0;
+
+            padding: 0;
+
+            box-sizing: border-box;
+
+            font-family: 'Poppins', sans-serif;
+
+        }
+
+        body {
+
+            background: #f7f9fc;
+
+            overflow-x: hidden;
+
+        }
+
+        /* Hero */
+
+        .career-hero {
+
+            height: 90vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-align: center;
+
+            background:
+
+                linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .55)),
+
+                url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+
+            background-position: center;
+
+            color: white;
+
+        }
+
+        .hero-content {
+
+            max-width: 900px;
+
+            padding: 20px;
+
+            animation: fadeUp 1s ease;
+
+        }
+
+        .hero-content h1 {
+
+            font-size: 4rem;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+
+        }
+
+        .hero-content p {
+
+            font-size: 1.15rem;
+
+            line-height: 2;
+
+            color: #eee;
+
+            margin-bottom: 35px;
+
+        }
+
+        .hero-btn {
+
+            display: inline-block;
+
+            padding: 16px 45px;
+
+            background: white;
+
+            color: #2f80ed;
+
+            font-weight: 700;
+
+            text-decoration: none;
+
+            border-radius: 50px;
+
+            transition: .35s;
+
+        }
+
+        .hero-btn:hover {
+
+            background: #2f80ed;
+
+            color: white;
+
+            transform: translateY(-5px);
+
+        }
+
+        /* Sections */
+
+        .section {
+
+            padding: 100px 8%;
+
+        }
+
+        .section-title {
+
+            text-align: center;
+
+            font-size: 2.8rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+            color: #222;
+
+        }
+
+        .divider {
+
+            width: 120px;
+
+            height: 5px;
+
+            background: #2f80ed;
+
+            margin: 0 auto 60px;
+
+            border-radius: 30px;
+
+        }
+
+        /* Culture */
+
+        .culture-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .culture-card {
+
+            background: white;
+
+            padding: 40px;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+            text-align: center;
+
+            transition: .35s;
+
+            height: 100%;
+
+        }
+
+        .culture-card:hover {
+
+            transform: translateY(-8px);
+
+        }
+
+        .culture-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .culture-card h3 {
+
+            margin-bottom: 18px;
+
+            font-weight: 700;
+
+        }
+
+        .culture-card p {
+
+            color: #666;
+
+            line-height: 1.8;
+
+        }
+
+        /* Why Join */
+
+        .join-wrapper {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .join-wrapper img {
+
+            width: 100%;
+
+            border-radius: 20px;
+
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .12);
+
+        }
+
+        .join-content h2 {
+
+            font-size: 2.5rem;
+
+            margin-bottom: 20px;
+
+            font-weight: 700;
+
+        }
+
+        .join-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        .join-list {
+
+            list-style: none;
+
+            padding: 0;
+
+        }
+
+        .join-list li {
+
+            margin-bottom: 18px;
+
+            font-size: 1.05rem;
+
+        }
+
+        .join-list i {
+
+            color: #2f80ed;
+
+            margin-right: 12px;
+
+        }
+
+        /* Animation */
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(50px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+        @media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+
+            .join-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        /* Jobs */
+
+        .jobs-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
+            gap: 35px;
+
+        }
+
+        .job-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+            position: relative;
+
+        }
+
+        .job-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .job-type {
+
+            background: #2f80ed;
+
+            color: white;
+
+            padding: 6px 15px;
+
+            border-radius: 30px;
+
+            font-size: .8rem;
+
+            font-weight: 600;
+
+            display: inline-block;
+
+            margin-bottom: 20px;
+
+        }
+
+        .job-card h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+        }
+
+        .location {
+
+            color: #2f80ed;
+
+            font-weight: 600;
+
+            margin-bottom: 20px;
+
+        }
+
+        .skills {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+            margin: 25px 0;
+
+        }
+
+        .skills span {
+
+            background: #eef5ff;
+
+            padding: 8px 14px;
+
+            border-radius: 30px;
+
+            font-size: .85rem;
+
+        }
+
+        .apply-btn {
+
+            display: inline-block;
+
+            padding: 12px 30px;
+
+            background: #2f80ed;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 40px;
+
+            transition: .3s;
+
+            font-weight: 600;
+
+        }
+
+        .apply-btn:hover {
+
+            background: #111;
+
+            color: white;
+
+        }
+
+        /* Benefits */
+
+        .benefits-section {
+
+            background: white;
+
+        }
+
+        .benefits-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .benefit-card {
+
+            padding: 35px;
+
+            background: #f8f9fc;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            transition: .35s;
+
+        }
+
+        .benefit-card:hover {
+
+            transform: translateY(-8px);
+
+        }
+
+        .benefit-card i {
+
+            font-size: 45px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Stats */
+
+        .career-stats {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 25px;
+
+            text-align: center;
+
+        }
+
+        .career-stats div {
+
+            background: white;
+
+            padding: 40px;
+
+            border-radius: 20px;
+
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .06);
+
+            transition: .35s;
+
+        }
+
+        .career-stats div:hover {
+
+            transform: translateY(-8px);
+
+        }
+
+        .career-stats h2 {
+
+            font-size: 3rem;
+
+            font-weight: 700;
+
+            color: #2f80ed;
+
+            margin-bottom: 10px;
+
+        }
+
+        /* Hiring Process */
+
+        .process-section {
+
+            background: #fff;
+
+        }
+
+        .process-wrapper {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .process-step {
+
+            background: #f8f9fc;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            transition: .35s;
+
+        }
+
+        .process-step:hover {
+
+            transform: translateY(-8px);
+
+        }
+
+        .process-number {
+
+            width: 70px;
+
+            height: 70px;
+
+            margin: auto auto 20px;
+
+            background: #2f80ed;
+
+            color: white;
+
+            font-size: 28px;
+
+            font-weight: 700;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            border-radius: 50%;
+
+        }
+
+        /* Testimonials */
+
+        .testimonial-section {
+
+            background: #f7f9fc;
+
+        }
+
+        .testimonial-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .testimonial-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .testimonial-card:hover {
+
+            transform: translateY(-8px);
+
+        }
+
+        .testimonial-card i {
+
+            font-size: 35px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .testimonial-card h5 {
+
+            margin-top: 20px;
+
+            margin-bottom: 5px;
+
+            font-weight: 700;
+
+        }
+
+        .testimonial-card span {
+
+            color: #777;
+
+        }
+
+        /* FAQ */
+
+        .faq-section {
+
+            background: white;
+
+        }
+
+        .accordion-button {
+
+            font-weight: 600;
+
+        }
+
+        /* CTA */
+
+        .career-cta {
+
+            padding: 120px 8%;
+
+            text-align: center;
+
+            background: linear-gradient(135deg, #2f80ed, #56ccf2);
+
+            color: white;
+
+        }
+
+        .career-cta h2 {
+
+            font-size: 3rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .career-cta p {
+
+            max-width: 700px;
+
+            margin: auto auto 35px;
+
+            line-height: 2;
+
+        }
+
+        .career-btn {
+
+            display: inline-block;
+
+            padding: 16px 45px;
+
+            background: white;
+
+            color: #2f80ed;
+
+            text-decoration: none;
+
+            border-radius: 50px;
+
+            font-weight: 700;
+
+            transition: .3s;
+
+        }
+
+        .career-btn:hover {
+
+            background: #111;
+
+            color: white;
+
+        }
+
+        /* Awards */
+
+        .awards-section {
+
+            background: white;
+
+        }
+
+        .award-card {
+
+            padding: 40px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            background: #f8f9fc;
+
+            transition: .35s;
+
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .06);
+
+        }
+
+        .award-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .award-card i {
+
+            font-size: 55px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Offices */
+
+        .office-section {
+
+            background: #f7f9fc;
+
+        }
+
+        .office-card {
+
+            padding: 40px;
+
+            background: white;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            transition: .35s;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .06);
+
+        }
+
+        .office-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .office-card i {
+
+            font-size: 55px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Gallery */
+
+        .gallery-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+            gap: 20px;
+
+        }
+
+        .gallery-grid img {
+
+            width: 100%;
+
+            height: 250px;
+
+            object-fit: cover;
+
+            border-radius: 20px;
+
+            transition: .4s;
+
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .gallery-grid img:hover {
+
+            transform: scale(1.05);
+
+        }
+    </style>
+
+    <!-- HERO -->
+
+    <section class="career-hero">
+
+        <div class="hero-content">
+
+            <h1>
+
+                Build the Future of Travel
+
+            </h1>
+
+            <p>
+
+                At Homigo, we're passionate about making travel smarter,
+                simpler,
+                and more memorable.
+
+                Join our growing team and help create technology
+                that connects millions of travelers with amazing destinations.
+
+            </p>
+
+            <a href="#jobs" class="hero-btn">
+
+                View Open Positions
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- CULTURE -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Life at Homigo
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="culture-grid">
+
+            <div class="culture-card">
+
+                <i class="fa-solid fa-lightbulb"></i>
+
+                <h3>
+
+                    Innovation
+
+                </h3>
+
+                <p>
+
+                    We embrace creativity,
+                    continuous learning,
+                    and bold ideas that redefine the travel experience.
+
+                </p>
+
+            </div>
+
+            <div class="culture-card">
+
+                <i class="fa-solid fa-users"></i>
+
+                <h3>
+
+                    Collaboration
+
+                </h3>
+
+                <p>
+
+                    Every achievement begins with teamwork.
+
+                    We believe the best products are built together.
+
+                </p>
+
+            </div>
+
+            <div class="culture-card">
+
+                <i class="fa-solid fa-earth-asia"></i>
+
+                <h3>
+
+                    Global Impact
+
+                </h3>
+
+                <p>
+
+                    Your work helps travelers discover unforgettable destinations around the world.
+
+                </p>
+
+            </div>
+
+            <div class="culture-card">
+
+                <i class="fa-solid fa-heart"></i>
+
+                <h3>
+
+                    Work-Life Balance
+
+                </h3>
+
+                <p>
+
+                    We encourage flexibility,
+                    well-being,
+                    and a healthy balance between work and personal life.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- WHY JOIN -->
+
+    <section class="section" style="background:white;">
+
+        <div class="join-wrapper">
+
+            <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1000&q=80">
+
+            <div class="join-content">
+
+                <h2>
+
+                    Why Join Homigo?
+
+                </h2>
+
+                <p>
+
+                    Homigo is more than just a travel company.
+
+                    We're building a platform that empowers travelers,
+                    supports hosts,
+                    and creates unforgettable journeys.
+
+                    Every team member contributes directly to shaping the future of travel.
+
+                </p>
+
+                <ul class="join-list">
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Flexible Working Environment
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Competitive Compensation
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Learning & Growth Opportunities
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Friendly & Inclusive Culture
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Latest Technologies
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- OPEN POSITIONS -->
+
+    <section class="section" id="jobs">
+
+        <h2 class="section-title">
+
+            Current Open Positions
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="jobs-grid">
+
+            <div class="job-card">
+
+                <span class="job-type">
+
+                    Full Time
+
+                </span>
+
+                <h3>
+
+                    Frontend Developer
+
+                </h3>
+
+                <p class="location">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    Kolkata / Remote
+
+                </p>
+
+                <p>
+
+                    Build responsive user interfaces using
+                    HTML,
+                    CSS,
+                    JavaScript,
+                    Bootstrap,
+                    React.js
+                    and modern frontend technologies.
+
+                </p>
+
+                <div class="skills">
+
+                    <span>HTML</span>
+
+                    <span>CSS</span>
+
+                    <span>JavaScript</span>
+
+                    <span>React</span>
+
+                </div>
+
+                <a href="mailto:careers@homigo.com" class="apply-btn">
+
+                    Apply Now
+
+                </a>
+
+            </div>
+
+            <div class="job-card">
+
+                <span class="job-type">
+
+                    Full Time
+
+                </span>
+
+                <h3>
+
+                    Backend Developer
+
+                </h3>
+
+                <p class="location">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    Kolkata / Hybrid
+
+                </p>
+
+                <p>
+
+                    Develop scalable REST APIs,
+                    authentication,
+                    booking systems,
+                    payment integration
+                    and database architecture.
+
+                </p>
+
+                <div class="skills">
+
+                    <span>Node.js</span>
+
+                    <span>Express</span>
+
+                    <span>MongoDB</span>
+
+                    <span>REST API</span>
+
+                </div>
+
+                <a href="mailto:careers@homigo.com" class="apply-btn">
+
+                    Apply Now
+
+                </a>
+
+            </div>
+
+            <div class="job-card">
+
+                <span class="job-type">
+
+                    Internship
+
+                </span>
+
+                <h3>
+
+                    UI / UX Designer
+
+                </h3>
+
+                <p class="location">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    Remote
+
+                </p>
+
+                <p>
+
+                    Design modern,
+                    beautiful
+                    and user-friendly interfaces
+                    for millions of travelers.
+
+                </p>
+
+                <div class="skills">
+
+                    <span>Figma</span>
+
+                    <span>Adobe XD</span>
+
+                    <span>UI Design</span>
+
+                    <span>UX</span>
+
+                </div>
+
+                <a href="mailto:careers@homigo.com" class="apply-btn">
+
+                    Apply Now
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- BENEFITS -->
+
+    <section class="section benefits-section">
+
+        <h2 class="section-title">
+
+            Employee Benefits
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="benefits-grid">
+
+            <div class="benefit-card">
+
+                <i class="fa-solid fa-laptop-house"></i>
+
+                <h4>
+
+                    Hybrid Work
+
+                </h4>
+
+                <p>
+
+                    Flexible work from office
+                    or home.
+
+                </p>
+
+            </div>
+
+            <div class="benefit-card">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+                <h4>
+
+                    Learning Budget
+
+                </h4>
+
+                <p>
+
+                    Company-sponsored courses,
+                    certifications
+                    and workshops.
+
+                </p>
+
+            </div>
+
+            <div class="benefit-card">
+
+                <i class="fa-solid fa-heart-pulse"></i>
+
+                <h4>
+
+                    Health Support
+
+                </h4>
+
+                <p>
+
+                    Comprehensive wellness
+                    and healthcare initiatives.
+
+                </p>
+
+            </div>
+
+            <div class="benefit-card">
+
+                <i class="fa-solid fa-plane"></i>
+
+                <h4>
+
+                    Travel Discounts
+
+                </h4>
+
+                <p>
+
+                    Exclusive discounts
+                    on Homigo stays.
+
+                </p>
+
+            </div>
+
+            <div class="benefit-card">
+
+                <i class="fa-solid fa-trophy"></i>
+
+                <h4>
+
+                    Performance Rewards
+
+                </h4>
+
+                <p>
+
+                    Bonuses,
+                    recognition,
+                    and career growth.
+
+                </p>
+
+            </div>
+
+            <div class="benefit-card">
+
+                <i class="fa-solid fa-mug-hot"></i>
+
+                <h4>
+
+                    Fun Workplace
+
+                </h4>
+
+                <p>
+
+                    Team outings,
+                    events,
+                    and celebrations.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- COMPANY STATS -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Homigo by Numbers
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="career-stats">
+
+            <div>
+
+                <h2>5000+</h2>
+
+                <p>
+
+                    Hotels & Properties
+
+                </p>
+
+            </div>
+
+            <div>
+
+                <h2>100K+</h2>
+
+                <p>
+
+                    Happy Travelers
+
+                </p>
+
+            </div>
+
+            <div>
+
+                <h2>120+</h2>
+
+                <p>
+
+                    Cities Covered
+
+                </p>
+
+            </div>
+
+            <div>
+
+                <h2>250+</h2>
+
+                <p>
+
+                    Team Members
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- HIRING PROCESS -->
+
+    <section class="section process-section">
+
+        <h2 class="section-title">
+
+            Our Hiring Process
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="process-wrapper">
+
+            <div class="process-step">
+
+                <div class="process-number">
+
+                    1
+
+                </div>
+
+                <h4>
+
+                    Apply
+
+                </h4>
+
+                <p>
+
+                    Submit your application with your resume and portfolio through our careers page.
+
+                </p>
+
+            </div>
+
+            <div class="process-step">
+
+                <div class="process-number">
+
+                    2
+
+                </div>
+
+                <h4>
+
+                    Screening
+
+                </h4>
+
+                <p>
+
+                    Our recruitment team reviews your profile and contacts shortlisted candidates.
+
+                </p>
+
+            </div>
+
+            <div class="process-step">
+
+                <div class="process-number">
+
+                    3
+
+                </div>
+
+                <h4>
+
+                    Technical Interview
+
+                </h4>
+
+                <p>
+
+                    Meet our engineering team to discuss your technical skills and problem-solving approach.
+
+                </p>
+
+            </div>
+
+            <div class="process-step">
+
+                <div class="process-number">
+
+                    4
+
+                </div>
+
+                <h4>
+
+                    Final Discussion
+
+                </h4>
+
+                <p>
+
+                    Meet our leadership team to discuss your goals and how you fit into Homigo.
+
+                </p>
+
+            </div>
+
+            <div class="process-step">
+
+                <div class="process-number">
+
+                    5
+
+                </div>
+
+                <h4>
+
+                    Welcome!
+
+                </h4>
+
+                <p>
+
+                    Receive your offer letter and begin your exciting journey with Homigo.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- TESTIMONIALS -->
+
+    <section class="section testimonial-section">
+
+        <h2 class="section-title">
+
+            What Our Team Says
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="testimonial-grid">
+
+            <div class="testimonial-card">
+
+                <i class="fa-solid fa-quote-left"></i>
+
+                <p>
+
+                    Working at Homigo has given me opportunities to learn modern technologies while solving real-world
+                    travel problems.
+
+                </p>
+
+                <h5>
+
+                    Aarav Sharma
+
+                </h5>
+
+                <span>
+
+                    Software Engineer
+
+                </span>
+
+            </div>
+
+            <div class="testimonial-card">
+
+                <i class="fa-solid fa-quote-left"></i>
+
+                <p>
+
+                    The collaborative culture and supportive teammates make Homigo one of the best places to grow
+                    professionally.
+
+                </p>
+
+                <h5>
+
+                    Priya Mehta
+
+                </h5>
+
+                <span>
+
+                    Product Designer
+
+                </span>
+
+            </div>
+
+            <div class="testimonial-card">
+
+                <i class="fa-solid fa-quote-left"></i>
+
+                <p>
+
+                    Every project feels meaningful because millions of travelers benefit from what we build every day.
+
+                </p>
+
+                <h5>
+
+                    Rahul Verma
+
+                </h5>
+
+                <span>
+
+                    Backend Engineer
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FAQ -->
+
+    <section class="section faq-section">
+
+        <h2 class="section-title">
+
+            Frequently Asked Questions
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="accordion" id="careerFAQ">
+
+            <div class="accordion-item">
+
+                <h2 class="accordion-header">
+
+                    <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#faq1">
+
+                        Do I need previous experience?
+
+                    </button>
+
+                </h2>
+
+                <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#careerFAQ">
+
+                    <div class="accordion-body">
+
+                        We welcome both experienced professionals and talented fresh graduates depending on the role.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="accordion-item">
+
+                <h2 class="accordion-header">
+
+                    <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq2">
+
+                        Can I work remotely?
+
+                    </button>
+
+                </h2>
+
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#careerFAQ">
+
+                    <div class="accordion-body">
+
+                        Several positions offer hybrid or remote work opportunities depending on project requirements.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="accordion-item">
+
+                <h2 class="accordion-header">
+
+                    <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq3">
+
+                        How long does hiring take?
+
+                    </button>
+
+                </h2>
+
+                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#careerFAQ">
+
+                    <div class="accordion-body">
+
+                        The hiring process usually takes between one and three weeks.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CTA -->
+
+    <section class="career-cta">
+
+        <div class="container">
+
+            <h2>
+
+                Ready to Shape the Future of Travel?
+
+            </h2>
+
+            <p>
+
+                Join Homigo and help us build technology that inspires millions of travelers worldwide.
+
+            </p>
+
+            <a href="mailto:careers@homigo.com" class="career-btn">
+
+                Apply Today
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- AWARDS -->
+
+    <section class="section awards-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Awards & Recognition
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="row g-4">
+
+                <div class="col-md-3">
+
+                    <div class="award-card">
+
+                        <i class="fa-solid fa-award"></i>
+
+                        <h3>
+
+                            Best Startup
+
+                        </h3>
+
+                        <p>
+
+                            Travel Innovation Award 2025
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="award-card">
+
+                        <i class="fa-solid fa-star"></i>
+
+                        <h3>
+
+                            4.9 Rating
+
+                        </h3>
+
+                        <p>
+
+                            Average Customer Rating
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="award-card">
+
+                        <i class="fa-solid fa-globe"></i>
+
+                        <h3>
+
+                            120+
+
+                        </h3>
+
+                        <p>
+
+                            Cities Served
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="award-card">
+
+                        <i class="fa-solid fa-users"></i>
+
+                        <h3>
+
+                            100K+
+
+                        </h3>
+
+                        <p>
+
+                            Satisfied Travelers
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- OFFICES -->
+
+    <section class="section office-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Our Offices
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+
+                    <div class="office-card">
+
+                        <i class="fa-solid fa-building"></i>
+
+                        <h3>
+
+                            Kolkata
+
+                        </h3>
+
+                        <p>
+
+                            Headquarters
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="office-card">
+
+                        <i class="fa-solid fa-building"></i>
+
+                        <h3>
+
+                            Bengaluru
+
+                        </h3>
+
+                        <p>
+
+                            Engineering Center
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="office-card">
+
+                        <i class="fa-solid fa-building"></i>
+
+                        <h3>
+
+                            Remote
+
+                        </h3>
+
+                        <p>
+
+                            Global Workforce
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- LIFE AT HOMIGO -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Life at Homigo
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="gallery-grid">
+
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80">
+
+                <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80">
+
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80">
+
+                <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80">
+
+            </div>
+
+        </div>
+
+    </section>

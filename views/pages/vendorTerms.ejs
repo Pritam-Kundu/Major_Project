@@ -1,0 +1,1940 @@
+<% layout("layouts/boilerplate") %>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f8f9fc;
+            overflow-x: hidden;
+        }
+
+        /* HERO */
+
+        .vendor-hero {
+
+            height: 80vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            color: white;
+
+            background:
+                linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .55)),
+                url("https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+
+            background-position: center;
+
+        }
+
+        .hero-content {
+
+            max-width: 900px;
+
+            padding: 20px;
+
+            animation: fadeUp 1s ease;
+
+        }
+
+        .hero-content h1 {
+
+            font-size: 4rem;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+
+        }
+
+        .hero-content p {
+
+            font-size: 1.2rem;
+
+            line-height: 2;
+
+            color: #eee;
+
+        }
+
+        .section {
+
+            padding: 100px 8%;
+
+        }
+
+        .section-title {
+
+            text-align: center;
+
+            font-size: 2.8rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .divider {
+
+            width: 120px;
+
+            height: 5px;
+
+            background: #2f80ed;
+
+            margin: 0 auto 60px;
+
+            border-radius: 30px;
+
+        }
+
+        /* OVERVIEW */
+
+        .overview {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .overview img {
+
+            width: 100%;
+
+            border-radius: 20px;
+
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+
+        }
+
+        .overview-content h2 {
+
+            font-size: 2.4rem;
+
+            margin-bottom: 20px;
+
+        }
+
+        .overview-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* AGREEMENT CARDS */
+
+        .vendor-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .vendor-card {
+
+            background: white;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .vendor-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .vendor-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .vendor-card h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+        }
+
+        .vendor-card p {
+
+            line-height: 1.9;
+
+            color: #666;
+
+        }
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(40px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+        @media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+
+            .overview {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        /* Standards */
+
+        .standard-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .standard-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .standard-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .standard-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Payment */
+
+        .payment-wrapper {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .payment-content h2 {
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .payment-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        .payment-content ul {
+
+            list-style: none;
+
+            padding: 0;
+
+        }
+
+        .payment-content li {
+
+            margin-bottom: 18px;
+
+        }
+
+        .payment-content i {
+
+            color: #2f80ed;
+
+            margin-right: 10px;
+
+        }
+
+        /* Booking */
+
+        .booking-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .booking-card {
+
+            background: white;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .booking-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .booking-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Reviews */
+
+        .review-section {
+
+            background: white;
+
+        }
+
+        .review-box {
+
+            display: flex;
+
+            gap: 30px;
+
+            background: #eef5ff;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .review-icon i {
+
+            font-size: 60px;
+
+            color: #f4b400;
+
+        }
+
+        @media(max-width:992px) {
+
+            .payment-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .review-box {
+
+                flex-direction: column;
+
+            }
+
+        }
+
+        /* Prohibited */
+
+        .prohibited-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .prohibited-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .prohibited-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .prohibited-card i {
+
+            font-size: 50px;
+
+            color: #dc3545;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Legal */
+
+        .legal-wrapper {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .legal-content h2 {
+
+            margin-bottom: 20px;
+
+            font-weight: 700;
+
+        }
+
+        .legal-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        .legal-content ul {
+
+            list-style: none;
+
+            padding: 0;
+
+        }
+
+        .legal-content li {
+
+            margin-bottom: 18px;
+
+        }
+
+        .legal-content i {
+
+            color: #2f80ed;
+
+            margin-right: 10px;
+
+        }
+
+        /* Status */
+
+        .status-box {
+
+            display: flex;
+
+            gap: 30px;
+
+            background: #eef5ff;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .status-icon i {
+
+            font-size: 60px;
+
+            color: #2f80ed;
+
+        }
+
+        /* Best Practices */
+
+        .practice-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .practice-card {
+
+            background: #f8f9fc;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            transition: .35s;
+
+        }
+
+        .practice-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .practice-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Resources */
+
+        .resource-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 25px;
+
+        }
+
+        .resource-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            color: #333;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .resource-card:hover {
+
+            background: #2f80ed;
+
+            color: white;
+
+            transform: translateY(-10px);
+
+        }
+
+        .resource-card i {
+
+            font-size: 45px;
+
+            margin-bottom: 15px;
+
+        }
+
+        @media(max-width:992px) {
+
+            .legal-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .status-box {
+
+                flex-direction: column;
+
+            }
+
+        }
+
+        /* FAQ */
+
+        .faq-section {
+
+            background: #f7f9fc;
+
+        }
+
+        .accordion-button {
+
+            font-weight: 600;
+
+            font-size: 1.05rem;
+
+        }
+
+        /* Updates */
+
+        .update-box {
+
+            display: flex;
+
+            gap: 30px;
+
+            align-items: flex-start;
+
+            background: #eef5ff;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .update-box i {
+
+            font-size: 60px;
+
+            color: #2f80ed;
+
+            margin-top: 5px;
+
+        }
+
+        .update-box h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+        }
+
+        .update-box p {
+
+            line-height: 1.9;
+
+            color: #555;
+
+        }
+
+        /* Last Updated */
+
+        .last-updated-card {
+
+            max-width: 450px;
+
+            margin: auto;
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .last-updated-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 15px;
+
+        }
+
+        .last-updated-card h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 10px;
+
+        }
+
+        .last-updated-card p {
+
+            margin: 0;
+
+            font-size: 1.1rem;
+
+            color: #666;
+
+        }
+
+        /* CTA */
+
+        .vendor-contact {
+
+            padding: 120px 8%;
+
+            background: linear-gradient(135deg, #2f80ed, #56ccf2);
+
+            color: white;
+
+            text-align: center;
+
+        }
+
+        .vendor-contact h2 {
+
+            font-size: 3rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .vendor-contact p {
+
+            max-width: 760px;
+
+            margin: 0 auto 40px;
+
+            line-height: 2;
+
+        }
+
+        .contact-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .contact-buttons .btn {
+
+            padding: 16px 36px;
+
+            border-radius: 50px;
+
+            font-weight: 600;
+
+            transition: .3s;
+
+        }
+
+        .contact-buttons .btn:hover {
+
+            transform: translateY(-5px);
+
+        }
+
+        @media(max-width:768px) {
+
+            .update-box {
+
+                flex-direction: column;
+
+            }
+
+            .vendor-contact h2 {
+
+                font-size: 2.2rem;
+
+            }
+
+            .contact-buttons {
+
+                flex-direction: column;
+
+                align-items: center;
+
+            }
+
+            .contact-buttons .btn {
+
+                width: 260px;
+
+            }
+
+        }
+    </style>
+
+    <!-- HERO -->
+
+    <section class="vendor-hero">
+
+        <div class="hero-content">
+
+            <h1>
+
+                Vendor Terms & Conditions
+
+            </h1>
+
+            <p>
+
+                These Vendor Terms apply to property owners and accommodation providers who list properties on Homigo.
+                By listing a property, you agree to follow these terms and maintain the standards expected by our
+                platform.
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- OVERVIEW -->
+
+    <section class="section">
+
+        <div class="overview">
+
+            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1000&q=80">
+
+            <div class="overview-content">
+
+                <h2>
+
+                    Partnering With Homigo
+
+                </h2>
+
+                <p>
+
+                    Homigo connects property owners with travelers through a secure booking platform. Our goal is to
+                    create a reliable marketplace where guests can book with confidence and vendors can grow their
+                    business.
+
+                </p>
+
+                <p>
+
+                    These Vendor Terms explain the responsibilities, expectations, and standards required for listing
+                    accommodations on Homigo.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CORE PRINCIPLES -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Vendor Responsibilities
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="vendor-grid">
+
+            <div class="vendor-card">
+
+                <i class="fa-solid fa-house-circle-check"></i>
+
+                <h3>
+
+                    Accurate Listings
+
+                </h3>
+
+                <p>
+
+                    Provide truthful descriptions, amenities, pricing, availability, and recent photographs for every
+                    property.
+
+                </p>
+
+            </div>
+
+            <div class="vendor-card">
+
+                <i class="fa-solid fa-handshake"></i>
+
+                <h3>
+
+                    Professional Conduct
+
+                </h3>
+
+                <p>
+
+                    Communicate respectfully with guests and provide timely responses to booking requests and inquiries.
+
+                </p>
+
+            </div>
+
+            <div class="vendor-card">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <h3>
+
+                    Safe Accommodation
+
+                </h3>
+
+                <p>
+
+                    Maintain properties in a clean, safe, and habitable condition while complying with local safety
+                    regulations.
+
+                </p>
+
+            </div>
+
+            <div class="vendor-card">
+
+                <i class="fa-solid fa-scale-balanced"></i>
+
+                <h3>
+
+                    Legal Compliance
+
+                </h3>
+
+                <p>
+
+                    Comply with all applicable laws, taxes, licenses, and regulations governing your accommodation.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- PROPERTY STANDARDS -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Property Listing Standards
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="standard-grid">
+
+            <div class="standard-card">
+
+                <i class="fa-solid fa-camera"></i>
+
+                <h3>
+
+                    High-Quality Photos
+
+                </h3>
+
+                <p>
+
+                    Upload clear, recent, and accurate photographs that fairly represent the property and its amenities.
+
+                </p>
+
+            </div>
+
+            <div class="standard-card">
+
+                <i class="fa-solid fa-list-check"></i>
+
+                <h3>
+
+                    Accurate Information
+
+                </h3>
+
+                <p>
+
+                    Descriptions, pricing, occupancy limits, amenities, and availability must remain accurate and
+                    regularly updated.
+
+                </p>
+
+            </div>
+
+            <div class="standard-card">
+
+                <i class="fa-solid fa-bed"></i>
+
+                <h3>
+
+                    Clean Accommodation
+
+                </h3>
+
+                <p>
+
+                    Ensure every guest receives a clean, well-maintained, and properly prepared property before
+                    check-in.
+
+                </p>
+
+            </div>
+
+            <div class="standard-card">
+
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+
+                <h3>
+
+                    Regular Maintenance
+
+                </h3>
+
+                <p>
+
+                    Repair damages promptly and ensure utilities, appliances, and safety equipment remain functional.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- PAYMENTS -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Payments & Vendor Payouts
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="payment-wrapper">
+
+            <div>
+
+                <img src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1000&q=80"
+                    class="img-fluid rounded-4 shadow">
+
+            </div>
+
+            <div class="payment-content">
+
+                <h2>
+
+                    Receiving Payments
+
+                </h2>
+
+                <p>
+
+                    Payments are processed through Homigo's supported payment system. Vendors are responsible for
+                    providing accurate payout information and complying with applicable tax regulations.
+
+                </p>
+
+                <ul>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Provide valid payout details
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Maintain accurate pricing
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Comply with tax obligations
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Report payout issues promptly
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- BOOKINGS -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Booking Responsibilities
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="booking-grid">
+
+            <div class="booking-card">
+
+                <i class="fa-solid fa-calendar-check"></i>
+
+                <h3>
+
+                    Honor Confirmed Bookings
+
+                </h3>
+
+                <p>
+
+                    Once a reservation is confirmed, vendors should make every reasonable effort to honor the booking.
+
+                </p>
+
+            </div>
+
+            <div class="booking-card">
+
+                <i class="fa-solid fa-comments"></i>
+
+                <h3>
+
+                    Respond Promptly
+
+                </h3>
+
+                <p>
+
+                    Answer guest questions and provide check-in instructions within a reasonable timeframe.
+
+                </p>
+
+            </div>
+
+            <div class="booking-card">
+
+                <i class="fa-solid fa-key"></i>
+
+                <h3>
+
+                    Smooth Check-In
+
+                </h3>
+
+                <p>
+
+                    Ensure guests receive clear arrival instructions and property access information before check-in.
+
+                </p>
+
+            </div>
+
+            <div class="booking-card">
+
+                <i class="fa-solid fa-calendar-xmark"></i>
+
+                <h3>
+
+                    Minimize Cancellations
+
+                </h3>
+
+                <p>
+
+                    Avoid unnecessary cancellations and notify affected guests immediately if exceptional circumstances
+                    arise.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- REVIEWS -->
+
+    <section class="section review-section">
+
+        <h2 class="section-title">
+
+            Reviews & Ratings
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="review-box">
+
+            <div class="review-icon">
+
+                <i class="fa-solid fa-star"></i>
+
+            </div>
+
+            <div>
+
+                <h3>
+
+                    Building Trust Through Feedback
+
+                </h3>
+
+                <p>
+
+                    Guest reviews help maintain transparency and improve service quality. Vendors are encouraged to
+                    provide excellent hospitality and respond professionally to constructive feedback. Manipulating
+                    ratings or submitting fake reviews is strictly prohibited.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- PROHIBITED ACTIVITIES -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Prohibited Activities
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="prohibited-grid">
+
+            <div class="prohibited-card">
+
+                <i class="fa-solid fa-file-circle-xmark"></i>
+
+                <h3>
+
+                    False Listings
+
+                </h3>
+
+                <p>
+
+                    Creating misleading property listings, uploading inaccurate photos, or providing false information
+                    is strictly prohibited.
+
+                </p>
+
+            </div>
+
+            <div class="prohibited-card">
+
+                <i class="fa-solid fa-money-bill-transfer"></i>
+
+                <h3>
+
+                    Off-Platform Payments
+
+                </h3>
+
+                <p>
+
+                    Requesting guests to pay outside Homigo or bypassing official payment methods is not permitted.
+
+                </p>
+
+            </div>
+
+            <div class="prohibited-card">
+
+                <i class="fa-solid fa-star-half-stroke"></i>
+
+                <h3>
+
+                    Fake Reviews
+
+                </h3>
+
+                <p>
+
+                    Generating fake reviews or manipulating ratings damages trust and may result in account suspension.
+
+                </p>
+
+            </div>
+
+            <div class="prohibited-card">
+
+                <i class="fa-solid fa-user-slash"></i>
+
+                <h3>
+
+                    Discrimination
+
+                </h3>
+
+                <p>
+
+                    Vendors must treat every guest fairly and respectfully without unlawful discrimination.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- LEGAL RESPONSIBILITIES -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Legal & Tax Responsibilities
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="legal-wrapper">
+
+            <div>
+
+                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1000&q=80"
+                    class="img-fluid rounded-4 shadow">
+
+            </div>
+
+            <div class="legal-content">
+
+                <h2>
+
+                    Operate Responsibly
+
+                </h2>
+
+                <p>
+
+                    Vendors are responsible for complying with all applicable laws,
+                    licenses,
+                    permits,
+                    insurance requirements,
+                    and taxation obligations relating to their accommodation business.
+
+                </p>
+
+                <ul>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Maintain valid operating licenses where required.
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Comply with tax regulations.
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Follow local accommodation laws.
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Maintain required insurance where applicable.
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ACCOUNT STATUS -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Account Suspension & Termination
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="status-box">
+
+            <div class="status-icon">
+
+                <i class="fa-solid fa-user-lock"></i>
+
+            </div>
+
+            <div>
+
+                <h3>
+
+                    Protecting Our Community
+
+                </h3>
+
+                <p>
+
+                    Homigo may suspend or permanently remove vendor accounts that repeatedly violate platform policies,
+                    provide fraudulent information, engage in payment abuse, manipulate reviews, or create unsafe
+                    experiences for guests.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- BEST PRACTICES -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Vendor Best Practices
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="practice-grid">
+
+            <div class="practice-card">
+
+                <i class="fa-solid fa-comments"></i>
+
+                <h3>
+
+                    Respond Quickly
+
+                </h3>
+
+                <p>
+
+                    Reply to booking requests and guest questions promptly to improve guest satisfaction.
+
+                </p>
+
+            </div>
+
+            <div class="practice-card">
+
+                <i class="fa-solid fa-broom"></i>
+
+                <h3>
+
+                    Maintain Cleanliness
+
+                </h3>
+
+                <p>
+
+                    Regularly inspect and clean your property before every guest arrival.
+
+                </p>
+
+            </div>
+
+            <div class="practice-card">
+
+                <i class="fa-solid fa-camera-retro"></i>
+
+                <h3>
+
+                    Keep Listings Updated
+
+                </h3>
+
+                <p>
+
+                    Refresh photos, pricing, and amenities whenever changes occur.
+
+                </p>
+
+            </div>
+
+            <div class="practice-card">
+
+                <i class="fa-solid fa-face-smile"></i>
+
+                <h3>
+
+                    Deliver Great Hospitality
+
+                </h3>
+
+                <p>
+
+                    Provide a welcoming experience that encourages positive guest reviews and repeat bookings.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- RELATED RESOURCES -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Related Resources
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="resource-grid">
+
+            <a href="/terms" class="resource-card">
+
+                <i class="fa-solid fa-scale-balanced"></i>
+
+                <h4>
+
+                    Terms of Service
+
+                </h4>
+
+            </a>
+
+            <a href="/privacy" class="resource-card">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+                <h4>
+
+                    Privacy Policy
+
+                </h4>
+
+            </a>
+
+            <a href="/safety" class="resource-card">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <h4>
+
+                    Safety Center
+
+                </h4>
+
+            </a>
+
+            <a href="/help" class="resource-card">
+
+                <i class="fa-solid fa-headset"></i>
+
+                <h4>
+
+                    Help Center
+
+                </h4>
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- FAQ -->
+
+    <section class="section faq-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Frequently Asked Questions
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="accordion" id="vendorFAQ">
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#vendor1">
+
+                            How do I become a Homigo vendor?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="vendor1" class="accordion-collapse collapse show" data-bs-parent="#vendorFAQ">
+
+                        <div class="accordion-body">
+
+                            Create a Homigo account, complete your vendor profile, submit your property details, and
+                            provide accurate information and photos for review before listing.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#vendor2">
+
+                            Can Homigo remove my property listing?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="vendor2" class="accordion-collapse collapse" data-bs-parent="#vendorFAQ">
+
+                        <div class="accordion-body">
+
+                            Yes. Listings that violate our policies, contain misleading information, receive repeated
+                            safety complaints, or fail to meet platform standards may be suspended or removed.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#vendor3">
+
+                            Who is responsible for taxes?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="vendor3" class="accordion-collapse collapse" data-bs-parent="#vendorFAQ">
+
+                        <div class="accordion-body">
+
+                            Vendors are responsible for complying with all applicable tax laws, licensing requirements,
+                            and local regulations relating to their accommodation business.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#vendor4">
+
+                            How can I improve my listing?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="vendor4" class="accordion-collapse collapse" data-bs-parent="#vendorFAQ">
+
+                        <div class="accordion-body">
+
+                            Maintain accurate information, upload quality photos, respond promptly to guests, keep your
+                            property clean, and provide excellent hospitality to earn positive reviews.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- TERMS UPDATES -->
+
+    <section class="section" style="background:white;">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Updates to Vendor Terms
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="update-box">
+
+                <i class="fa-solid fa-file-circle-plus"></i>
+
+                <div>
+
+                    <h3>
+
+                        Keeping Our Partnership Current
+
+                    </h3>
+
+                    <p>
+
+                        Homigo may revise these Vendor Terms as our platform evolves, new features are introduced, or
+                        legal requirements change. Updated terms will be published on this page, and significant changes
+                        may be communicated through your vendor account or registered email.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- LAST UPDATED -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="last-updated-card">
+
+                <i class="fa-solid fa-calendar-days"></i>
+
+                <h3>
+
+                    Last Updated
+
+                </h3>
+
+                <p>
+
+                    August 2026
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CTA -->
+
+    <section class="vendor-contact">
+
+        <div class="container">
+
+            <h2>
+
+                Grow Your Business With Homigo
+
+            </h2>
+
+            <p>
+
+                Our goal is to help trusted accommodation providers reach more travelers while maintaining high
+                standards of quality, transparency, and guest satisfaction.
+
+            </p>
+
+            <div class="contact-buttons">
+
+                <a href="/help" class="btn btn-light btn-lg">
+
+                    <i class="fa-solid fa-headset"></i>
+
+                    Vendor Support
+
+                </a>
+
+                <a href="/contact" class="btn btn-outline-light btn-lg">
+
+                    <i class="fa-solid fa-envelope"></i>
+
+                    Contact Us
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>

@@ -1,0 +1,1233 @@
+<% layout("layouts/boilerplate") %>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f8f9fc;
+            overflow-x: hidden;
+        }
+
+        /* HERO */
+
+        .covid-hero {
+
+            height: 80vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            color: white;
+
+            background:
+                linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .55)),
+                url("https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+
+            background-position: center;
+
+        }
+
+        .hero-content {
+
+            max-width: 850px;
+
+            padding: 20px;
+
+            animation: fadeUp 1s ease;
+
+        }
+
+        .hero-content h1 {
+
+            font-size: 4rem;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+
+        }
+
+        .hero-content p {
+
+            font-size: 1.15rem;
+
+            line-height: 2;
+
+            color: #eee;
+
+        }
+
+        /* COMMON */
+
+        .section {
+
+            padding: 100px 8%;
+
+        }
+
+        .section-title {
+
+            text-align: center;
+
+            font-size: 2.8rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+            color: #222;
+
+        }
+
+        .divider {
+
+            width: 120px;
+
+            height: 5px;
+
+            background: #2f80ed;
+
+            margin: 0 auto 60px;
+
+            border-radius: 30px;
+
+        }
+
+        /* OVERVIEW */
+
+        .overview {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .overview img {
+
+            width: 100%;
+
+            border-radius: 20px;
+
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+
+        }
+
+        .overview-content h2 {
+
+            font-size: 2.4rem;
+
+            margin-bottom: 20px;
+
+            font-weight: 700;
+
+        }
+
+        .overview-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* SAFETY */
+
+        .safety-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .safety-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+            height: 100%;
+
+        }
+
+        .safety-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .safety-card i {
+
+            font-size: 48px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .safety-card h3 {
+
+            margin-bottom: 18px;
+
+            font-weight: 700;
+
+        }
+
+        .safety-card p {
+
+            line-height: 1.9;
+
+            color: #666;
+
+        }
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(50px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+        @media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+
+            .overview {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        /* Cleaning */
+
+        .cleaning-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .clean-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .clean-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .clean-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Recommendations */
+
+        .recommend-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .recommend-card {
+
+            background: #f8f9fc;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            transition: .35s;
+
+        }
+
+        .recommend-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .recommend-card i {
+
+            font-size: 48px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Advisory */
+
+        .advisory-box {
+
+            display: flex;
+
+            gap: 30px;
+
+            align-items: flex-start;
+
+            background: white;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .06);
+
+        }
+
+        .advisory-icon i {
+
+            font-size: 55px;
+
+            color: #2f80ed;
+
+        }
+
+        /* Checklist */
+
+        .checklist-section {
+
+            background: white;
+
+        }
+
+        .checklist-grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .travel-checklist {
+
+            list-style: none;
+
+            padding: 0;
+
+        }
+
+        .travel-checklist li {
+
+            font-size: 1.1rem;
+
+            margin-bottom: 22px;
+
+        }
+
+        .travel-checklist i {
+
+            color: #28a745;
+
+            margin-right: 12px;
+
+        }
+
+        @media(max-width:992px) {
+
+            .checklist-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .advisory-box {
+
+                flex-direction: column;
+
+            }
+
+        }
+
+        /* FAQ */
+
+        .faq-section {
+
+            background: #f8f9fc;
+
+        }
+
+        .accordion-button {
+
+            font-weight: 600;
+
+            font-size: 1.05rem;
+
+        }
+
+        /* Notice */
+
+        .notice-section {
+
+            background: white;
+
+        }
+
+        .notice-box {
+
+            display: flex;
+
+            gap: 25px;
+
+            align-items: flex-start;
+
+            background: #eef5ff;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .06);
+
+        }
+
+        .notice-box i {
+
+            font-size: 55px;
+
+            color: #2f80ed;
+
+            margin-top: 5px;
+
+        }
+
+        .notice-box h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+        }
+
+        .notice-box p {
+
+            line-height: 1.9;
+
+            color: #555;
+
+        }
+
+        /* Support */
+
+        .covid-support {
+
+            padding: 120px 8%;
+
+            background: linear-gradient(135deg, #2f80ed, #56ccf2);
+
+            text-align: center;
+
+            color: white;
+
+        }
+
+        .covid-support h2 {
+
+            font-size: 3rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .covid-support p {
+
+            max-width: 760px;
+
+            margin: 0 auto 40px;
+
+            line-height: 2;
+
+        }
+
+        .support-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .support-buttons .btn {
+
+            padding: 15px 35px;
+
+            border-radius: 50px;
+
+            font-weight: 600;
+
+            transition: .3s;
+
+        }
+
+        .support-buttons .btn:hover {
+
+            transform: translateY(-5px);
+
+        }
+
+        @media(max-width:768px) {
+
+            .notice-box {
+
+                flex-direction: column;
+
+                text-align: left;
+
+            }
+
+            .covid-support h2 {
+
+                font-size: 2.2rem;
+
+            }
+
+            .support-buttons {
+
+                flex-direction: column;
+
+                align-items: center;
+
+            }
+
+            .support-buttons .btn {
+
+                width: 260px;
+
+            }
+
+        }
+    </style>
+
+    <!-- HERO -->
+
+    <section class="covid-hero">
+
+        <div class="hero-content">
+
+            <h1>
+
+                Health & Safety
+
+            </h1>
+
+            <p>
+
+                Your safety is our priority.
+                Homigo encourages responsible travel and follows recommended health practices to help guests and hosts
+                enjoy safer stays.
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- OVERVIEW -->
+
+    <section class="section">
+
+        <div class="overview">
+
+            <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1000&q=80">
+
+            <div class="overview-content">
+
+                <h2>
+
+                    Travel With Confidence
+
+                </h2>
+
+                <p>
+
+                    Homigo promotes responsible travel by encouraging guests and property owners to follow local health
+                    recommendations and maintain high standards of cleanliness.
+
+                </p>
+
+                <p>
+
+                    Before travelling, we recommend checking local government advisories and any property-specific
+                    requirements that may apply to your destination.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SAFETY -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Our Health & Safety Measures
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="safety-grid">
+
+            <div class="safety-card">
+
+                <i class="fa-solid fa-pump-soap"></i>
+
+                <h3>
+
+                    Enhanced Cleaning
+
+                </h3>
+
+                <p>
+
+                    Properties are encouraged to maintain high cleaning standards before every guest arrival.
+
+                </p>
+
+            </div>
+
+            <div class="safety-card">
+
+                <i class="fa-solid fa-house-circle-check"></i>
+
+                <h3>
+
+                    Verified Properties
+
+                </h3>
+
+                <p>
+
+                    We work with hosts to provide accurate property information and health-related updates.
+
+                </p>
+
+            </div>
+
+            <div class="safety-card">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+                <h3>
+
+                    Safer Stays
+
+                </h3>
+
+                <p>
+
+                    Guests are encouraged to follow local health guidance and respect property rules during their stay.
+
+                </p>
+
+            </div>
+
+            <div class="safety-card">
+
+                <i class="fa-solid fa-headset"></i>
+
+                <h3>
+
+                    24×7 Support
+
+                </h3>
+
+                <p>
+
+                    Our support team is available to assist with travel-related concerns and booking questions.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CLEANING STANDARDS -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Enhanced Cleaning Standards
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="cleaning-grid">
+
+            <div class="clean-card">
+
+                <i class="fa-solid fa-spray-can-sparkles"></i>
+
+                <h3>
+
+                    Property Sanitization
+
+                </h3>
+
+                <p>
+
+                    Hosts are encouraged to thoroughly clean frequently touched surfaces,
+                    bedrooms,
+                    bathrooms,
+                    and common areas between guest stays.
+
+                </p>
+
+            </div>
+
+            <div class="clean-card">
+
+                <i class="fa-solid fa-bed"></i>
+
+                <h3>
+
+                    Fresh Linen
+
+                </h3>
+
+                <p>
+
+                    Clean bedding,
+                    towels,
+                    and toiletries should be prepared before every new guest arrives.
+
+                </p>
+
+            </div>
+
+            <div class="clean-card">
+
+                <i class="fa-solid fa-trash-can"></i>
+
+                <h3>
+
+                    Waste Disposal
+
+                </h3>
+
+                <p>
+
+                    Proper disposal of waste and routine cleaning helps maintain a hygienic environment for guests.
+
+                </p>
+
+            </div>
+
+            <div class="clean-card">
+
+                <i class="fa-solid fa-door-open"></i>
+
+                <h3>
+
+                    Ventilation
+
+                </h3>
+
+                <p>
+
+                    Properties should be well ventilated before guest check-in whenever possible.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- HEALTH RECOMMENDATIONS -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Recommended Health Practices
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="recommend-grid">
+
+            <div class="recommend-card">
+
+                <i class="fa-solid fa-hands-bubbles"></i>
+
+                <h4>
+
+                    Wash Hands Frequently
+
+                </h4>
+
+                <p>
+
+                    Practice good hand hygiene,
+                    especially before eating and after visiting public places.
+
+                </p>
+
+            </div>
+
+            <div class="recommend-card">
+
+                <i class="fa-solid fa-user-doctor"></i>
+
+                <h4>
+
+                    Seek Medical Advice
+
+                </h4>
+
+                <p>
+
+                    If you feel unwell before travelling,
+                    consult a qualified healthcare professional before your trip.
+
+                </p>
+
+            </div>
+
+            <div class="recommend-card">
+
+                <i class="fa-solid fa-suitcase-medical"></i>
+
+                <h4>
+
+                    Carry Essentials
+
+                </h4>
+
+                <p>
+
+                    Bring any necessary medications,
+                    travel insurance details,
+                    and emergency contact information.
+
+                </p>
+
+            </div>
+
+            <div class="recommend-card">
+
+                <i class="fa-solid fa-earth-asia"></i>
+
+                <h4>
+
+                    Follow Local Guidance
+
+                </h4>
+
+                <p>
+
+                    Health recommendations and travel requirements may vary by destination.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- TRAVEL ADVISORY -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Travel Advisory
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="advisory-box">
+
+            <div class="advisory-icon">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+            </div>
+
+            <div>
+
+                <h3>
+
+                    Check Local Requirements Before You Travel
+
+                </h3>
+
+                <p>
+
+                    Travel regulations and public health recommendations can change over time.
+                    Before your journey,
+                    please check the latest guidance issued by the relevant authorities at your destination,
+                    including entry requirements,
+                    local restrictions,
+                    or health advisories.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CHECKLIST -->
+
+    <section class="section checklist-section">
+
+        <h2 class="section-title">
+
+            Before You Travel
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="checklist-grid">
+
+            <div>
+
+                <ul class="travel-checklist">
+
+                    <li><i class="fa-solid fa-check"></i> Confirm your booking details</li>
+
+                    <li><i class="fa-solid fa-check"></i> Carry a valid government ID</li>
+
+                    <li><i class="fa-solid fa-check"></i> Pack required medications</li>
+
+                    <li><i class="fa-solid fa-check"></i> Save emergency contacts</li>
+
+                    <li><i class="fa-solid fa-check"></i> Review your destination's travel guidance</li>
+
+                    <li><i class="fa-solid fa-check"></i> Keep digital copies of important documents</li>
+
+                </ul>
+
+            </div>
+
+            <div>
+
+                <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1000&q=80"
+                    class="img-fluid rounded-4 shadow">
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FAQ -->
+
+    <section class="section faq-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Frequently Asked Questions
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="accordion" id="covidFAQ">
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#covid1">
+
+                            Do I need to follow local health regulations?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="covid1" class="accordion-collapse collapse show" data-bs-parent="#covidFAQ">
+
+                        <div class="accordion-body">
+
+                            Yes. Guests should always follow the health and safety recommendations, laws, and
+                            regulations applicable at their travel destination.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#covid2">
+
+                            What if I feel unwell before travelling?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="covid2" class="accordion-collapse collapse" data-bs-parent="#covidFAQ">
+
+                        <div class="accordion-body">
+
+                            If you are feeling unwell, consider postponing your trip and consult a qualified healthcare
+                            professional before travelling.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#covid3">
+
+                            Can I modify my booking?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="covid3" class="accordion-collapse collapse" data-bs-parent="#covidFAQ">
+
+                        <div class="accordion-body">
+
+                            Booking modifications depend on the property's individual booking and cancellation policy.
+                            Please review the policy shown during booking or contact support.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#covid4">
+
+                            Where can I find travel updates?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="covid4" class="accordion-collapse collapse" data-bs-parent="#covidFAQ">
+
+                        <div class="accordion-body">
+
+                            Before your journey, check official government travel advisories and local authority
+                            websites for the latest recommendations and entry requirements.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- IMPORTANT NOTICE -->
+
+    <section class="section notice-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Important Notice
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="notice-box">
+
+                <i class="fa-solid fa-triangle-exclamation"></i>
+
+                <div>
+
+                    <h3>
+
+                        Travel Requirements May Change
+
+                    </h3>
+
+                    <p>
+
+                        Health recommendations, travel advisories, and entry requirements can change over time. Guests
+                        are responsible for reviewing the latest official guidance before departure and complying with
+                        applicable local regulations during their trip.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SUPPORT -->
+
+    <section class="covid-support">
+
+        <div class="container">
+
+            <h2>
+
+                Need Travel Assistance?
+
+            </h2>
+
+            <p>
+
+                Our support team is available to answer questions related to bookings, cancellations, travel guidance,
+                and general assistance before or during your trip.
+
+            </p>
+
+            <div class="support-buttons">
+
+                <a href="/help" class="btn btn-light btn-lg">
+
+                    <i class="fa-solid fa-headset"></i>
+
+                    Contact Support
+
+                </a>
+
+                <a href="/cancellation" class="btn btn-outline-light btn-lg">
+
+                    <i class="fa-solid fa-calendar-xmark"></i>
+
+                    Cancellation Policy
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>

@@ -1,0 +1,1292 @@
+<% layout("layouts/boilerplate") %>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f8f9fc;
+            overflow-x: hidden;
+        }
+
+        /* HERO */
+
+        .cancel-hero {
+
+            height: 80vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            color: white;
+
+            background:
+                linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .55)),
+                url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+
+            background-position: center;
+
+        }
+
+        .hero-content {
+
+            max-width: 850px;
+
+            padding: 20px;
+
+            animation: fadeUp 1s ease;
+
+        }
+
+        .hero-content h1 {
+
+            font-size: 4rem;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+
+        }
+
+        .hero-content p {
+
+            font-size: 1.15rem;
+
+            line-height: 2;
+
+            color: #eee;
+
+        }
+
+        /* COMMON */
+
+        .section {
+
+            padding: 100px 8%;
+
+        }
+
+        .section-title {
+
+            text-align: center;
+
+            font-size: 2.8rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+            color: #222;
+
+        }
+
+        .divider {
+
+            width: 120px;
+
+            height: 5px;
+
+            background: #2f80ed;
+
+            margin: 0 auto 60px;
+
+            border-radius: 30px;
+
+        }
+
+        /* OVERVIEW */
+
+        .overview {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .overview img {
+
+            width: 100%;
+
+            border-radius: 20px;
+
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+
+        }
+
+        .overview-content h2 {
+
+            font-size: 2.4rem;
+
+            margin-bottom: 20px;
+
+            font-weight: 700;
+
+        }
+
+        .overview-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* QUICK LINKS */
+
+        .quick-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .quick-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .quick-card:hover {
+
+            transform: translateY(-8px);
+
+        }
+
+        .quick-card i {
+
+            font-size: 45px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .quick-card h4 {
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+
+        }
+
+        .quick-card p {
+
+            color: #666;
+
+            line-height: 1.8;
+
+        }
+
+        /* ANIMATION */
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(50px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+        @media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.7rem;
+
+            }
+
+            .overview {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        /* Policy Cards */
+
+        .policy-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .policy-card {
+
+            background: white;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .policy-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .policy-header {
+
+            padding: 30px;
+
+            color: white;
+
+            text-align: center;
+
+        }
+
+        .policy-header i {
+
+            font-size: 45px;
+
+            margin-bottom: 15px;
+
+        }
+
+        .policy-header h3 {
+
+            font-weight: 700;
+
+        }
+
+        .flexible {
+
+            background: #28a745;
+
+        }
+
+        .moderate {
+
+            background: #ffc107;
+
+            color: #222;
+
+        }
+
+        .strict {
+
+            background: #fd7e14;
+
+        }
+
+        .nonrefundable {
+
+            background: #dc3545;
+
+        }
+
+        .policy-card ul {
+
+            padding: 30px;
+
+            margin: 0;
+
+        }
+
+        .policy-card li {
+
+            margin-bottom: 18px;
+
+            line-height: 1.8;
+
+            color: #555;
+
+        }
+
+        /* Timeline */
+
+        .timeline-bg {
+
+            background: white;
+
+        }
+
+        .refund-timeline {
+
+            max-width: 850px;
+
+            margin: auto;
+
+        }
+
+        .timeline-item {
+
+            display: flex;
+
+            gap: 25px;
+
+            align-items: flex-start;
+
+            margin-bottom: 40px;
+
+        }
+
+        .timeline-circle {
+
+            min-width: 65px;
+
+            height: 65px;
+
+            border-radius: 50%;
+
+            background: #2f80ed;
+
+            color: white;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 24px;
+
+            font-weight: 700;
+
+        }
+
+        .timeline-item h4 {
+
+            margin-bottom: 10px;
+
+            font-weight: 700;
+
+        }
+
+        .timeline-item p {
+
+            line-height: 1.8;
+
+            color: #666;
+
+        }
+
+        /* FAQ */
+
+        .faq-section {
+
+            background: #f8f9fc;
+
+        }
+
+        .accordion-button {
+
+            font-weight: 600;
+
+            font-size: 1.05rem;
+
+        }
+
+        /* Notes */
+
+        .notes-section {
+
+            background: white;
+
+        }
+
+        .notes-box {
+
+            background: #eef5ff;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 15px;
+
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .05);
+
+        }
+
+        .notes-box ul {
+
+            margin: 0;
+
+            padding-left: 20px;
+
+        }
+
+        .notes-box li {
+
+            margin-bottom: 18px;
+
+            line-height: 1.9;
+
+            color: #555;
+
+        }
+
+        /* Support */
+
+        .support-section {
+
+            padding: 120px 8%;
+
+            background: linear-gradient(135deg, #2f80ed, #56ccf2);
+
+            text-align: center;
+
+            color: white;
+
+        }
+
+        .support-section h2 {
+
+            font-size: 3rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .support-section p {
+
+            max-width: 750px;
+
+            margin: 0 auto 40px;
+
+            line-height: 2;
+
+            font-size: 1.05rem;
+
+        }
+
+        .support-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .support-buttons .btn {
+
+            padding: 15px 35px;
+
+            border-radius: 50px;
+
+            font-weight: 600;
+
+            transition: .3s;
+
+        }
+
+        .support-buttons .btn:hover {
+
+            transform: translateY(-5px);
+
+        }
+
+        @media(max-width:768px) {
+
+            .support-section h2 {
+
+                font-size: 2.2rem;
+
+            }
+
+            .notes-box {
+
+                padding: 25px;
+
+            }
+
+            .support-buttons {
+
+                flex-direction: column;
+
+                align-items: center;
+
+            }
+
+            .support-buttons .btn {
+
+                width: 260px;
+
+            }
+
+        }
+    </style>
+
+    <!-- HERO -->
+
+    <section class="cancel-hero">
+
+        <div class="hero-content">
+
+            <h1>
+
+                Cancellation Policy
+
+            </h1>
+
+            <p>
+
+                We understand that travel plans can change.
+
+                Our cancellation policy is designed to provide flexibility while ensuring fairness for both guests and
+                property owners.
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- OVERVIEW -->
+
+    <section class="section">
+
+        <div class="overview">
+
+            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1000&q=80">
+
+            <div class="overview-content">
+
+                <h2>
+
+                    Simple, Transparent & Fair
+
+                </h2>
+
+                <p>
+
+                    At Homigo, we believe cancellations should be easy to understand.
+
+                    Every property follows a clearly defined cancellation policy so that both guests and hosts know
+                    exactly what to expect.
+
+                </p>
+
+                <p>
+
+                    Before confirming your reservation, you can review the applicable cancellation terms. Refund
+                    eligibility depends on the selected policy and the timing of your cancellation.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- QUICK INFO -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Quick Information
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="quick-grid">
+
+            <div class="quick-card">
+
+                <i class="fa-solid fa-calendar-check"></i>
+
+                <h4>
+
+                    Free Cancellation
+
+                </h4>
+
+                <p>
+
+                    Available on selected properties within the eligible cancellation period.
+
+                </p>
+
+            </div>
+
+            <div class="quick-card">
+
+                <i class="fa-solid fa-money-bill-wave"></i>
+
+                <h4>
+
+                    Refund Processing
+
+                </h4>
+
+                <p>
+
+                    Eligible refunds are processed within 5–7 business days after approval.
+
+                </p>
+
+            </div>
+
+            <div class="quick-card">
+
+                <i class="fa-solid fa-clock"></i>
+
+                <h4>
+
+                    Processing Time
+
+                </h4>
+
+                <p>
+
+                    Cancellation requests are reviewed immediately after submission.
+
+                </p>
+
+            </div>
+
+            <div class="quick-card">
+
+                <i class="fa-solid fa-headset"></i>
+
+                <h4>
+
+                    Support Team
+
+                </h4>
+
+                <p>
+
+                    Need assistance?
+
+                    Our customer support team is available 24×7.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CANCELLATION POLICIES -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Cancellation Policies
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="policy-grid">
+
+            <div class="policy-card">
+
+                <div class="policy-header flexible">
+
+                    <i class="fa-solid fa-face-smile"></i>
+
+                    <h3>
+
+                        Flexible
+
+                    </h3>
+
+                </div>
+
+                <ul>
+
+                    <li>
+
+                        Free cancellation up to <strong>24 hours before check-in.</strong>
+
+                    </li>
+
+                    <li>
+
+                        100% refund of the booking amount.
+
+                    </li>
+
+                    <li>
+
+                        Ideal for flexible travel plans.
+
+                    </li>
+
+                    <li>
+
+                        No cancellation charges within the eligible period.
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div class="policy-card">
+
+                <div class="policy-header moderate">
+
+                    <i class="fa-solid fa-calendar-days"></i>
+
+                    <h3>
+
+                        Moderate
+
+                    </h3>
+
+                </div>
+
+                <ul>
+
+                    <li>
+
+                        Free cancellation up to <strong>7 days before check-in.</strong>
+
+                    </li>
+
+                    <li>
+
+                        50% refund after the free cancellation window.
+
+                    </li>
+
+                    <li>
+
+                        Suitable for planned vacations.
+
+                    </li>
+
+                    <li>
+
+                        Balances flexibility for guests and hosts.
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div class="policy-card">
+
+                <div class="policy-header strict">
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                    <h3>
+
+                        Strict
+
+                    </h3>
+
+                </div>
+
+                <ul>
+
+                    <li>
+
+                        Cancellation allowed only up to <strong>14 days before check-in.</strong>
+
+                    </li>
+
+                    <li>
+
+                        Limited refund after confirmation.
+
+                    </li>
+
+                    <li>
+
+                        Recommended for premium properties.
+
+                    </li>
+
+                    <li>
+
+                        Higher commitment from guests.
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div class="policy-card">
+
+                <div class="policy-header nonrefundable">
+
+                    <i class="fa-solid fa-ban"></i>
+
+                    <h3>
+
+                        Non-Refundable
+
+                    </h3>
+
+                </div>
+
+                <ul>
+
+                    <li>
+
+                        No refund after booking confirmation.
+
+                    </li>
+
+                    <li>
+
+                        Lowest available room rates.
+
+                    </li>
+
+                    <li>
+
+                        Suitable for fixed travel plans.
+
+                    </li>
+
+                    <li>
+
+                        Cannot be modified or cancelled.
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- REFUND TIMELINE -->
+
+    <section class="section timeline-bg">
+
+        <h2 class="section-title">
+
+            Refund Timeline
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="refund-timeline">
+
+            <div class="timeline-item">
+
+                <div class="timeline-circle">
+
+                    1
+
+                </div>
+
+                <div>
+
+                    <h4>
+
+                        Cancellation Request
+
+                    </h4>
+
+                    <p>
+
+                        Guest submits cancellation through Homigo.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="timeline-item">
+
+                <div class="timeline-circle">
+
+                    2
+
+                </div>
+
+                <div>
+
+                    <h4>
+
+                        Verification
+
+                    </h4>
+
+                    <p>
+
+                        System checks the property's cancellation policy.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="timeline-item">
+
+                <div class="timeline-circle">
+
+                    3
+
+                </div>
+
+                <div>
+
+                    <h4>
+
+                        Refund Approval
+
+                    </h4>
+
+                    <p>
+
+                        Refund amount is calculated automatically.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="timeline-item">
+
+                <div class="timeline-circle">
+
+                    4
+
+                </div>
+
+                <div>
+
+                    <h4>
+
+                        Payment Processed
+
+                    </h4>
+
+                    <p>
+
+                        Refund is initiated to the original payment method.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="timeline-item">
+
+                <div class="timeline-circle">
+
+                    5
+
+                </div>
+
+                <div>
+
+                    <h4>
+
+                        Amount Credited
+
+                    </h4>
+
+                    <p>
+
+                        Refund reaches your account within 5–7 business days.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FAQ -->
+
+    <section class="section faq-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Frequently Asked Questions
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="accordion" id="cancelFAQ">
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#faq1">
+
+                            How can I cancel my booking?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#cancelFAQ">
+
+                        <div class="accordion-body">
+
+                            Go to <strong>My Bookings</strong>, select the reservation you wish to cancel, and click the
+                            <strong>Cancel Booking</strong> button. The applicable cancellation policy will be shown
+                            before you confirm.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq2">
+
+                            When will I receive my refund?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#cancelFAQ">
+
+                        <div class="accordion-body">
+
+                            If your booking is eligible for a refund, the amount is generally credited to your original
+                            payment method within <strong>5–7 business days</strong>. Processing times may vary
+                            depending on your bank or payment provider.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq3">
+
+                            Can I modify my booking instead of cancelling it?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#cancelFAQ">
+
+                        <div class="accordion-body">
+
+                            Yes. Depending on the property's policy, you may be able to change your travel dates or
+                            update guest information without cancelling the booking.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq4">
+
+                            What happens if the property owner cancels?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#cancelFAQ">
+
+                        <div class="accordion-body">
+
+                            In the rare event that a property owner cancels your confirmed reservation, Homigo will help
+                            you find an alternative accommodation or process a full refund.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- IMPORTANT NOTES -->
+
+    <section class="section notes-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Important Notes
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="notes-box">
+
+                <ul>
+
+                    <li>
+
+                        Cancellation policies may vary depending on the property and booking type.
+
+                    </li>
+
+                    <li>
+
+                        Service fees, taxes, or third-party charges may not always be refundable.
+
+                    </li>
+
+                    <li>
+
+                        Refunds are credited to the original payment method used during booking.
+
+                    </li>
+
+                    <li>
+
+                        Special offers and promotional bookings may have different cancellation terms.
+
+                    </li>
+
+                    <li>
+
+                        Please review the cancellation policy displayed on the property page before confirming your
+                        reservation.
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SUPPORT CTA -->
+
+    <section class="support-section">
+
+        <div class="container">
+
+            <h2>
+
+                Need Help With Your Booking?
+
+            </h2>
+
+            <p>
+
+                Our customer support team is available 24×7 to help you with cancellations, refunds, booking
+                modifications, and travel-related questions.
+
+            </p>
+
+            <div class="support-buttons">
+
+                <a href="/help" class="btn btn-light btn-lg">
+
+                    <i class="fa-solid fa-headset"></i>
+
+                    Contact Support
+
+                </a>
+
+                <a href="/my-bookings" class="btn btn-outline-light btn-lg">
+
+                    <i class="fa-solid fa-calendar-check"></i>
+
+                    My Bookings
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>

@@ -1,0 +1,1989 @@
+<% layout("layouts/boilerplate") %>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+
+            background: #f8f9fc;
+
+            overflow-x: hidden;
+
+        }
+
+        /* HERO */
+
+        .safety-hero {
+
+            height: 82vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            color: white;
+
+            background:
+
+                linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .55)),
+
+                url("https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+
+            background-position: center;
+
+        }
+
+        .hero-content {
+
+            max-width: 900px;
+
+            padding: 20px;
+
+            animation: fadeUp 1s ease;
+
+        }
+
+        .hero-content h1 {
+
+            font-size: 4rem;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+
+        }
+
+        .hero-content p {
+
+            font-size: 1.2rem;
+
+            line-height: 2;
+
+            color: #eee;
+
+            margin-bottom: 35px;
+
+        }
+
+        .hero-btn {
+
+            display: inline-block;
+
+            padding: 16px 38px;
+
+            background: white;
+
+            color: #2f80ed;
+
+            font-weight: 700;
+
+            border-radius: 50px;
+
+            text-decoration: none;
+
+            transition: .35s;
+
+        }
+
+        .hero-btn:hover {
+
+            background: #2f80ed;
+
+            color: white;
+
+            transform: translateY(-5px);
+
+        }
+
+        /* COMMON */
+
+        .section {
+
+            padding: 100px 8%;
+
+        }
+
+        .section-title {
+
+            text-align: center;
+
+            font-size: 2.8rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .divider {
+
+            width: 120px;
+
+            height: 5px;
+
+            background: #2f80ed;
+
+            margin: 0 auto 60px;
+
+            border-radius: 30px;
+
+        }
+
+        /* OVERVIEW */
+
+        .overview {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .overview img {
+
+            width: 100%;
+
+            border-radius: 20px;
+
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+
+        }
+
+        .overview-content h2 {
+
+            font-size: 2.5rem;
+
+            margin-bottom: 20px;
+
+        }
+
+        .overview-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* SAFETY GRID */
+
+        .safety-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .safety-card {
+
+            background: white;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .safety-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .safety-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .safety-card h3 {
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+
+        }
+
+        .safety-card p {
+
+            line-height: 1.8;
+
+            color: #666;
+
+        }
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(50px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+        @media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+
+            .overview {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        /* Tips */
+
+        .tips-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .tip-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .tip-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .tip-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .tip-card h3 {
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+
+        }
+
+        .tip-card p {
+
+            line-height: 1.9;
+
+            color: #666;
+
+        }
+
+        /* Payment */
+
+        .payment-wrapper {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .payment-content h2 {
+
+            margin-bottom: 20px;
+
+            font-weight: 700;
+
+        }
+
+        .payment-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 25px;
+
+        }
+
+        .payment-content ul {
+
+            list-style: none;
+
+            padding: 0;
+
+        }
+
+        .payment-content li {
+
+            margin-bottom: 18px;
+
+            font-size: 1.05rem;
+
+        }
+
+        .payment-content i {
+
+            color: #2f80ed;
+
+            margin-right: 12px;
+
+        }
+
+        /* Emergency */
+
+        .emergency-section {
+
+            background: white;
+
+        }
+
+        .emergency-box {
+
+            display: flex;
+
+            gap: 30px;
+
+            align-items: flex-start;
+
+            background: #eef5ff;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .06);
+
+        }
+
+        .emergency-icon i {
+
+            font-size: 60px;
+
+            color: #2f80ed;
+
+        }
+
+        @media(max-width:992px) {
+
+            .payment-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .emergency-box {
+
+                flex-direction: column;
+
+            }
+
+        }
+
+        /* Checklist */
+
+        .checklist-wrapper {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .travel-checklist {
+
+            list-style: none;
+
+            padding: 0;
+
+        }
+
+        .travel-checklist li {
+
+            margin-bottom: 22px;
+
+            font-size: 1.08rem;
+
+        }
+
+        .travel-checklist i {
+
+            color: #28a745;
+
+            margin-right: 12px;
+
+        }
+
+        /* Scam */
+
+        .scam-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .scam-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .scam-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .scam-card i {
+
+            font-size: 50px;
+
+            color: #dc3545;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Digital */
+
+        .digital-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .digital-card {
+
+            background: white;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .digital-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .digital-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Stats */
+
+        .stats-section {
+
+            background: white;
+
+        }
+
+        .stats-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .stat-box {
+
+            background: #f8f9fc;
+
+            padding: 40px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            transition: .35s;
+
+        }
+
+        .stat-box:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .stat-box h2 {
+
+            font-size: 3rem;
+
+            font-weight: 800;
+
+            color: #2f80ed;
+
+            margin-bottom: 10px;
+
+        }
+
+        @media(max-width:992px) {
+
+            .checklist-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        /* FAQ */
+
+        .faq-section {
+
+            background: #f8f9fc;
+
+        }
+
+        .accordion-button {
+
+            font-weight: 600;
+
+            font-size: 1.05rem;
+
+        }
+
+        /* Notice */
+
+        .notice-box {
+
+            display: flex;
+
+            gap: 30px;
+
+            align-items: flex-start;
+
+            background: #eef5ff;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .notice-box i {
+
+            font-size: 60px;
+
+            color: #2f80ed;
+
+            margin-top: 5px;
+
+        }
+
+        .notice-box h3 {
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+
+        }
+
+        .notice-box p {
+
+            line-height: 1.9;
+
+            color: #555;
+
+        }
+
+        /* Support */
+
+        .support-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .support-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .support-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .support-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .support-card h3 {
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+
+        }
+
+        .support-card p {
+
+            line-height: 1.8;
+
+            color: #666;
+
+        }
+
+        /* CTA */
+
+        .safety-cta {
+
+            padding: 120px 8%;
+
+            background: linear-gradient(135deg, #2f80ed, #56ccf2);
+
+            text-align: center;
+
+            color: white;
+
+        }
+
+        .safety-cta h2 {
+
+            font-size: 3rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .safety-cta p {
+
+            max-width: 760px;
+
+            margin: 0 auto 40px;
+
+            line-height: 2;
+
+        }
+
+        .cta-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .cta-buttons .btn {
+
+            padding: 16px 36px;
+
+            border-radius: 50px;
+
+            font-weight: 600;
+
+            transition: .3s;
+
+        }
+
+        .cta-buttons .btn:hover {
+
+            transform: translateY(-5px);
+
+        }
+
+        @media(max-width:768px) {
+
+            .notice-box {
+
+                flex-direction: column;
+
+            }
+
+            .safety-cta h2 {
+
+                font-size: 2.2rem;
+
+            }
+
+            .cta-buttons {
+
+                flex-direction: column;
+
+                align-items: center;
+
+            }
+
+            .cta-buttons .btn {
+
+                width: 260px;
+
+            }
+
+        }
+    </style>
+
+    <!-- HERO -->
+
+    <section class="safety-hero">
+
+        <div class="hero-content">
+
+            <h1>
+
+                Safety Comes First
+
+            </h1>
+
+            <p>
+
+                Whether you're travelling,
+                hosting,
+                or exploring new destinations,
+                Homigo is committed to helping create a safer and more reliable travel experience.
+
+            </p>
+
+            <a href="#guestSafety" class="hero-btn">
+
+                Learn More
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- OVERVIEW -->
+
+    <section class="section">
+
+        <div class="overview">
+
+            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80">
+
+            <div class="overview-content">
+
+                <h2>
+
+                    Travel With Confidence
+
+                </h2>
+
+                <p>
+
+                    Homigo encourages responsible travel by promoting verified listings,
+                    secure bookings,
+                    transparent communication,
+                    and helpful support throughout your journey.
+
+                </p>
+
+                <p>
+
+                    While no platform can eliminate every risk,
+                    we continuously work to provide tools,
+                    resources,
+                    and guidance that help guests and hosts make informed decisions.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SAFETY HIGHLIGHTS -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Our Safety Commitment
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="safety-grid">
+
+            <div class="safety-card">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <h3>
+
+                    Verified Listings
+
+                </h3>
+
+                <p>
+
+                    We encourage accurate property information and clear listing details to help guests book with
+                    confidence.
+
+                </p>
+
+            </div>
+
+            <div class="safety-card">
+
+                <i class="fa-solid fa-credit-card"></i>
+
+                <h3>
+
+                    Secure Payments
+
+                </h3>
+
+                <p>
+
+                    Use trusted payment methods and avoid sharing payment information outside the platform.
+
+                </p>
+
+            </div>
+
+            <div class="safety-card">
+
+                <i class="fa-solid fa-comments"></i>
+
+                <h3>
+
+                    Reliable Communication
+
+                </h3>
+
+                <p>
+
+                    Communicate clearly with hosts before arrival and keep booking details accessible during your trip.
+
+                </p>
+
+            </div>
+
+            <div class="safety-card">
+
+                <i class="fa-solid fa-headset"></i>
+
+                <h3>
+
+                    24×7 Support
+
+                </h3>
+
+                <p>
+
+                    Our support team is available to assist with booking-related questions and travel concerns.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- GUEST SAFETY -->
+
+    <section class="section" id="guestSafety">
+
+        <h2 class="section-title">
+
+            Guest Safety Tips
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="tips-grid">
+
+            <div class="tip-card">
+
+                <i class="fa-solid fa-id-card"></i>
+
+                <h3>
+
+                    Review Listing Details
+
+                </h3>
+
+                <p>
+
+                    Carefully review the property description,
+                    photos,
+                    amenities,
+                    house rules,
+                    and guest reviews before confirming your reservation.
+
+                </p>
+
+            </div>
+
+            <div class="tip-card">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+                <h3>
+
+                    Know Your Destination
+
+                </h3>
+
+                <p>
+
+                    Research local transportation,
+                    emergency numbers,
+                    weather conditions,
+                    and nearby facilities before travelling.
+
+                </p>
+
+            </div>
+
+            <div class="tip-card">
+
+                <i class="fa-solid fa-phone"></i>
+
+                <h3>
+
+                    Stay Connected
+
+                </h3>
+
+                <p>
+
+                    Share your itinerary with trusted family or friends and keep emergency contacts easily accessible.
+
+                </p>
+
+            </div>
+
+            <div class="tip-card">
+
+                <i class="fa-solid fa-key"></i>
+
+                <h3>
+
+                    Protect Your Belongings
+
+                </h3>
+
+                <p>
+
+                    Lock doors,
+                    keep valuables secure,
+                    and avoid sharing personal information unnecessarily.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- HOST SAFETY -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Host Safety Guidelines
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="tips-grid">
+
+            <div class="tip-card">
+
+                <i class="fa-solid fa-house-circle-check"></i>
+
+                <h3>
+
+                    Maintain Accurate Listings
+
+                </h3>
+
+                <p>
+
+                    Provide honest descriptions,
+                    recent photos,
+                    and clear information about your property.
+
+                </p>
+
+            </div>
+
+            <div class="tip-card">
+
+                <i class="fa-solid fa-broom"></i>
+
+                <h3>
+
+                    Prepare Your Property
+
+                </h3>
+
+                <p>
+
+                    Clean the property thoroughly,
+                    check essential utilities,
+                    and ensure important amenities are functioning.
+
+                </p>
+
+            </div>
+
+            <div class="tip-card">
+
+                <i class="fa-solid fa-comment-dots"></i>
+
+                <h3>
+
+                    Communicate Clearly
+
+                </h3>
+
+                <p>
+
+                    Respond promptly to guest questions,
+                    share check-in instructions,
+                    and provide helpful local information.
+
+                </p>
+
+            </div>
+
+            <div class="tip-card">
+
+                <i class="fa-solid fa-file-signature"></i>
+
+                <h3>
+
+                    Follow Local Laws
+
+                </h3>
+
+                <p>
+
+                    Comply with applicable regulations,
+                    property requirements,
+                    and community guidelines.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SECURE PAYMENTS -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Safe Payment Practices
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="payment-wrapper">
+
+            <div>
+
+                <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1000&q=80"
+                    class="img-fluid rounded-4 shadow">
+
+            </div>
+
+            <div class="payment-content">
+
+                <h2>
+
+                    Book & Pay Securely
+
+                </h2>
+
+                <p>
+
+                    Always complete payments through Homigo's supported payment methods.
+
+                    Avoid sending money directly to unknown individuals outside the platform.
+
+                </p>
+
+                <ul>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Use trusted payment methods
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Never share OTPs or passwords
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Avoid cash payments unless officially supported
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Report suspicious payment requests immediately
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- EMERGENCY -->
+
+    <section class="section emergency-section">
+
+        <h2 class="section-title">
+
+            Emergency Assistance
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="emergency-box">
+
+            <div class="emergency-icon">
+
+                <i class="fa-solid fa-truck-medical"></i>
+
+            </div>
+
+            <div>
+
+                <h3>
+
+                    If You Need Immediate Help
+
+                </h3>
+
+                <p>
+
+                    In an emergency,
+                    contact your local emergency services first.
+
+                    For booking-related issues,
+                    property concerns,
+                    or account assistance,
+                    please contact the Homigo Support Team through the Help Center.
+
+                </p>
+
+                <a href="/help" class="hero-btn mt-3">
+
+                    Contact Support
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SAFE TRAVEL CHECKLIST -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Safe Travel Checklist
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="checklist-wrapper">
+
+            <div>
+
+                <ul class="travel-checklist">
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Verify your booking confirmation before departure.
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Carry valid government identification.
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Keep emergency contacts saved on your phone.
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Review property check-in instructions before arrival.
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Share your travel itinerary with someone you trust.
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Keep important documents backed up digitally.
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div>
+
+                <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1000&q=80"
+                    class="img-fluid rounded-4 shadow">
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- AVOID SCAMS -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Protect Yourself From Scams
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="scam-grid">
+
+            <div class="scam-card">
+
+                <i class="fa-solid fa-credit-card"></i>
+
+                <h3>
+
+                    Never Pay Outside Homigo
+
+                </h3>
+
+                <p>
+
+                    Complete payments only through official Homigo payment methods.
+
+                    Avoid bank transfers or payment links shared through unofficial channels.
+
+                </p>
+
+            </div>
+
+            <div class="scam-card">
+
+                <i class="fa-solid fa-link-slash"></i>
+
+                <h3>
+
+                    Beware of Fake Links
+
+                </h3>
+
+                <p>
+
+                    Only access Homigo through the official website.
+
+                    Avoid clicking suspicious links received through email or messaging apps.
+
+                </p>
+
+            </div>
+
+            <div class="scam-card">
+
+                <i class="fa-solid fa-user-secret"></i>
+
+                <h3>
+
+                    Protect Your Account
+
+                </h3>
+
+                <p>
+
+                    Never share your password,
+                    verification codes,
+                    or authentication details with anyone.
+
+                </p>
+
+            </div>
+
+            <div class="scam-card">
+
+                <i class="fa-solid fa-flag"></i>
+
+                <h3>
+
+                    Report Suspicious Activity
+
+                </h3>
+
+                <p>
+
+                    If you notice unusual listings,
+                    messages,
+                    or payment requests,
+                    contact Homigo Support immediately.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- DIGITAL SAFETY -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Digital Safety
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="digital-grid">
+
+            <div class="digital-card">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <h3>
+
+                    Strong Passwords
+
+                </h3>
+
+                <p>
+
+                    Create a strong,
+                    unique password and update it periodically.
+
+                </p>
+
+            </div>
+
+            <div class="digital-card">
+
+                <i class="fa-solid fa-mobile-screen-button"></i>
+
+                <h3>
+
+                    Secure Devices
+
+                </h3>
+
+                <p>
+
+                    Keep your browser,
+                    mobile apps,
+                    and operating system updated.
+
+                </p>
+
+            </div>
+
+            <div class="digital-card">
+
+                <i class="fa-solid fa-wifi"></i>
+
+                <h3>
+
+                    Public Wi-Fi
+
+                </h3>
+
+                <p>
+
+                    Avoid making sensitive payments over unsecured public Wi-Fi networks.
+
+                </p>
+
+            </div>
+
+            <div class="digital-card">
+
+                <i class="fa-solid fa-bug"></i>
+
+                <h3>
+
+                    Stay Alert
+
+                </h3>
+
+                <p>
+
+                    Watch for phishing attempts,
+                    fake login pages,
+                    and suspicious emails.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SAFETY STATS -->
+
+    <section class="section stats-section">
+
+        <h2 class="section-title">
+
+            Safety By Numbers
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="stats-grid">
+
+            <div class="stat-box">
+
+                <h2>
+
+                    24×7
+
+                </h2>
+
+                <p>
+
+                    Customer Support
+
+                </p>
+
+            </div>
+
+            <div class="stat-box">
+
+                <h2>
+
+                    5000+
+
+                </h2>
+
+                <p>
+
+                    Verified Properties
+
+                </p>
+
+            </div>
+
+            <div class="stat-box">
+
+                <h2>
+
+                    99%
+
+                </h2>
+
+                <p>
+
+                    Secure Bookings
+
+                </p>
+
+            </div>
+
+            <div class="stat-box">
+
+                <h2>
+
+                    120+
+
+                </h2>
+
+                <p>
+
+                    Travel Destinations
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FAQ -->
+
+    <section class="section faq-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Frequently Asked Questions
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="accordion" id="safetyFAQ">
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+
+                            How can I verify a property before booking?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#safetyFAQ">
+
+                        <div class="accordion-body">
+
+                            Read the listing description carefully, review photos, amenities, house rules, and previous
+                            guest reviews before confirming your reservation.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#faq2">
+
+                            What should I do if I receive a suspicious payment request?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#safetyFAQ">
+
+                        <div class="accordion-body">
+
+                            Never send payments outside Homigo. Report any suspicious payment requests or unusual
+                            activity immediately through our Help Center.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#faq3">
+
+                            Who should I contact in an emergency?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#safetyFAQ">
+
+                        <div class="accordion-body">
+
+                            If you are facing an emergency, contact your local emergency services immediately. For
+                            booking-related assistance, reach out to Homigo Support.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#faq4">
+
+                            How can I keep my Homigo account secure?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#safetyFAQ">
+
+                        <div class="accordion-body">
+
+                            Use a strong password, avoid sharing verification codes, keep your devices updated, and sign
+                            out from shared or public computers.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SAFETY NOTICE -->
+
+    <section class="section" style="background:white;">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Safety Notice
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="notice-box">
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+                <div>
+
+                    <h3>
+
+                        Stay Informed & Travel Responsibly
+
+                    </h3>
+
+                    <p>
+
+                        Travel conditions, local regulations, and property requirements may change over time. Before
+                        travelling, review the latest guidance for your destination and communicate with your host
+                        regarding important check-in information.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SUPPORT -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Need Help?
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="support-grid">
+
+                <div class="support-card">
+
+                    <i class="fa-solid fa-headset"></i>
+
+                    <h3>
+
+                        24×7 Customer Support
+
+                    </h3>
+
+                    <p>
+
+                        Our support team is available to assist you with booking issues, account questions, and general
+                        travel assistance.
+
+                    </p>
+
+                </div>
+
+                <div class="support-card">
+
+                    <i class="fa-solid fa-envelope"></i>
+
+                    <h3>
+
+                        Report a Concern
+
+                    </h3>
+
+                    <p>
+
+                        If you encounter suspicious behaviour, inaccurate listings, or safety concerns, please contact
+                        us immediately.
+
+                    </p>
+
+                </div>
+
+                <div class="support-card">
+
+                    <i class="fa-solid fa-book-open"></i>
+
+                    <h3>
+
+                        Help Center
+
+                    </h3>
+
+                    <p>
+
+                        Visit our Help Center for guides, booking support, policies, and answers to common questions.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CTA -->
+
+    <section class="safety-cta">
+
+        <div class="container">
+
+            <h2>
+
+                Travel Smarter. Stay Safer.
+
+            </h2>
+
+            <p>
+
+                Whether you're a guest or a host, we're committed to helping make every Homigo experience secure,
+                transparent, and enjoyable.
+
+            </p>
+
+            <div class="cta-buttons">
+
+                <a href="/help" class="btn btn-light btn-lg">
+
+                    <i class="fa-solid fa-headset"></i>
+
+                    Help Center
+
+                </a>
+
+                <a href="/contact" class="btn btn-outline-light btn-lg">
+
+                    <i class="fa-solid fa-phone"></i>
+
+                    Contact Us
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>

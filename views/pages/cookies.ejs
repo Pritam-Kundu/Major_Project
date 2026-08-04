@@ -1,0 +1,1297 @@
+<% layout("layouts/boilerplate") %>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f7f9fc;
+            overflow-x: hidden;
+        }
+
+        /* Hero */
+
+        .cookie-hero {
+
+            height: 80vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            color: white;
+
+            background:
+                linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .55)),
+                url("https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+
+            background-position: center;
+
+        }
+
+        .hero-content {
+
+            max-width: 850px;
+
+            padding: 20px;
+
+            animation: fadeUp 1s ease;
+
+        }
+
+        .hero-content h1 {
+
+            font-size: 4rem;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+
+        }
+
+        .hero-content p {
+
+            font-size: 1.15rem;
+
+            line-height: 2;
+
+            color: #eee;
+
+        }
+
+        /* Common */
+
+        .section {
+
+            padding: 100px 8%;
+
+        }
+
+        .section-title {
+
+            text-align: center;
+
+            font-size: 2.8rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .divider {
+
+            width: 120px;
+
+            height: 5px;
+
+            background: #2f80ed;
+
+            margin: 0 auto 60px;
+
+            border-radius: 30px;
+
+        }
+
+        /* Intro */
+
+        .cookie-intro {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .cookie-intro img {
+
+            width: 100%;
+
+            border-radius: 20px;
+
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+
+        }
+
+        .cookie-content h2 {
+
+            font-size: 2.3rem;
+
+            margin-bottom: 20px;
+
+            font-weight: 700;
+
+        }
+
+        .cookie-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Cards */
+
+        .cookie-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .cookie-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+            height: 100%;
+
+        }
+
+        .cookie-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .cookie-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .cookie-card h3 {
+
+            margin-bottom: 18px;
+
+            font-weight: 700;
+
+        }
+
+        .cookie-card p {
+
+            color: #666;
+
+            line-height: 1.9;
+
+        }
+
+        /* Animation */
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(50px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+        @media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+
+            .cookie-intro {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        /* Purpose */
+
+        .purpose-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .purpose-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+            height: 100%;
+
+        }
+
+        .purpose-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .purpose-card i {
+
+            font-size: 48px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .purpose-card h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 18px;
+
+        }
+
+        .purpose-card p {
+
+            line-height: 1.9;
+
+            color: #666;
+
+        }
+
+        /* Management */
+
+        .management-wrapper {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .management-image img {
+
+            width: 100%;
+
+            border-radius: 20px;
+
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .12);
+
+        }
+
+        .management-content h3 {
+
+            font-size: 2rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .management-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 25px;
+
+        }
+
+        .management-content ul {
+
+            list-style: none;
+
+            padding: 0;
+
+        }
+
+        .management-content li {
+
+            margin-bottom: 18px;
+
+            font-size: 1.05rem;
+
+        }
+
+        .management-content i {
+
+            color: #2f80ed;
+
+            margin-right: 12px;
+
+        }
+
+        /* Third Party */
+
+        .thirdparty-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .third-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .third-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .third-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .third-card h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+        }
+
+        .third-card p {
+
+            line-height: 1.9;
+
+            color: #666;
+
+        }
+
+        @media(max-width:992px) {
+
+            .management-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        /* FAQ */
+
+        .faq-section {
+
+            background: #f7f9fc;
+
+        }
+
+        .accordion-button {
+
+            font-weight: 600;
+
+            font-size: 1.05rem;
+
+        }
+
+        /* Rights */
+
+        .rights-section {
+
+            background: white;
+
+        }
+
+        .rights-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .rights-card {
+
+            background: #f8f9fc;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .06);
+
+            transition: .35s;
+
+        }
+
+        .rights-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .rights-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .rights-card h3 {
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+
+        }
+
+        .rights-card p {
+
+            line-height: 1.8;
+
+            color: #666;
+
+        }
+
+        /* Contact */
+
+        .cookie-contact {
+
+            padding: 120px 8%;
+
+            background: linear-gradient(135deg, #2f80ed, #56ccf2);
+
+            text-align: center;
+
+            color: white;
+
+        }
+
+        .cookie-contact h2 {
+
+            font-size: 3rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .cookie-contact p {
+
+            max-width: 700px;
+
+            margin: 0 auto 40px;
+
+            line-height: 2;
+
+        }
+
+        .contact-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .contact-buttons .btn {
+
+            padding: 15px 35px;
+
+            border-radius: 50px;
+
+            font-weight: 600;
+
+            transition: .3s;
+
+        }
+
+        .contact-buttons .btn:hover {
+
+            transform: translateY(-5px);
+
+        }
+
+        @media(max-width:768px) {
+
+            .cookie-contact h2 {
+
+                font-size: 2.2rem;
+
+            }
+
+            .contact-buttons {
+
+                flex-direction: column;
+
+                align-items: center;
+
+            }
+
+            .contact-buttons .btn {
+
+                width: 260px;
+
+            }
+
+        }
+    </style>
+
+    <!-- HERO -->
+
+    <section class="cookie-hero">
+
+        <div class="hero-content">
+
+            <h1>
+
+                Cookie Policy
+
+            </h1>
+
+            <p>
+
+                Learn how Homigo uses cookies and similar technologies
+                to improve your browsing experience,
+                enhance security,
+                and personalize our services.
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- INTRO -->
+
+    <section class="section">
+
+        <div class="cookie-intro">
+
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80">
+
+            <div class="cookie-content">
+
+                <h2>
+
+                    What Are Cookies?
+
+                </h2>
+
+                <p>
+
+                    Cookies are small text files stored on your device when you visit our website.
+                    They help us remember your preferences,
+                    keep you signed in,
+                    improve website performance,
+                    and provide a more personalized browsing experience.
+
+                </p>
+
+                <p>
+
+                    Homigo uses cookies responsibly and only for purposes that improve security,
+                    performance,
+                    and user experience.
+                    We never use cookies to collect sensitive personal information without your consent.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- TYPES -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Types of Cookies We Use
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="cookie-grid">
+
+            <div class="cookie-card">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <h3>
+
+                    Essential Cookies
+
+                </h3>
+
+                <p>
+
+                    Required for login,
+                    security,
+                    session management,
+                    and booking functionality.
+
+                </p>
+
+            </div>
+
+            <div class="cookie-card">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                <h3>
+
+                    Analytics Cookies
+
+                </h3>
+
+                <p>
+
+                    Help us understand website traffic,
+                    visitor behavior,
+                    and improve overall performance.
+
+                </p>
+
+            </div>
+
+            <div class="cookie-card">
+
+                <i class="fa-solid fa-sliders"></i>
+
+                <h3>
+
+                    Preference Cookies
+
+                </h3>
+
+                <p>
+
+                    Remember your preferred language,
+                    currency,
+                    theme,
+                    and other settings.
+
+                </p>
+
+            </div>
+
+            <div class="cookie-card">
+
+                <i class="fa-solid fa-bullhorn"></i>
+
+                <h3>
+
+                    Marketing Cookies
+
+                </h3>
+
+                <p>
+
+                    Display relevant travel offers
+                    and promotional campaigns
+                    based on your interests.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- WHY WE USE COOKIES -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Why We Use Cookies
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="purpose-grid">
+
+            <div class="purpose-card">
+
+                <i class="fa-solid fa-user-check"></i>
+
+                <h3>
+
+                    Remember Your Preferences
+
+                </h3>
+
+                <p>
+
+                    Cookies remember your preferred language,
+                    currency,
+                    location,
+                    and recently viewed properties
+                    to make your next visit faster and more personalized.
+
+                </p>
+
+            </div>
+
+            <div class="purpose-card">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <h3>
+
+                    Improve Security
+
+                </h3>
+
+                <p>
+
+                    Authentication cookies help keep your account secure,
+                    prevent unauthorized access,
+                    and detect suspicious login activity.
+
+                </p>
+
+            </div>
+
+            <div class="purpose-card">
+
+                <i class="fa-solid fa-gauge-high"></i>
+
+                <h3>
+
+                    Improve Performance
+
+                </h3>
+
+                <p>
+
+                    Performance cookies help us understand
+                    which pages load slowly
+                    and where we can improve the browsing experience.
+
+                </p>
+
+            </div>
+
+            <div class="purpose-card">
+
+                <i class="fa-solid fa-heart"></i>
+
+                <h3>
+
+                    Personalized Experience
+
+                </h3>
+
+                <p>
+
+                    We use cookies to recommend destinations,
+                    properties,
+                    and travel experiences
+                    that match your interests.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- COOKIE MANAGEMENT -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Managing Your Cookie Preferences
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="management-wrapper">
+
+            <div class="management-image">
+
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80">
+
+            </div>
+
+            <div class="management-content">
+
+                <h3>
+
+                    You're in Control
+
+                </h3>
+
+                <p>
+
+                    Most web browsers allow you to control,
+                    block,
+                    or delete cookies through their settings.
+                    Disabling certain cookies may affect
+                    features such as login,
+                    saved preferences,
+                    or booking functionality.
+
+                </p>
+
+                <ul>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Enable or disable cookies anytime
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Delete stored cookies
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Block third-party cookies
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Manage browser privacy settings
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- THIRD-PARTY SERVICES -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Third-Party Services
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="thirdparty-grid">
+
+            <div class="third-card">
+
+                <i class="fa-solid fa-chart-simple"></i>
+
+                <h3>
+
+                    Analytics
+
+                </h3>
+
+                <p>
+
+                    Analytics tools help us understand
+                    how visitors interact with Homigo
+                    so we can continuously improve our platform.
+
+                </p>
+
+            </div>
+
+            <div class="third-card">
+
+                <i class="fa-solid fa-credit-card"></i>
+
+                <h3>
+
+                    Payment Providers
+
+                </h3>
+
+                <p>
+
+                    Trusted payment partners
+                    may use secure cookies
+                    to process transactions safely
+                    and prevent fraud.
+
+                </p>
+
+            </div>
+
+            <div class="third-card">
+
+                <i class="fa-solid fa-cloud"></i>
+
+                <h3>
+
+                    Cloud Services
+
+                </h3>
+
+                <p>
+
+                    Cloud infrastructure providers
+                    use technical cookies
+                    to improve performance,
+                    availability,
+                    and security.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FAQ -->
+
+    <section class="section faq-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Frequently Asked Questions
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="accordion" id="cookieFAQ">
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#cookie1">
+
+                            Can I disable cookies?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="cookie1" class="accordion-collapse collapse show" data-bs-parent="#cookieFAQ">
+
+                        <div class="accordion-body">
+
+                            Yes. Most browsers allow you to block or delete cookies through their privacy settings.
+                            However, disabling essential cookies may affect login, booking, and other website features.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#cookie2">
+
+                            Do cookies store my personal information?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="cookie2" class="accordion-collapse collapse" data-bs-parent="#cookieFAQ">
+
+                        <div class="accordion-body">
+
+                            Cookies generally store small pieces of information such as your preferences, session
+                            identifiers, and browsing settings. They do not store sensitive information like your
+                            password in plain text.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#cookie3">
+
+                            How long do cookies remain on my device?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="cookie3" class="accordion-collapse collapse" data-bs-parent="#cookieFAQ">
+
+                        <div class="accordion-body">
+
+                            Some cookies expire when you close your browser (session cookies), while others remain for a
+                            specified period to remember your preferences on future visits (persistent cookies).
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#cookie4">
+
+                            Can I change my cookie preferences later?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="cookie4" class="accordion-collapse collapse" data-bs-parent="#cookieFAQ">
+
+                        <div class="accordion-body">
+
+                            Yes. You can update your browser settings or any cookie preference controls provided by
+                            Homigo at any time.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- PRIVACY RIGHTS -->
+
+    <section class="section rights-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Your Privacy Rights
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="rights-grid">
+
+                <div class="rights-card">
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+                    <h3>
+
+                        Transparency
+
+                    </h3>
+
+                    <p>
+
+                        We clearly explain how cookies are used and what information they collect.
+
+                    </p>
+
+                </div>
+
+                <div class="rights-card">
+
+                    <i class="fa-solid fa-toggle-on"></i>
+
+                    <h3>
+
+                        Control
+
+                    </h3>
+
+                    <p>
+
+                        You have the ability to manage, disable, or delete cookies at any time.
+
+                    </p>
+
+                </div>
+
+                <div class="rights-card">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <h3>
+
+                        Security
+
+                    </h3>
+
+                    <p>
+
+                        We implement security measures to protect your information from unauthorized access.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CONTACT -->
+
+    <section class="cookie-contact">
+
+        <div class="container">
+
+            <h2>
+
+                Questions About Cookies?
+
+            </h2>
+
+            <p>
+
+                If you have any questions about this Cookie Policy or how Homigo uses cookies, our privacy team is here
+                to help.
+
+            </p>
+
+            <div class="contact-buttons">
+
+                <a href="/help" class="btn btn-light btn-lg">
+
+                    <i class="fa-solid fa-headset"></i>
+
+                    Contact Support
+
+                </a>
+
+                <a href="/privacy" class="btn btn-outline-light btn-lg">
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+                    Privacy Policy
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>

@@ -20,6 +20,8 @@
 
                     <th>Status</th>
 
+                    <th>Details</th>
+
                     <th>Action</th>
 
                 </tr>
@@ -33,13 +35,31 @@
                     <tr>
 
                         <td>
-                            <strong>
-                                <%= ticket.user.username %>
-                            </strong><br>
-                            <small class="text-muted">
-                                <i class="fa-solid fa-envelope"></i>
-                                <%= ticket.user.email %>
-                            </small>
+
+                            <% if (ticket.user) { %>
+
+                                <strong>
+                                    <%= ticket.user.username %>
+                                </strong>
+
+                                <br>
+
+                                <small class="text-muted">
+
+                                    <i class="fa-solid fa-envelope"></i>
+
+                                    <%= ticket.user.email %>
+
+                                </small>
+
+                                <% } else { %>
+
+                                    <span class="text-danger">
+                                        User Not Found
+                                    </span>
+
+                                    <% } %>
+
                         </td>
 
                         <td>
@@ -55,6 +75,19 @@
                                 <%= ticket.status %>
 
                             </span>
+
+                        </td>
+
+                        <td>
+
+                            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#ticketModal<%= ticket._id %>">
+
+                                <i class="fa-solid fa-eye"></i>
+
+                                Details
+
+                            </button>
 
                         </td>
 
@@ -95,6 +128,171 @@
                         </td>
 
                     </tr>
+
+                    <div class="modal fade" id="ticketModal<%= ticket._id %>" tabindex="-1">
+
+                        <div class="modal-dialog modal-lg">
+
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+
+                                    <h5 class="modal-title">
+
+                                        Support Ticket Details
+
+                                    </h5>
+
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                    </button>
+
+                                </div>
+
+                                <div class="modal-body">
+
+                                    <p>
+
+                                        <strong>Name:</strong>
+
+                                        <%= ticket.name %>
+
+                                    </p>
+
+                                    <p>
+
+                                        <strong>Email:</strong>
+
+                                        <%= ticket.email %>
+
+                                    </p>
+
+                                    <p>
+
+                                        <strong>Subject:</strong>
+
+                                        <%= ticket.subject %>
+
+                                    </p>
+
+                                    <p>
+
+                                        <strong>Category:</strong>
+
+                                        <%= ticket.category %>
+
+                                    </p>
+
+                                    <p>
+
+                                        <strong>Status:</strong>
+
+                                        <span class="badge bg-primary">
+
+                                            <%= ticket.status %>
+
+                                        </span>
+
+                                    </p>
+
+                                    <p>
+
+                                        <strong>Submitted:</strong>
+
+                                        <%= ticket.createdAt.toLocaleString("en-IN") %>
+
+                                    </p>
+
+                                    <% if(ticket.booking){ %>
+
+                                        <hr>
+
+                                        <h5 class="mb-3">
+
+                                            Related Booking
+
+                                        </h5>
+
+                                        <p>
+
+                                            <strong>Booking ID:</strong>
+
+                                            <%= ticket.booking._id %>
+
+                                        </p>
+
+                                        <p>
+
+                                            <strong>Property:</strong>
+
+                                            <%= ticket.booking.listing.title %>
+
+                                        </p>
+
+                                        <p>
+
+                                            <strong>Check-In:</strong>
+
+                                            <%= ticket.booking.checkIn.toLocaleDateString("en-IN") %>
+
+                                        </p>
+
+                                        <p>
+
+                                            <strong>Check-Out:</strong>
+
+                                            <%= ticket.booking.checkOut.toLocaleDateString("en-IN") %>
+
+                                        </p>
+
+                                        <p>
+
+                                            <strong>Guests:</strong>
+
+                                            <%= ticket.booking.guests %>
+
+                                        </p>
+
+                                        <p>
+
+                                            <strong>Total Amount:</strong>
+
+                                            ₹<%= ticket.booking.totalPrice.toLocaleString("en-IN") %>
+
+                                        </p>
+
+                                        <% } %>
+
+                                            <hr>
+
+                                            <h6>
+
+                                                Message
+
+                                            </h6>
+
+                                            <div class="border rounded p-3 bg-light">
+
+                                                <%= ticket.message %>
+
+                                            </div>
+
+                                </div>
+
+                                <div class="modal-footer">
+
+                                    <button class="btn btn-secondary" data-bs-dismiss="modal">
+
+                                        Close
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
 
                     <% }) %>
 

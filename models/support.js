@@ -29,6 +29,12 @@ const supportSchema = new mongoose.Schema({
         default: "Other"
     },
 
+    booking: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Booking",
+        default: null
+    },
+
     message: {
         type: String,
         required: true

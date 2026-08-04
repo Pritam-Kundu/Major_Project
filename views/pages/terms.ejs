@@ -1,0 +1,1933 @@
+<% layout("layouts/boilerplate") %>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f8f9fc;
+            overflow-x: hidden;
+        }
+
+        /* HERO */
+
+        .terms-hero {
+
+            height: 80vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            color: white;
+
+            background:
+                linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .55)),
+                url("https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+
+            background-position: center;
+
+        }
+
+        .hero-content {
+
+            max-width: 900px;
+
+            padding: 20px;
+
+            animation: fadeUp 1s ease;
+
+        }
+
+        .hero-content h1 {
+
+            font-size: 4rem;
+
+            font-weight: 800;
+
+            margin-bottom: 20px;
+
+        }
+
+        .hero-content p {
+
+            font-size: 1.2rem;
+
+            line-height: 2;
+
+            color: #eee;
+
+        }
+
+        .section {
+
+            padding: 100px 8%;
+
+        }
+
+        .section-title {
+
+            text-align: center;
+
+            font-size: 2.8rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .divider {
+
+            width: 120px;
+
+            height: 5px;
+
+            background: #2f80ed;
+
+            margin: 0 auto 60px;
+
+            border-radius: 30px;
+
+        }
+
+        /* OVERVIEW */
+
+        .overview {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .overview img {
+
+            width: 100%;
+
+            border-radius: 20px;
+
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+
+        }
+
+        .overview-content h2 {
+
+            font-size: 2.4rem;
+
+            margin-bottom: 20px;
+
+        }
+
+        .overview-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* CARDS */
+
+        .terms-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .terms-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .terms-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .terms-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .terms-card h3 {
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+
+        }
+
+        .terms-card p {
+
+            line-height: 1.9;
+
+            color: #666;
+
+        }
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(40px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+        @media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+
+            .overview {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        /* Responsibilities */
+
+        .responsibility-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .responsibility-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .responsibility-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .responsibility-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .responsibility-card h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+        }
+
+        .responsibility-card p {
+
+            line-height: 1.9;
+
+            color: #666;
+
+        }
+
+        /* Payment */
+
+        .payment-wrapper {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .payment-content h2 {
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .payment-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        .payment-content ul {
+
+            list-style: none;
+
+            padding: 0;
+
+        }
+
+        .payment-content li {
+
+            margin-bottom: 18px;
+
+        }
+
+        .payment-content i {
+
+            color: #2f80ed;
+
+            margin-right: 10px;
+
+        }
+
+        /* Cancellation */
+
+        .cancellation-section {
+
+            background: white;
+
+        }
+
+        .cancellation-box {
+
+            display: flex;
+
+            gap: 30px;
+
+            background: #eef5ff;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+            align-items: flex-start;
+
+        }
+
+        .cancel-icon i {
+
+            font-size: 60px;
+
+            color: #2f80ed;
+
+        }
+
+        @media(max-width:992px) {
+
+            .payment-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .cancellation-box {
+
+                flex-direction: column;
+
+            }
+
+        }
+
+        /* Policy Cards */
+
+        .policy-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .policy-card {
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+            text-align: center;
+
+        }
+
+        .policy-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .policy-card i {
+
+            font-size: 55px;
+
+            color: #2f80ed;
+
+            margin-bottom: 20px;
+
+        }
+
+        .policy-link {
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+        }
+
+        /* Safety */
+
+        .safety-wrapper {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 60px;
+
+            align-items: center;
+
+        }
+
+        .safety-content h2 {
+
+            margin-bottom: 20px;
+
+            font-weight: 700;
+
+        }
+
+        .safety-content p {
+
+            line-height: 2;
+
+            color: #666;
+
+            margin-bottom: 20px;
+
+        }
+
+        .safety-content ul {
+
+            list-style: none;
+
+            padding: 0;
+
+        }
+
+        .safety-content li {
+
+            margin-bottom: 18px;
+
+        }
+
+        .safety-content li i {
+
+            color: #2f80ed;
+
+            margin-right: 10px;
+
+        }
+
+        /* Prohibited */
+
+        .prohibited-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 30px;
+
+        }
+
+        .prohibited-card {
+
+            background: white;
+
+            padding: 35px;
+
+            text-align: center;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
+            transition: .35s;
+
+        }
+
+        .prohibited-card:hover {
+
+            transform: translateY(-10px);
+
+        }
+
+        .prohibited-card i {
+
+            font-size: 50px;
+
+            color: #dc3545;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* Liability */
+
+        .liability-section {
+
+            background: #f8f9fc;
+
+        }
+
+        .liability-box {
+
+            display: flex;
+
+            gap: 30px;
+
+            background: white;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .liability-icon i {
+
+            font-size: 60px;
+
+            color: #2f80ed;
+
+        }
+
+        /* Related */
+
+        .related-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+            gap: 25px;
+
+        }
+
+        .related-card {
+
+            background: #f8f9fc;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            text-decoration: none;
+
+            color: #333;
+
+            transition: .35s;
+
+        }
+
+        .related-card:hover {
+
+            transform: translateY(-10px);
+
+            background: #2f80ed;
+
+            color: white;
+
+        }
+
+        .related-card i {
+
+            font-size: 45px;
+
+            margin-bottom: 15px;
+
+        }
+
+        @media(max-width:992px) {
+
+            .safety-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .liability-box {
+
+                flex-direction: column;
+
+            }
+
+        }
+
+        /* FAQ */
+
+        .faq-section {
+
+            background: #f7f9fc;
+
+        }
+
+        .accordion-button {
+
+            font-weight: 600;
+
+            font-size: 1.05rem;
+
+        }
+
+        /* Changes */
+
+        .changes-box {
+
+            display: flex;
+
+            gap: 30px;
+
+            align-items: flex-start;
+
+            background: #eef5ff;
+
+            padding: 40px;
+
+            border-left: 6px solid #2f80ed;
+
+            border-radius: 20px;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .changes-box i {
+
+            font-size: 60px;
+
+            color: #2f80ed;
+
+            margin-top: 5px;
+
+        }
+
+        .changes-box h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+        }
+
+        .changes-box p {
+
+            line-height: 1.9;
+
+            color: #555;
+
+        }
+
+        /* Last Updated */
+
+        .last-update-card {
+
+            max-width: 450px;
+
+            margin: auto;
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+
+        }
+
+        .last-update-card i {
+
+            font-size: 50px;
+
+            color: #2f80ed;
+
+            margin-bottom: 15px;
+
+        }
+
+        .last-update-card h3 {
+
+            font-weight: 700;
+
+            margin-bottom: 10px;
+
+        }
+
+        .last-update-card p {
+
+            font-size: 1.1rem;
+
+            color: #666;
+
+            margin: 0;
+
+        }
+
+        /* Contact */
+
+        .terms-contact {
+
+            padding: 120px 8%;
+
+            background: linear-gradient(135deg, #2f80ed, #56ccf2);
+
+            color: white;
+
+            text-align: center;
+
+        }
+
+        .terms-contact h2 {
+
+            font-size: 3rem;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+        .terms-contact p {
+
+            max-width: 760px;
+
+            margin: 0 auto 40px;
+
+            line-height: 2;
+
+        }
+
+        .contact-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .contact-buttons .btn {
+
+            padding: 16px 36px;
+
+            border-radius: 50px;
+
+            font-weight: 600;
+
+            transition: .3s;
+
+        }
+
+        .contact-buttons .btn:hover {
+
+            transform: translateY(-5px);
+
+        }
+
+        @media(max-width:768px) {
+
+            .changes-box {
+
+                flex-direction: column;
+
+            }
+
+            .terms-contact h2 {
+
+                font-size: 2.2rem;
+
+            }
+
+            .contact-buttons {
+
+                flex-direction: column;
+
+                align-items: center;
+
+            }
+
+            .contact-buttons .btn {
+
+                width: 260px;
+
+            }
+
+        }
+    </style>
+
+    <!-- HERO -->
+
+    <section class="terms-hero">
+
+        <div class="hero-content">
+
+            <h1>
+
+                Terms of Service
+
+            </h1>
+
+            <p>
+
+                These Terms govern your use of Homigo. By creating an account, browsing listings, or making a booking,
+                you agree to follow these terms and our related policies.
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- OVERVIEW -->
+
+    <section class="section">
+
+        <div class="overview">
+
+            <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1000&q=80">
+
+            <div class="overview-content">
+
+                <h2>
+
+                    Using Homigo Responsibly
+
+                </h2>
+
+                <p>
+
+                    Homigo is designed to connect guests with accommodation providers through a secure and transparent
+                    booking platform.
+
+                </p>
+
+                <p>
+
+                    These Terms explain the rights, responsibilities, and expectations of everyone using our platform,
+                    helping create a safe and enjoyable experience for all users.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- KEY PRINCIPLES -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Key Principles
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="terms-grid">
+
+            <div class="terms-card">
+
+                <i class="fa-solid fa-user-check"></i>
+
+                <h3>
+
+                    Use Responsibly
+
+                </h3>
+
+                <p>
+
+                    Use Homigo honestly, respectfully, and in compliance with applicable laws.
+
+                </p>
+
+            </div>
+
+            <div class="terms-card">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <h3>
+
+                    Protect Your Account
+
+                </h3>
+
+                <p>
+
+                    Keep your login credentials secure and notify us of any unauthorized access.
+
+                </p>
+
+            </div>
+
+            <div class="terms-card">
+
+                <i class="fa-solid fa-scale-balanced"></i>
+
+                <h3>
+
+                    Follow Policies
+
+                </h3>
+
+                <p>
+
+                    Using Homigo means agreeing to our policies regarding bookings, payments, privacy, and safety.
+
+                </p>
+
+            </div>
+
+            <div class="terms-card">
+
+                <i class="fa-solid fa-handshake"></i>
+
+                <h3>
+
+                    Respect Others
+
+                </h3>
+
+                <p>
+
+                    Guests and hosts should communicate respectfully and follow agreed booking terms.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- USER RESPONSIBILITIES -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Guest Responsibilities
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="responsibility-grid">
+
+            <div class="responsibility-card">
+
+                <i class="fa-solid fa-id-card"></i>
+
+                <h3>
+
+                    Provide Accurate Information
+
+                </h3>
+
+                <p>
+
+                    Guests should provide accurate account details, contact information, and booking information to
+                    ensure smooth reservations.
+
+                </p>
+
+            </div>
+
+            <div class="responsibility-card">
+
+                <i class="fa-solid fa-house-user"></i>
+
+                <h3>
+
+                    Respect Property Rules
+
+                </h3>
+
+                <p>
+
+                    Follow house rules, occupancy limits, and check-in/check-out instructions provided by the host.
+
+                </p>
+
+            </div>
+
+            <div class="responsibility-card">
+
+                <i class="fa-solid fa-comment-dots"></i>
+
+                <h3>
+
+                    Communicate Respectfully
+
+                </h3>
+
+                <p>
+
+                    Maintain polite and professional communication with hosts and Homigo support staff.
+
+                </p>
+
+            </div>
+
+            <div class="responsibility-card">
+
+                <i class="fa-solid fa-ban"></i>
+
+                <h3>
+
+                    No Illegal Activities
+
+                </h3>
+
+                <p>
+
+                    Guests must not engage in unlawful, harmful, fraudulent, or disruptive activities while using the
+                    platform.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- HOST RESPONSIBILITIES -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Host Responsibilities
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="responsibility-grid">
+
+            <div class="responsibility-card">
+
+                <i class="fa-solid fa-house-circle-check"></i>
+
+                <h3>
+
+                    Maintain Accurate Listings
+
+                </h3>
+
+                <p>
+
+                    Property descriptions, amenities, pricing, and availability should be accurate and regularly
+                    updated.
+
+                </p>
+
+            </div>
+
+            <div class="responsibility-card">
+
+                <i class="fa-solid fa-broom"></i>
+
+                <h3>
+
+                    Provide Clean Accommodation
+
+                </h3>
+
+                <p>
+
+                    Hosts should maintain clean, safe, and properly prepared accommodations for every booking.
+
+                </p>
+
+            </div>
+
+            <div class="responsibility-card">
+
+                <i class="fa-solid fa-clock"></i>
+
+                <h3>
+
+                    Timely Communication
+
+                </h3>
+
+                <p>
+
+                    Respond promptly to booking requests, guest questions, and important travel updates.
+
+                </p>
+
+            </div>
+
+            <div class="responsibility-card">
+
+                <i class="fa-solid fa-scale-balanced"></i>
+
+                <h3>
+
+                    Follow Local Regulations
+
+                </h3>
+
+                <p>
+
+                    Hosts are responsible for complying with local laws, licensing requirements, and applicable
+                    regulations.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- BOOKINGS & PAYMENTS -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Bookings & Payments
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="payment-wrapper">
+
+            <div>
+
+                <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1000&q=80"
+                    class="img-fluid rounded-4 shadow">
+
+            </div>
+
+            <div class="payment-content">
+
+                <h2>
+
+                    Booking Guidelines
+
+                </h2>
+
+                <p>
+
+                    Bookings are confirmed only after successful payment processing and confirmation from the Homigo
+                    platform.
+
+                </p>
+
+                <ul>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Review booking details before payment.
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Use supported payment methods only.
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Keep your booking confirmation for future reference.
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Report payment issues immediately through the Help Center.
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CANCELLATION -->
+
+    <section class="section cancellation-section">
+
+        <h2 class="section-title">
+
+            Cancellations & Refunds
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="cancellation-box">
+
+            <div class="cancel-icon">
+
+                <i class="fa-solid fa-calendar-xmark"></i>
+
+            </div>
+
+            <div>
+
+                <h3>
+
+                    Cancellation Policies
+
+                </h3>
+
+                <p>
+
+                    Cancellation and refund eligibility depend on the policy selected for each property. Guests should
+                    review the property's cancellation terms before completing a booking. Additional information is
+                    available on our Cancellation Policy page.
+
+                </p>
+
+                <a href="/cancellation" class="btn btn-primary mt-3">
+
+                    View Cancellation Policy
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- PRIVACY & COOKIES -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Privacy & Data Protection
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="policy-grid">
+
+            <div class="policy-card">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+                <h3>
+
+                    Privacy Policy
+
+                </h3>
+
+                <p>
+
+                    Homigo respects your privacy and explains how personal information is collected,
+                    used,
+                    stored,
+                    and protected.
+
+                </p>
+
+                <a href="/privacy" class="policy-link">
+
+                    Read Privacy Policy →
+
+                </a>
+
+            </div>
+
+            <div class="policy-card">
+
+                <i class="fa-solid fa-cookie-bite"></i>
+
+                <h3>
+
+                    Cookie Policy
+
+                </h3>
+
+                <p>
+
+                    Cookies help improve your browsing experience,
+                    remember preferences,
+                    and keep your account secure.
+
+                </p>
+
+                <a href="/cookies" class="policy-link">
+
+                    View Cookie Policy →
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SAFETY -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Safety & Responsible Travel
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="safety-wrapper">
+
+            <div>
+
+                <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80"
+                    class="img-fluid rounded-4 shadow">
+
+            </div>
+
+            <div class="safety-content">
+
+                <h2>
+
+                    Creating Safe Experiences
+
+                </h2>
+
+                <p>
+
+                    Guests and hosts are expected to follow our Safety Guidelines and respect local laws while using
+                    Homigo.
+
+                </p>
+
+                <ul>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Respect property rules
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Communicate honestly
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Report unsafe behaviour
+
+                    </li>
+
+                    <li>
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Travel responsibly
+
+                    </li>
+
+                </ul>
+
+                <div class="mt-4">
+
+                    <a href="/safety" class="btn btn-primary me-2">
+
+                        Safety Center
+
+                    </a>
+
+                    <a href="/covid" class="btn btn-outline-primary">
+
+                        Health & Safety
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- PROHIBITED ACTIVITIES -->
+
+    <section class="section">
+
+        <h2 class="section-title">
+
+            Prohibited Activities
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="prohibited-grid">
+
+            <div class="prohibited-card">
+
+                <i class="fa-solid fa-user-secret"></i>
+
+                <h3>
+
+                    Fraud
+
+                </h3>
+
+                <p>
+
+                    Creating fake accounts,
+                    providing false information,
+                    or attempting fraudulent bookings is prohibited.
+
+                </p>
+
+            </div>
+
+            <div class="prohibited-card">
+
+                <i class="fa-solid fa-credit-card"></i>
+
+                <h3>
+
+                    Payment Abuse
+
+                </h3>
+
+                <p>
+
+                    Attempting to bypass official payment methods or requesting payments outside Homigo is not
+                    permitted.
+
+                </p>
+
+            </div>
+
+            <div class="prohibited-card">
+
+                <i class="fa-solid fa-bug"></i>
+
+                <h3>
+
+                    Platform Misuse
+
+                </h3>
+
+                <p>
+
+                    Users must not interfere with platform security,
+                    attempt unauthorized access,
+                    or distribute malicious software.
+
+                </p>
+
+            </div>
+
+            <div class="prohibited-card">
+
+                <i class="fa-solid fa-ban"></i>
+
+                <h3>
+
+                    Illegal Activities
+
+                </h3>
+
+                <p>
+
+                    Homigo may suspend or remove accounts involved in unlawful,
+                    harmful,
+                    or abusive behaviour.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- LIABILITY -->
+
+    <section class="section liability-section">
+
+        <h2 class="section-title">
+
+            Limitation of Liability
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="liability-box">
+
+            <div class="liability-icon">
+
+                <i class="fa-solid fa-scale-balanced"></i>
+
+            </div>
+
+            <div>
+
+                <h3>
+
+                    Platform Responsibility
+
+                </h3>
+
+                <p>
+
+                    Homigo provides a platform that enables guests and hosts to connect.
+                    While we strive to maintain accurate information and a secure experience,
+                    users remain responsible for their own decisions,
+                    communications,
+                    and compliance with applicable laws.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- RELATED POLICIES -->
+
+    <section class="section" style="background:white;">
+
+        <h2 class="section-title">
+
+            Related Policies
+
+        </h2>
+
+        <div class="divider"></div>
+
+        <div class="related-grid">
+
+            <a href="/privacy" class="related-card">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+                <h4>Privacy Policy</h4>
+
+            </a>
+
+            <a href="/cookies" class="related-card">
+
+                <i class="fa-solid fa-cookie-bite"></i>
+
+                <h4>Cookie Policy</h4>
+
+            </a>
+
+            <a href="/cancellation" class="related-card">
+
+                <i class="fa-solid fa-calendar-xmark"></i>
+
+                <h4>Cancellation Policy</h4>
+
+            </a>
+
+            <a href="/safety" class="related-card">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                <h4>Safety Center</h4>
+
+            </a>
+
+            <a href="/covid" class="related-card">
+
+                <i class="fa-solid fa-heart-pulse"></i>
+
+                <h4>Health & Safety</h4>
+
+            </a>
+
+            <a href="/help" class="related-card">
+
+                <i class="fa-solid fa-headset"></i>
+
+                <h4>Help Center</h4>
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- FAQ -->
+
+    <section class="section faq-section">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Frequently Asked Questions
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="accordion" id="termsFAQ">
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#terms1">
+
+                            Do I need an account to make a booking?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="terms1" class="accordion-collapse collapse show" data-bs-parent="#termsFAQ">
+
+                        <div class="accordion-body">
+
+                            Yes. Creating an account allows you to securely manage bookings, communicate with hosts, and
+                            access booking history.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#terms2">
+
+                            Can Homigo suspend my account?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="terms2" class="accordion-collapse collapse" data-bs-parent="#termsFAQ">
+
+                        <div class="accordion-body">
+
+                            Yes. Accounts may be suspended or removed if they violate these Terms, engage in fraudulent
+                            activities, abuse the platform, or compromise the safety of other users.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#terms3">
+
+                            How do I report a problem?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="terms3" class="accordion-collapse collapse" data-bs-parent="#termsFAQ">
+
+                        <div class="accordion-body">
+
+                            Visit the Help Center to report booking issues, payment concerns, inaccurate listings, or
+                            other platform-related problems.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+
+                    <h2 class="accordion-header">
+
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#terms4">
+
+                            Which policies should I read before booking?
+
+                        </button>
+
+                    </h2>
+
+                    <div id="terms4" class="accordion-collapse collapse" data-bs-parent="#termsFAQ">
+
+                        <div class="accordion-body">
+
+                            We recommend reviewing the Privacy Policy, Cookie Policy, Cancellation Policy, and Safety
+                            Center before completing your reservation.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CHANGES TO TERMS -->
+
+    <section class="section" style="background:white;">
+
+        <div class="container">
+
+            <h2 class="section-title">
+
+                Changes to These Terms
+
+            </h2>
+
+            <div class="divider"></div>
+
+            <div class="changes-box">
+
+                <i class="fa-solid fa-file-circle-plus"></i>
+
+                <div>
+
+                    <h3>
+
+                        Keeping Our Terms Up To Date
+
+                    </h3>
+
+                    <p>
+
+                        Homigo may update these Terms of Service as our platform evolves, new features are introduced,
+                        or legal requirements change. Significant updates will be reflected on this page, and where
+                        appropriate, users will be notified through the platform.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- LAST UPDATED -->
+
+    <section class="section">
+
+        <div class="container">
+
+            <div class="last-update-card">
+
+                <i class="fa-solid fa-calendar-days"></i>
+
+                <h3>
+
+                    Last Updated
+
+                </h3>
+
+                <p>
+
+                    August 2026
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CONTACT -->
+
+    <section class="terms-contact">
+
+        <div class="container">
+
+            <h2>
+
+                Need Help Understanding Our Terms?
+
+            </h2>
+
+            <p>
+
+                If you have questions regarding these Terms of Service or any of our policies, our support team is here
+                to help.
+
+            </p>
+
+            <div class="contact-buttons">
+
+                <a href="/help" class="btn btn-light btn-lg">
+
+                    <i class="fa-solid fa-headset"></i>
+
+                    Help Center
+
+                </a>
+
+                <a href="/contact" class="btn btn-outline-light btn-lg">
+
+                    <i class="fa-solid fa-envelope"></i>
+
+                    Contact Us
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>

@@ -40,6 +40,48 @@
 
             <div class="mb-3">
 
+                <label class="form-label">
+
+                    Related Booking
+
+                </label>
+
+                <select name="booking" class="form-select">
+
+                    <option value="">
+
+                        Not related to any booking
+
+                    </option>
+
+                    <% bookings.forEach(booking=>{ %>
+
+                        <option value="<%= booking._id %>">
+
+                            Booking #<%= booking._id.toString().slice(-6).toUpperCase() %>
+
+                                |
+
+                                <%= booking.listing.title %>
+
+                                    |
+
+                                    <%= booking.checkIn.toLocaleDateString() %>
+
+                                        -
+
+                                        <%= booking.checkOut.toLocaleDateString() %>
+
+                        </option>
+
+                        <% }) %>
+
+                </select>
+
+            </div>
+
+            <div class="mb-3">
+
                 <label>Message</label>
 
                 <textarea name="message" rows="6" class="form-control" required></textarea>
