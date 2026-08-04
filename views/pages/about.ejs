@@ -596,19 +596,49 @@
 
         }
 
-        .team-card {
+        .team-intro {
 
-            background: white;
+            max-width: 850px;
 
-            padding: 35px;
+            margin: 0 auto 60px;
 
             text-align: center;
 
-            border-radius: 20px;
+            font-size: 1.08rem;
+
+            line-height: 1.8;
+
+            color: #666;
+
+        }
+
+        .team-grid {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 50px;
+
+            flex-wrap: wrap;
+
+        }
+
+        .team-card {
+
+            width: 420px;
+
+            background: #fff;
+
+            padding: 40px;
+
+            border-radius: 25px;
+
+            text-align: center;
+
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .08);
 
             transition: .35s;
-
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
 
         }
 
@@ -616,31 +646,67 @@
 
             transform: translateY(-10px);
 
+            box-shadow: 0 25px 50px rgba(0, 0, 0, .15);
+
         }
 
         .team-img {
 
-            width: 140px;
+            width: 170px;
 
-            height: 140px;
-
-            border-radius: 50%;
+            height: 170px;
 
             object-fit: cover;
 
-            margin-bottom: 20px;
+            border-radius: 50%;
 
             border: 5px solid #2f80ed;
+
+            margin-bottom: 25px;
+
+        }
+
+        .team-card h3 {
+
+            font-size: 2rem;
+
+            margin-bottom: 10px;
+
+            font-weight: 700;
 
         }
 
         .team-role {
 
+            display: inline-block;
+
             color: #2f80ed;
 
             font-weight: 600;
 
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+
+            font-size: 1.05rem;
+
+        }
+
+        .team-card p {
+
+            color: #555;
+
+            line-height: 1.9;
+
+        }
+
+        @media(max-width:992px) {
+
+            .team-card {
+
+                width: 100%;
+
+                max-width: 420px;
+
+            }
 
         }
 
@@ -1580,106 +1646,62 @@
 
             <h2 class="section-title">
 
-                Project Contributors
+                Meet Our Team
 
             </h2>
 
             <div class="divider"></div>
 
-            <div class="row g-4">
+            <p class="team-intro">
+                Homigo was designed and developed as a collaborative project by two passionate developers dedicated to
+                creating a modern and reliable hotel booking platform.
+            </p>
 
-                <div class="col-md-4">
+            <div class="team-grid">
 
-                    <div class="team-card">
+                <!-- Pritam -->
 
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="team-img">
+                <div class="team-card">
 
-                        <h4>
+                    <img src="/images/team/Pritam.jpeg" alt="Pritam Kundu" class="team-img">
 
-                            Alex Carter
+                    <h3>Pritam Kundu</h3>
 
-                        </h4>
+                    <span class="team-role">
+                        Full Stack Developer
+                    </span>
 
-                        <p class="team-role">
+                    <p>
 
-                            Founder & CEO
+                        Co-developed Homigo by contributing across both frontend and backend development, including user
+                        interface design, authentication, booking management, database integration, and overall system
+                        functionality to deliver a seamless travel booking experience.
 
-                        </p>
-
-                        <p>
-
-                            Passionate about transforming travel through innovation
-                            and customer-first experiences.
-
-                        </p>
-
-                    </div>
+                    </p>
 
                 </div>
+                <!-- Abhik -->
 
-                <div class="col-md-4">
+                <div class="team-card">
 
-                    <div class="team-card">
+                    <img src="/images/team/Abhik.jpeg" alt="Abhik Paul" class="team-img">
 
-                        <img src="https://randomuser.me/api/portraits/women/65.jpg" class="team-img">
+                    <h3>Abhik Paul</h3>
 
-                        <h4>
+                    <span class="team-role">
+                        Full Stack Developer
+                    </span>
 
-                            Sophia Wilson
+                    <p>
 
-                        </h4>
-
-                        <p class="team-role">
-
-                            Head of Operations
-
-                        </p>
-
-                        <p>
-
-                            Ensuring every booking
-                            is seamless,
-                            secure
-                            and memorable.
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <div class="team-card">
-
-                        <img src="https://randomuser.me/api/portraits/men/52.jpg" class="team-img">
-
-                        <h4>
-
-                            Daniel Lee
-
-                        </h4>
-
-                        <p class="team-role">
-
-                            Technology Lead
-
-                        </p>
-
-                        <p>
-
-                            Building innovative travel solutions
-                            powered by modern technologies.
-
-                        </p>
-
-                    </div>
+                        Co-developed Homigo by working on both frontend and backend components, implementing core
+                        application features, optimizing database operations, integrating APIs, and enhancing the
+                        platform's performance, security, and user experience.
+                    </p>
 
                 </div>
 
             </div>
-
-        </div>
 
     </section>
 
