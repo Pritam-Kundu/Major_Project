@@ -1,6 +1,7 @@
 const Booking = require("../models/booking");
 const Listing = require("../models/listing");
 const { createNotification } = require("./notification");
+const sendCancellationEmail = require("../utils/sendCancellationEmail");
 
 module.exports.createBooking = async (req, res) => {
     const listing = await Listing.findById(req.params.id);
@@ -90,51 +91,127 @@ module.exports.showBookings = async (req, res) => {
     })
         .populate("listing")
         .sort({ bookedAt: -1 });
+
+    const now = new Date();
+    for (let booking of bookings) {
+        if (booking.status === "Booked" || booking.status === "Confirmed") {
+            const checkInDate = new Date(booking.checkIn);
+            const bookedAtDate = new Date(booking.bookedAt);
+            const hoursSinceBooking = (now.getTime() - bookedAtDate.getTime()) / (1000 * 60 * 60);
+            const daysBeforeCheckIn = (checkInDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
+
+            let refundPercentage = 0;
+            let cancellationMessage = "";
+
+            if (now >= checkInDate) {
+                refundPercentage = 0;
+                cancellationMessage = "This stay has already started and can no longer be cancelled.";
+            } else if (hoursSinceBooking <= 24 && daysBeforeCheckIn >= 7) {
+                refundPercentage = 100;
+                cancellationMessage = "You cancelled within 24 hours of booking. You are eligible for a full refund.";
+            } else if (daysBeforeCheckIn > 7) {
+                refundPercentage = 90;
+                cancellationMessage = "You cancelled more than 7 days before check-in. A 10% service fee has been deducted.";
+            } else if (daysBeforeCheckIn >= 2 && daysBeforeCheckIn <= 7) {
+                refundPercentage = 50;
+                cancellationMessage = "You cancelled within 7 days of check-in. 50% cancellation charges have been applied.";
+            } else {
+                refundPercentage = 0;
+                cancellationMessage = "This booking is non-refundable because cancellation occurred within 48 hours of check-in.";
+            }
+
+            const refundAmount = Math.round(booking.totalPrice * (refundPercentage / 100));
+            const deductionAmount = booking.totalPrice - refundAmount;
+
+            booking.computedCancellation = {
+                refundPercentage,
+                refundAmount,
+                deductionAmount,
+                cancellationMessage,
+                canCancel: now < checkInDate
+            };
+        }
+    }
+
     res.render("bookings/index", { bookings });
 };
 
 module.exports.cancelBooking = async (req, res) => {
     const { id } = req.params;
+    const { cancellationReason } = req.body;
+    
     const booking = await Booking.findById(id).populate("listing");
     if (!booking) {
         req.flash("error", "Booking not found.");
         return res.redirect("/bookings");
     }
-    // Allow only the user who made the booking
+
     if (!booking.user.equals(req.user._id)) {
         req.flash("error", "You are not authorized to cancel this booking.");
         return res.redirect("/bookings");
     }
+
+    if (booking.status === "Cancelled") {
+        req.flash("error", "This booking is already cancelled.");
+        return res.redirect("/bookings");
+    }
+
+    if (!cancellationReason) {
+        req.flash("error", "Cancellation reason is required.");
+        return res.redirect("/bookings");
+    }
+
     const now = new Date();
     const checkInDate = new Date(booking.checkIn);
-    const timeDiff = checkInDate.getTime() - now.getTime();
-    const hoursBeforeCheckIn = timeDiff / (1000 * 60 * 60);
     
-    let refundPercentage = 0;
-    if (hoursBeforeCheckIn >= 48) {
-        refundPercentage = 1; // 100%
-    } else if (hoursBeforeCheckIn >= 24) {
-        refundPercentage = 0.5; // 50%
-    } else {
-        refundPercentage = 0; // 0%
+    if (now >= checkInDate) {
+        req.flash("error", "This stay has already started and can no longer be cancelled.");
+        return res.redirect("/bookings");
     }
-    
-    const refundAmount = Math.round(booking.totalPrice * refundPercentage);
-    
+
+    const bookedAtDate = new Date(booking.bookedAt);
+    const hoursSinceBooking = (now.getTime() - bookedAtDate.getTime()) / (1000 * 60 * 60);
+    const daysBeforeCheckIn = (checkInDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
+
+    let refundPercentage = 0;
+    let cancellationMessage = "";
+
+    if (hoursSinceBooking <= 24 && daysBeforeCheckIn >= 7) {
+        refundPercentage = 100;
+        cancellationMessage = "You cancelled within 24 hours of booking. You are eligible for a full refund.";
+    } else if (daysBeforeCheckIn > 7) {
+        refundPercentage = 90;
+        cancellationMessage = "You cancelled more than 7 days before check-in. A 10% service fee has been deducted.";
+    } else if (daysBeforeCheckIn >= 2 && daysBeforeCheckIn <= 7) {
+        refundPercentage = 50;
+        cancellationMessage = "You cancelled within 7 days of check-in. 50% cancellation charges have been applied.";
+    } else {
+        refundPercentage = 0;
+        cancellationMessage = "This booking is non-refundable because cancellation occurred within 48 hours of check-in.";
+    }
+
+    const totalPrice = booking.totalPrice;
+    const refundAmount = Math.round(totalPrice * (refundPercentage / 100));
+    const deductionAmount = totalPrice - refundAmount;
+    const refundStatus = refundAmount > 0 ? "Pending" : "Not Applicable";
+
     booking.status = "Cancelled";
     booking.cancelledAt = now;
     booking.refundAmount = refundAmount;
-    
+    booking.refundPercentage = refundPercentage;
+    booking.deductionAmount = deductionAmount;
+    booking.refundStatus = refundStatus;
+    booking.cancellationReason = cancellationReason;
+    booking.cancellationMessage = cancellationMessage;
+
     await booking.save();
-    
-    let flashMsg = `Booking cancelled successfully. `;
-    if (refundAmount > 0) {
-        flashMsg += `A refund of ₹${refundAmount.toLocaleString("en-IN")} will be processed shortly.`;
-    } else {
-        flashMsg += `As per the policy, no refund is applicable for this cancellation.`;
+
+    try {
+        await sendCancellationEmail(booking, booking.listing, req.user.email);
+    } catch(err) {
+        console.error("Failed to send cancellation email:", err);
     }
-    
-    // Trigger Notification
+
     await createNotification(
         req.user._id,
         'booking',
@@ -142,7 +219,14 @@ module.exports.cancelBooking = async (req, res) => {
         `Your booking for ${booking.listing.title} has been cancelled.`,
         `/bookings`
     );
-    
+
+    let flashMsg = `Booking Cancelled Successfully. `;
+    if (refundAmount > 0) {
+        flashMsg += `Refund Amount: ₹${refundAmount.toLocaleString("en-IN")}. Refund Status: Pending. Refund will be processed within 5-7 business days.`;
+    } else {
+        flashMsg += cancellationMessage;
+    }
+
     req.flash("success", flashMsg);
     res.redirect("/bookings");
 };

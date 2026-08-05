@@ -180,13 +180,6 @@
                 const subtotal = booking.subtotal ?? booking.totalPrice; 
                 const gst = booking.gst ?? subtotal * 0.18; 
                 const grandTotal = booking.subtotal ? booking.totalPrice : subtotal + gst; 
-                
-                const now = new Date();
-                const timeDiff = new Date(booking.checkIn).getTime() - now.getTime();
-                const hoursLeft = timeDiff / (1000 * 60 * 60);
-                let refundEstimate = 0;
-                if(hoursLeft >= 48) refundEstimate = grandTotal;
-                else if(hoursLeft >= 24) refundEstimate = grandTotal * 0.5;
               %>
 
               <ul class="booking-details-list">
@@ -199,7 +192,12 @@
               <% if(booking.status === "Cancelled") { %>
                 <div class="alert alert-danger py-3 px-3 mb-4" style="font-size: 0.9rem; border-radius: 10px;">
                   <strong><i class="fa-solid fa-circle-exclamation me-1"></i> Trip Cancelled</strong><br>
-                  <span class="d-inline-block mt-1">Refund Processed: <b class="text-dark">₹<%= booking.refundAmount ? booking.refundAmount.toLocaleString("en-IN") : "0" %></b></span>
+                  <span class="d-block mt-1">Cancelled On: <b><%= new Date(booking.cancelledAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %></b></span>
+                  <span class="d-block mt-1">Refund: <b class="text-dark">₹<%= booking.refundAmount ? booking.refundAmount.toLocaleString("en-IN") : "0" %></b></span>
+                  <span class="d-block mt-1">Status: <b class="text-dark"><%= booking.refundStatus %></b></span>
+                  <span class="d-block mt-1">Reason: <em><%= booking.cancellationReason %></em></span>
+                  <hr class="my-2 border-danger opacity-25">
+                  <span class="d-block text-muted" style="font-size: 0.8rem;"><%= booking.cancellationMessage %></span>
                 </div>
               <% } else if(booking.status === "Booked" || booking.status === "Confirmed") { %>
                 <div class="cancel-policy-box">
@@ -210,7 +208,7 @@
                   </ul>
                   <div class="mt-2 pt-2 border-top border-warning text-danger fw-bold d-flex justify-content-between">
                     <span>Est. Refund Now:</span>
-                    <span>₹<%= Math.round(refundEstimate).toLocaleString("en-IN") %></span>
+                    <span>₹<%= booking.computedCancellation ? booking.computedCancellation.refundAmount.toLocaleString("en-IN") : "0" %></span>
                   </div>
                 </div>
               <% } %>
@@ -221,13 +219,23 @@
                   View Property
                 </a>
                 
-                <% if(booking.status === "Booked" || booking.status === "Confirmed") { %>
-                  <form action="/bookings/<%= booking._id %>/cancel?_method=PUT" method="POST" class="m-0">
-                    <button type="submit" class="btn btn-outline-danger w-100 py-2 fw-bold text-uppercase" style="letter-spacing: 1px; border-radius: 8px;"
-                      onclick="return confirm('Cancel this trip? Your estimated refund is ₹<%= Math.round(refundEstimate).toLocaleString("en-IN") %>. Do you wish to proceed?')">
+                <% if((booking.status === "Booked" || booking.status === "Confirmed") && booking.computedCancellation && booking.computedCancellation.canCancel) { %>
+                    <button type="button" class="btn btn-outline-danger w-100 py-2 fw-bold text-uppercase" style="letter-spacing: 1px; border-radius: 8px;"
+                      data-bs-toggle="modal" data-bs-target="#cancelModal"
+                      data-booking-id="<%= booking._id %>"
+                      data-property-name="<%= booking.listing.title %>"
+                      data-booking-amount="₹<%= grandTotal.toLocaleString('en-IN') %>"
+                      data-refund-amount="₹<%= booking.computedCancellation.refundAmount.toLocaleString('en-IN') %>"
+                      data-refund-percentage="<%= booking.computedCancellation.refundPercentage %>%"
+                      data-deduction="₹<%= booking.computedCancellation.deductionAmount.toLocaleString('en-IN') %>"
+                      data-policy="<%= booking.computedCancellation.cancellationMessage %>"
+                      >
                       Cancel Trip
                     </button>
-                  </form>
+                <% } else if ((booking.status === "Booked" || booking.status === "Confirmed") && booking.computedCancellation && !booking.computedCancellation.canCancel) { %>
+                    <button type="button" class="btn btn-secondary w-100 py-2 fw-bold text-uppercase" style="letter-spacing: 1px; border-radius: 8px;" disabled>
+                      Stay In Progress
+                    </button>
                 <% } %>
               </div>
 
@@ -238,3 +246,114 @@
     </div>
   <% } %>
 </div>
+
+<!-- Cancellation Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-header bg-danger text-white border-0 rounded-top-4">
+        <h5 class="modal-title fw-bold" id="cancelModalLabel"><i class="fa-solid fa-triangle-exclamation me-2"></i>Cancel Booking</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="cancelForm" method="POST" action="">
+        <div class="modal-body p-4">
+          <h5 class="fw-bold mb-3" id="modalPropertyName">Property Name</h5>
+          
+          <div class="bg-light p-3 rounded-3 mb-3 border">
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Booking Amount:</span>
+              <span class="fw-bold" id="modalBookingAmount">₹0</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Cancellation Date:</span>
+              <span class="fw-bold"><%= new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
+            </div>
+            <div class="d-flex justify-content-between mb-2 text-danger">
+              <span class="text-muted">Deduction:</span>
+              <span class="fw-bold" id="modalDeduction">₹0</span>
+            </div>
+            <hr class="my-2">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-muted">Refund Amount <span id="modalRefundPercentage" class="badge bg-success ms-1">100%</span></span>
+              <span class="fw-bold fs-5 text-success" id="modalRefundAmount">₹0</span>
+            </div>
+          </div>
+
+          <div class="alert alert-warning py-2 px-3" style="font-size: 0.85rem;">
+            <strong>Policy Applied:</strong> <span id="modalPolicyMessage"></span>
+          </div>
+
+          <div class="mb-3">
+            <label for="cancellationReason" class="form-label fw-bold">Reason for Cancellation <span class="text-danger">*</span></label>
+            <select class="form-select" id="cancellationReason" name="cancellationReason" required>
+              <option value="" selected disabled>Select a reason...</option>
+              <option value="Changed my plans">Changed my plans</option>
+              <option value="Found a better property">Found a better property</option>
+              <option value="Booked by mistake">Booked by mistake</option>
+              <option value="Price is too high">Price is too high</option>
+              <option value="Travel issue">Travel issue</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-check mt-3">
+            <input class="form-check-input" type="checkbox" id="confirmCancelCheck">
+            <label class="form-check-label text-muted" for="confirmCancelCheck" style="font-size: 0.9rem;">
+              I understand this cancellation cannot be undone.
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer border-0 p-4 pt-0">
+          <button type="button" class="btn btn-light fw-bold" data-bs-dismiss="modal">Keep Booking</button>
+          <button type="submit" class="btn btn-danger fw-bold" id="confirmCancelBtn" disabled>Confirm Cancellation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cancelModal = document.getElementById('cancelModal');
+    if (cancelModal) {
+      cancelModal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget;
+        
+        const bookingId = button.getAttribute('data-booking-id');
+        const propertyName = button.getAttribute('data-property-name');
+        const bookingAmount = button.getAttribute('data-booking-amount');
+        const refundAmount = button.getAttribute('data-refund-amount');
+        const refundPercentage = button.getAttribute('data-refund-percentage');
+        const deduction = button.getAttribute('data-deduction');
+        const policy = button.getAttribute('data-policy');
+        
+        document.getElementById('cancelForm').action = \`/bookings/\${bookingId}/cancel?_method=PUT\`;
+        document.getElementById('modalPropertyName').textContent = propertyName;
+        document.getElementById('modalBookingAmount').textContent = bookingAmount;
+        document.getElementById('modalRefundAmount').textContent = refundAmount;
+        document.getElementById('modalRefundPercentage').textContent = refundPercentage;
+        document.getElementById('modalDeduction').textContent = deduction;
+        document.getElementById('modalPolicyMessage').textContent = policy;
+        
+        document.getElementById('cancellationReason').value = "";
+        document.getElementById('confirmCancelCheck').checked = false;
+        document.getElementById('confirmCancelBtn').disabled = true;
+      });
+
+      const reasonSelect = document.getElementById('cancellationReason');
+      const confirmCheck = document.getElementById('confirmCancelCheck');
+      const confirmBtn = document.getElementById('confirmCancelBtn');
+
+      function validateForm() {
+        if (reasonSelect.value !== "" && confirmCheck.checked) {
+          confirmBtn.disabled = false;
+        } else {
+          confirmBtn.disabled = true;
+        }
+      }
+
+      reasonSelect.addEventListener('change', validateForm);
+      confirmCheck.addEventListener('change', validateForm);
+    }
+  });
+</script>
