@@ -84,6 +84,30 @@ const bookingSchema = new Schema({
         default: 0,
     },
 
+    refundPercentage: {
+        type: Number,
+        default: 0,
+    },
+
+    deductionAmount: {
+        type: Number,
+        default: 0,
+    },
+
+    refundStatus: {
+        type: String,
+        enum: ["Pending", "Processing", "Refunded", "Not Applicable"],
+        default: "Pending",
+    },
+
+    cancellationReason: {
+        type: String,
+    },
+
+    cancellationMessage: {
+        type: String,
+    },
+
     cancellationDeadline: {
         type: Date,
     },

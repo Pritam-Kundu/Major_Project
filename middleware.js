@@ -16,15 +16,15 @@ module.exports.saveRedirectUrl = (req, res, next) => {
 }
 
 module.exports.isAdmin = (req, res, next) => {
-
-  if (!req.user || !req.user.isAdmin) {
-
-    req.flash("error", "Access Denied!");
-
+  if (!req.isAuthenticated()) {
+    req.session.redirectUrl = req.originalUrl;
+    req.flash("error", "Please login first.");
+    return res.redirect("/login");
+  }
+  if (!req.user.isAdmin) {
+    req.flash("error", "You are not authorized to access this page.");
     return res.redirect("/listings");
   }
-
   next();
-
 };
 

@@ -101,93 +101,48 @@
         </h3>
 
         <div class="table-responsive">
-
             <table class="table table-bordered table-hover align-middle">
-
-                <thead>
-
+                <thead class="table-light">
                     <tr>
-
                         <th>Guest</th>
-
                         <th>Property</th>
-
-                        <th>Check In</th>
-
-                        <th>Check Out</th>
-
-                        <th>Guests</th>
-
+                        <th>Dates</th>
                         <th>Total</th>
-
                         <th>Status</th>
-
+                        <th>Details</th>
                     </tr>
-
                 </thead>
-
                 <tbody>
-
-                    <% ownerBookings.forEach(booking=>{ %>
-
+                    <% ownerBookings.forEach(booking => { %>
                         <tr>
-
+                            <td class="fw-bold"><%= booking.user.username %></td>
+                            <td><%= booking.listing.title %></td>
                             <td>
-
-                                <%= booking.user.username %>
-
+                                <%= booking.checkIn.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) %> - 
+                                <%= booking.checkOut.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) %>
                             </td>
-
+                            <td>₹<%= booking.totalPrice.toLocaleString("en-IN") %></td>
                             <td>
-
-                                <%= booking.listing.title %>
-
-                            </td>
-
-                            <td>
-
-                                <%= booking.checkIn.toDateString() %>
-
-                            </td>
-
-                            <td>
-
-                                <%= booking.checkOut.toDateString() %>
-
-                            </td>
-
-                            <td>
-
-                                <%= booking.guests %>
-
-                            </td>
-
-                            <td>
-
-                                ₹<%= booking.totalPrice.toLocaleString("en-IN") %>
-
-                            </td>
-
-                            <td>
-
-                                <span class="badge <%= booking.status==='Booked'
-?'bg-success'
-:'bg-danger' %>">
-
+                                <span class="badge <%= (booking.status === 'Booked' || booking.status === 'Confirmed') ? 'bg-success' : 'bg-danger' %>">
                                     <%= booking.status %>
-
                                 </span>
-
                             </td>
-
+                            <td>
+                                <% if (booking.status === "Cancelled") { %>
+                                    <div class="d-flex flex-column" style="font-size: 0.85rem;">
+                                        <span class="text-danger fw-bold"><i class="fa-solid fa-ban me-1"></i> Cancelled By Guest</span>
+                                        <span class="text-muted">On: <%= booking.cancelledAt ? new Date(booking.cancelledAt).toLocaleDateString() : 'N/A' %></span>
+                                        <span class="text-muted">Reason: <em><%= booking.cancellationReason || 'N/A' %></em></span>
+                                        <span class="text-muted">Refund: <strong><%= booking.refundPercentage || 0 %>%</strong></span>
+                                    </div>
+                                <% } else { %>
+                                    <span class="text-muted" style="font-size: 0.85rem;">Guests: <%= booking.guests %></span>
+                                <% } %>
+                            </td>
                         </tr>
-
-                        <% }) %>
-
+                    <% }) %>
                 </tbody>
-
             </table>
-
         </div>
 
     </div>
