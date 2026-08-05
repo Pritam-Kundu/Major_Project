@@ -26,6 +26,21 @@ router.get(
   wrapAsync(userController.resendOTP)
 );
 
+router
+  .route("/forgot-password")
+  .get(userController.renderForgotPassword)
+  .post(wrapAsync(userController.sendResetOTP));
+
+router
+  .route("/verify-reset-otp")
+  .get(userController.renderVerifyResetOTP)
+  .post(wrapAsync(userController.verifyResetOTP));
+
+router
+  .route("/reset-password")
+  .get(userController.renderResetPassword)
+  .post(wrapAsync(userController.resetPassword));
+
 
 router
   .route("/login")

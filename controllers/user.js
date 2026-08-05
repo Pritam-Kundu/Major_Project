@@ -449,6 +449,228 @@ module.exports.addToCollection = async (req, res) => {
   res.redirect("/wishlist");
 };
 
+module.exports.renderForgotPassword = (req, res) => {
+
+  res.render("users/forgotPassword");
+
+};
+
+module.exports.renderResetPassword = (req, res) => {
+
+    if (!req.session.resetVerified) {
+
+        req.flash("error", "Verify OTP first.");
+
+        return res.redirect("/forgot-password");
+
+    }
+
+    res.render("users/resetPassword");
+
+};
+
+module.exports.resetPassword = async (req, res) => {
+
+  try {
+
+    if (!req.session.resetVerified) {
+
+      req.flash("error", "Unauthorized request.");
+
+      return res.redirect("/forgot-password");
+
+    }
+
+    const {
+
+      password,
+
+      confirmPassword
+
+    } = req.body;
+
+    if (password !== confirmPassword) {
+
+      req.flash("error", "Passwords do not match.");
+
+      return res.redirect("/reset-password");
+
+    }
+
+    const user = await User.findOne({
+
+      email: req.session.resetEmail
+
+    });
+
+    if (!user) {
+
+      req.flash("error", "User not found.");
+
+      return res.redirect("/forgot-password");
+
+    }
+
+    if (
+
+      !validator.isStrongPassword(password, {
+
+        minLength: 8,
+
+        minUppercase: 1,
+
+        minLowercase: 1,
+
+        minNumbers: 1,
+
+        minSymbols: 1
+
+      })
+
+    ) {
+
+      req.flash(
+
+        "error",
+
+        "Password must contain uppercase, lowercase, number and special character."
+
+      );
+
+      return res.redirect("/reset-password");
+
+    }
+
+    await user.setPassword(password);
+
+    await user.save();
+
+    delete req.session.resetOTP;
+
+    delete req.session.resetOTPExpiry;
+
+    delete req.session.resetEmail;
+
+    delete req.session.resetVerified;
+
+    req.flash(
+
+      "success",
+
+      "Password updated successfully. Please login."
+
+    );
+
+    res.redirect("/login");
+
+  }
+
+  catch (err) {
+
+    console.log(err);
+
+    req.flash(
+
+      "error",
+
+      "Unable to reset password."
+
+    );
+
+    res.redirect("/forgot-password");
+
+  }
+
+}
+
+module.exports.sendResetOTP = async (req, res) => {
+
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+
+    req.flash("error", "No account found with this email.");
+
+    return res.redirect("/forgot-password");
+
+  }
+
+  const otp = Math.floor(
+
+    100000 + Math.random() * 900000
+
+  ).toString();
+
+  req.session.resetOTP = otp;
+
+  req.session.resetEmail = email;
+
+  req.session.resetOTPExpiry = Date.now() + 300000;
+
+  await sendOTP(email, otp);
+
+  req.flash(
+
+    "success",
+
+    "OTP sent successfully."
+
+  );
+
+  res.redirect("/verify-reset-otp");
+
+}
+
+module.exports.renderVerifyResetOTP = (req, res) => {
+
+  if (!req.session.resetEmail) {
+
+    req.flash("error", "Please request a password reset first.");
+
+    return res.redirect("/forgot-password");
+
+  }
+
+  res.render("users/verifyResetOTP");
+
+};
+
+module.exports.verifyResetOTP = async (req, res) => {
+
+  const { otp } = req.body;
+
+  if (!req.session.resetOTP) {
+
+    req.flash("error", "OTP expired.");
+
+    return res.redirect("/forgot-password");
+
+  }
+
+  if (Date.now() > req.session.resetOTPExpiry) {
+
+    req.flash("error", "OTP has expired.");
+
+    return res.redirect("/forgot-password");
+
+  }
+
+  if (otp !== req.session.resetOTP) {
+
+    req.flash("error", "Incorrect OTP.");
+
+    return res.redirect("/verify-reset-otp");
+
+  }
+
+  req.session.resetVerified = true;
+
+  res.redirect("/reset-password");
+
+};
+
 module.exports.removeFromCollection = async (req, res) => {
   const { collectionId, listingId } = req.params;
   const user = await User.findById(req.user._id);

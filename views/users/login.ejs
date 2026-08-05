@@ -212,6 +212,22 @@
     .was-validated .form-control:invalid~.invalid-feedback {
       display: block;
     }
+
+    .forgot-link {
+
+      color: #2f80ed;
+
+      transition: .3s;
+
+    }
+
+    .forgot-link:hover {
+
+      color: #0d6efd;
+
+      text-decoration: underline !important;
+
+    }
   </style>
 
   <div class="auth-split-container">
@@ -265,7 +281,8 @@
 
         <div class="auth-label-row">
           <label for="password" class="auth-label">Password</label>
-          <a href="#" class="auth-forgot-link">Forgot Password?</a>
+          <a href="/forgot-password" class="text-decoration-none fw-semibold forgot-link auth-forgot-link">Forgot
+            Password?</a>
         </div>
         <input type="password" name="password" id="password" class="auth-input form-control"
           placeholder="Enter your password" autocomplete="current-password" required />
