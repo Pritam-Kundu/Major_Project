@@ -146,7 +146,11 @@ module.exports.signup = async (req, res) => {
 
   try {
 
-    const { username, email, password } = req.body;
+    let { username, email, password } = req.body;
+
+    // Clean up inputs by trimming unnecessary spaces
+    username = username ? username.trim() : "";
+    email = email ? email.trim() : "";
 
     // Email Validation
     if (!validator.isEmail(email)) {
@@ -189,9 +193,8 @@ module.exports.signup = async (req, res) => {
 
     }
 
-    // Already Exists
-
-    const existingUser = await User.findOne({ email });
+    // Already Exists (Case-insensitive check to prevent duplicate emails with different cases)
+    const existingUser = await User.findOne({ email: new RegExp('^' + email + '$', 'i') });
 
     if (existingUser) {
 
@@ -585,9 +588,17 @@ module.exports.resetPassword = async (req, res) => {
 
 module.exports.sendResetOTP = async (req, res) => {
 
-  const { email } = req.body;
+  let { email } = req.body;
 
-  const user = await User.findOne({ email });
+  if (!email) {
+    req.flash("error", "Email is required.");
+    return res.redirect("/forgot-password");
+  }
+
+  email = email.trim();
+
+  // Perform case-insensitive search to find the user
+  const user = await User.findOne({ email: new RegExp('^' + email + '$', 'i') });
 
   if (!user) {
 
@@ -605,7 +616,7 @@ module.exports.sendResetOTP = async (req, res) => {
 
   req.session.resetOTP = otp;
 
-  req.session.resetEmail = email;
+  req.session.resetEmail = user.email; // Store the exact email from DB for consistency
 
   req.session.resetOTPExpiry = Date.now() + 300000;
 
@@ -742,9 +753,19 @@ module.exports.firebaseLogin = async (req, res, next) => {
 
 module.exports.loginWithEmail = async (req, res, next) => {
 
-  const { email } = req.body;
+  // The login form submits the email in the 'username' field, so we extract it from there
+  // We also check req.body.email just in case another form submits it differently
+  let emailInput = req.body.username || req.body.email;
 
-  const user = await User.findOne({ email });
+  if (!emailInput) {
+    req.flash("error", "Email is required.");
+    return res.redirect("/login");
+  }
+
+  emailInput = emailInput.trim();
+
+  // Perform a case-insensitive search to find the correct user regardless of how they type their email
+  const user = await User.findOne({ email: new RegExp('^' + emailInput + '$', 'i') });
 
   if (!user) {
 

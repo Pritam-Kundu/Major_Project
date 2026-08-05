@@ -141,44 +141,4 @@ if (password && confirmPassword && strengthBar) {
     });
 
 }
-
-if (togglePassword) {
-
-    togglePassword.addEventListener("click", () => {
-
-        const type =
-            password.type === "password"
-                ? "text"
-                : "password";
-
-        password.type = type;
-
-        togglePassword.classList.toggle("fa-eye");
-
-        togglePassword.classList.toggle("fa-eye-slash");
-
-    });
-
-}
-
-const toggleConfirmPassword =
-    document.getElementById("toggleConfirmPassword");
-
-if (toggleConfirmPassword) {
-
-    toggleConfirmPassword.addEventListener("click", () => {
-
-        const type =
-            confirmPassword.type === "password"
-                ? "text"
-                : "password";
-
-        confirmPassword.type = type;
-
-        toggleConfirmPassword.classList.toggle("fa-eye");
-
-        toggleConfirmPassword.classList.toggle("fa-eye-slash");
-
-    });
-
-}
+

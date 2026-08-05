@@ -30,7 +30,7 @@ const listingSchema = new Schema({
     },
     category: {
         type: String,
-        enum: ["Beaches", "Mountains", "Forests", "Castles", "Pools", "Campings", "Farms", "Arctic", "House Boats", "Domes"]
+        enum: ["Trending", "Unique", "Beaches", "Mountains", "Forests", "Castles", "Pools", "Campings", "Farms", "Arctic", "House Boats", "Domes"]
     },
     latitude: Number,
     longitude: Number,
