@@ -2044,20 +2044,9 @@
                   const maxInput = document.getElementById("sidebarPriceMax");
 
                   function applyFilter() {
-
                     const min = minInput.value.trim();
-
                     const max = maxInput.value.trim();
-
-                    if (
-                      min !== "" ||
-                      max !== ""
-                    ) {
-
-                      filterForm.submit();
-
-                    }
-
+                    filterForm.submit();
                   }
 
                   minInput.addEventListener("change", applyFilter);

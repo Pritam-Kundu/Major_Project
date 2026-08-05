@@ -228,6 +228,21 @@
       text-decoration: underline !important;
 
     }
+
+    .password-toggle {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #666;
+      transition: color .2s;
+      z-index: 10;
+    }
+
+    .password-toggle:hover {
+      color: #000;
+    }
   </style>
 
   <div class="auth-split-container">
@@ -284,8 +299,11 @@
           <a href="/forgot-password" class="text-decoration-none fw-semibold forgot-link auth-forgot-link">Forgot
             Password?</a>
         </div>
-        <input type="password" name="password" id="password" class="auth-input form-control"
-          placeholder="Enter your password" autocomplete="current-password" required />
+        <div class="position-relative mb-3">
+          <input type="password" name="password" id="password" class="auth-input form-control pe-5"
+            placeholder="Enter your password" autocomplete="current-password" required style="margin-bottom: 0;" />
+          <i class="fa-solid fa-eye password-toggle"></i>
+        </div>
         <div class="invalid-feedback">Please enter your password.</div>
 
         <button type="submit" class="auth-btn-dark">
@@ -316,6 +334,7 @@
 
   <script type="module" src="/js/firebase.js"></script>
   <script type="module" src="/js/googleAuth.js"></script>
+  <script src="/js/passwordToggle.js"></script>
 
 
   <script>

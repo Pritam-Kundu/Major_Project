@@ -142,7 +142,7 @@ module.exports.index = async (req, res) => {
   res.render("listings/index.ejs", { 
     listings, 
     searchParams: req.query,
-    selectedCategory: req.query.category || 'Trending',
+    selectedCategory: req.query.category,
     recentlyViewedListings 
   });
 };
@@ -173,7 +173,7 @@ module.exports.searchPage = async (req, res) => {
     totalCount,
     currentPage: page,
     totalPages,
-    selectedCategory: req.query.category || 'Trending'
+    selectedCategory: req.query.category
   });
 };
 
