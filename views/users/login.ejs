@@ -250,10 +250,15 @@
       <form action="/login" method="post" novalidate class="needs-validation">
 
         <div class="auth-label-row">
-          <label for="username" class="auth-label">Email address</label>
+          <label for="username" class="auth-label">Email Address</label>
         </div>
 
-        <input type="email" class="auth-input form-control" name="email" placeholder="Enter your email" required>
+        <input type="email" id="username" name="username" class="auth-input form-control" placeholder="Enter your email"
+          autocomplete="email" required>
+
+        <div class="invalid-feedback">
+          Please enter a valid email address.
+        </div>
 
         <!-- <div class="invalid-feedback">Please enter your username.</div> -->
 
@@ -262,7 +267,8 @@
           <label for="password" class="auth-label">Password</label>
           <a href="#" class="auth-forgot-link">Forgot Password?</a>
         </div>
-        <input type="password" name="password" id="password" class="auth-input form-control" required />
+        <input type="password" name="password" id="password" class="auth-input form-control"
+          placeholder="Enter your password" autocomplete="current-password" required />
         <div class="invalid-feedback">Please enter your password.</div>
 
         <button type="submit" class="auth-btn-dark">
@@ -293,3 +299,51 @@
 
   <script type="module" src="/js/firebase.js"></script>
   <script type="module" src="/js/googleAuth.js"></script>
+
+
+  <script>
+    (() => {
+      'use strict';
+
+      const form = document.querySelector('.needs-validation');
+      const email = document.getElementById('username');
+      const password = document.getElementById('password');
+
+      form.addEventListener('submit', function (event) {
+
+        // Remove previous validation classes
+        email.classList.remove('is-valid', 'is-invalid');
+        password.classList.remove('is-valid', 'is-invalid');
+
+        let isValid = true;
+
+        // Email validation
+        if (!email.checkValidity()) {
+          email.classList.add('is-invalid');
+          isValid = false;
+        }
+
+        // Password validation
+        if (password.value.trim() === "") {
+          password.classList.add('is-invalid');
+          isValid = false;
+        }
+
+        // ⭐ Important part
+        // If email is invalid, password should also appear invalid
+        if (!email.checkValidity()) {
+          password.classList.add('is-invalid');
+        }
+
+        if (!isValid) {
+          event.preventDefault();
+          event.stopPropagation();
+        } else {
+          email.classList.add('is-valid');
+          password.classList.add('is-valid');
+        }
+
+      });
+
+    })();
+  </script>

@@ -4,78 +4,254 @@ const Booking = require("../models/booking.js");
 const Review = require("../models/review.js");
 const { createNotification } = require("./notification");
 const validator = require("validator");
+const sendOTP = require("../utils/sendOTP.js");
 
 module.exports.renderSignUpForm = (req, res) => {
   return res.render("users/signup.ejs");
 }
 
+module.exports.renderOTPPage = (req, res) => {
 
-module.exports.signup = async (req, res, next) => {
+  if (!req.session.pendingUser) {
+
+    req.flash("error", "Please sign up first.");
+
+    return res.redirect("/signup");
+
+  }
+
+  res.render("users/verifyOTP");
+
+};
+
+module.exports.verifyOTP = async (req, res, next) => {
+
+  const { otp } = req.body;
+
+  if (!req.session.otp) {
+
+    req.flash("error", "OTP expired.");
+
+    return res.redirect("/signup");
+
+  }
+
+  if (Date.now() > req.session.otpExpiry) {
+
+    req.flash("error", "OTP has expired.");
+
+    return res.redirect("/signup");
+
+  }
+
+  if (otp !== req.session.otp) {
+
+    req.flash("error", "Incorrect OTP.");
+
+    return res.redirect("/verify-otp");
+
+  }
+
+  const {
+
+    username,
+
+    email,
+
+    password
+
+  } = req.session.pendingUser;
+
+  const newUser = new User({
+
+    username,
+
+    email
+
+  });
+
+  const registeredUser = await User.register(
+
+    newUser,
+
+    password
+
+  );
+
+  delete req.session.pendingUser;
+
+  delete req.session.otp;
+
+  delete req.session.otpExpiry;
+
+  req.login(registeredUser, async (err) => {
+
+    if (err) {
+
+      return next(err);
+
+    }
+
+    req.flash(
+
+      "success",
+
+      "Email verified successfully."
+
+    );
+
+    return res.redirect("/listings");
+
+  });
+
+};
+
+module.exports.resendOTP = async (req, res) => {
+
+  if (!req.session.pendingUser) {
+
+    req.flash("error", "Signup again.");
+
+    return res.redirect("/signup");
+
+  }
+
+  const otp = Math.floor(
+
+    100000 + Math.random() * 900000
+
+  ).toString();
+
+  req.session.otp = otp;
+
+  req.session.otpExpiry = Date.now() + 300000;
+
+  await sendOTP(
+
+    req.session.pendingUser.email,
+
+    otp
+
+  );
+
+  req.flash("success", "OTP resent.");
+
+  res.redirect("/verify-otp");
+
+}
+
+
+
+module.exports.signup = async (req, res) => {
+
   try {
-    let { username, email, password } = req.body;
-    const newUser = new User({ email, username });
 
+    const { username, email, password } = req.body;
+
+    // Email Validation
     if (!validator.isEmail(email)) {
 
       req.flash("error", "Please enter a valid email.");
 
       return res.redirect("/signup");
+
     }
 
+    // Password Validation
+
     if (
+
       !validator.isStrongPassword(password, {
+
         minLength: 8,
+
         minLowercase: 1,
+
         minUppercase: 1,
+
         minNumbers: 1,
+
         minSymbols: 1,
+
       })
+
     ) {
 
       req.flash(
+
         "error",
+
         "Password must contain uppercase, lowercase, number and special character."
+
       );
 
       return res.redirect("/signup");
+
     }
+
+    // Already Exists
 
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
 
-      req.flash(
-        "error",
-        "Email is already registered."
-      );
+      req.flash("error", "Email already registered.");
 
       return res.redirect("/signup");
+
     }
 
-    const registeredUser = await User.register(newUser, password);
-    console.log(registeredUser);
-    req.login(registeredUser, async (err) => {            //after signup automatically login functionality 
-      if (err) {
-        next(err)
-      }
+    // Generate OTP
 
-      // Trigger Notification
-      await createNotification(
-        registeredUser._id,
-        'general',
-        'Welcome to Homigo!',
-        `Hi ${username}, your account has been successfully created.`,
-        `/account`
-      );
+    const otp = Math.floor(
 
-      req.flash("success", "Welcome to Homigo");
-      return res.redirect("/listings");
-    })
-  } catch (e) {
-    req.flash("error", e.message);
-    return res.redirect("/signup");
+      100000 + Math.random() * 900000
+
+    ).toString();
+
+    // Store in Session
+
+    req.session.pendingUser = {
+
+      username,
+
+      email,
+
+      password
+
+    };
+
+    req.session.otp = otp;
+
+    req.session.otpExpiry = Date.now() + 5 * 60 * 1000;
+
+    // Send OTP
+
+    await sendOTP(email, otp);
+
+    req.flash(
+
+      "success",
+
+      "OTP sent successfully."
+
+    );
+
+    return res.redirect("/verify-otp");
+
   }
-}
+
+  catch (err) {
+
+    console.log(err);
+
+    req.flash("error", "Unable to send OTP.");
+
+    return res.redirect("/signup");
+
+  }
+
+};
 
 
 module.exports.renderLoginForm = (req, res) => {

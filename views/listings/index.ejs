@@ -693,10 +693,19 @@
 
       /* Promo Banner */
       @keyframes gradientBGPromo {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+        0% {
+          background-position: 0% 50%;
+        }
+
+        50% {
+          background-position: 100% 50%;
+        }
+
+        100% {
+          background-position: 0% 50%;
+        }
       }
+
       .promo-banner {
         background: linear-gradient(135deg, #1a2a6c, #11998e, #38ef7d);
         background-size: 200% 200%;
@@ -711,29 +720,35 @@
         position: relative;
         overflow: hidden;
       }
+
       .promo-banner::before {
         content: '';
         position: absolute;
-        top: -50%; left: -50%;
-        width: 200%; height: 200%;
-        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
         transform: rotate(30deg);
       }
+
       .promo-banner h3 {
         font-family: 'Playfair Display', serif;
         font-weight: 800;
         font-size: 2.2rem;
         margin-bottom: 0.5rem;
-        text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        text-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         position: relative;
         z-index: 2;
       }
+
       .promo-banner p {
         position: relative;
         z-index: 2;
         font-size: 1.1rem;
         opacity: 0.9;
       }
+
       .promo-btn {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
@@ -747,6 +762,7 @@
         z-index: 2;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
       }
+
       .promo-btn:hover {
         background: #ffffff;
         color: #11998e;
@@ -1096,28 +1112,34 @@
         display: flex;
         flex-direction: column;
       }
+
       #listings-grid.list-view-active .col {
         flex: 0 0 100% !important;
         max-width: 100% !important;
         width: 100% !important;
       }
+
       #listings-grid.list-view-active .booking-card {
         flex-direction: row;
         align-items: stretch;
       }
+
       #listings-grid.list-view-active .booking-card-img-container {
         width: 320px;
         height: auto;
         min-height: 220px;
         flex-shrink: 0;
       }
+
       #listings-grid.list-view-active .booking-card-body {
         padding: 1.5rem;
       }
+
       @media(max-width: 768px) {
         #listings-grid.list-view-active .booking-card {
           flex-direction: column;
         }
+
         #listings-grid.list-view-active .booking-card-img-container {
           width: 100%;
           height: 240px;
@@ -1273,18 +1295,18 @@
               searchForm.addEventListener('submit', (e) => {
                 const checkInVal = document.getElementById('agodaCheckIn').value;
                 const checkOutVal = document.getElementById('agodaCheckOut').value;
-                
+
                 if (checkInVal && checkOutVal) {
                   const checkInDate = new Date(checkInVal);
                   const checkOutDate = new Date(checkOutVal);
-                  
+
                   if (checkInDate > checkOutDate) {
                     e.preventDefault(); // Stop form submission
-                    
+
                     // Remove existing client error toast if present to prevent duplicates
                     const existingToast = document.getElementById('clientErrorToast');
                     if (existingToast) existingToast.remove();
-                    
+
                     // Inject a custom error toast matching the application's design
                     const toastHtml = `
                       <div class="custom-toast error" id="clientErrorToast">
@@ -1303,17 +1325,17 @@
                               </svg>
                           </button>
                       </div>`;
-                    
+
                     document.body.insertAdjacentHTML('beforeend', toastHtml);
-                    
+
                     // Auto-dismiss after 6 seconds
                     setTimeout(() => {
-                        if (typeof closeToast === 'function') {
-                            closeToast('clientErrorToast');
-                        } else {
-                            const t = document.getElementById('clientErrorToast');
-                            if(t) t.remove();
-                        }
+                      if (typeof closeToast === 'function') {
+                        closeToast('clientErrorToast');
+                      } else {
+                        const t = document.getElementById('clientErrorToast');
+                        if (t) t.remove();
+                      }
                     }, 6000);
                   }
                 }
@@ -1329,527 +1351,591 @@
       %>
 
       <% if (!isSearchActive) { %>
-        <% if(currUser && typeof recentlyViewedListings !== 'undefined' && recentlyViewedListings.length > 0) { %>
-        <style>
-          .continue-search-section {
-            max-width: 1300px;
-            margin: 4rem auto;
-            padding: 0 20px;
-          }
-          .cs-header {
-            margin-bottom: 1.5rem;
-          }
-          .cs-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 0.25rem;
-          }
-          .cs-subtitle {
-            font-size: 1rem;
-            color: #666;
-            margin-bottom: 0;
-          }
-          .cs-scroll-container {
-            display: flex;
-            gap: 1.25rem;
-            overflow-x: auto;
-            padding-bottom: 1rem;
-            scroll-behavior: smooth;
-          }
-          .cs-scroll-container::-webkit-scrollbar {
-            height: 8px;
-          }
-          .cs-scroll-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-          }
-          .cs-scroll-container::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 4px;
-          }
-          .cs-scroll-container::-webkit-scrollbar-thumb:hover {
-            background: #aaa;
-          }
-          .cs-card {
-            min-width: 280px;
-            flex: 0 0 auto;
-            display: flex;
-            background: #fff;
-            border-radius: 12px;
-            border: 1px solid #e0e0e0;
-            text-decoration: none;
-            color: inherit;
-            transition: transform 0.2s, box-shadow 0.2s;
-            overflow: hidden;
-            height: 110px;
-          }
-          .cs-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-          }
-          .cs-img {
-            width: 110px;
-            height: 100%;
-            object-fit: cover;
-          }
-          .cs-body {
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            flex: 1;
-            overflow: hidden;
-          }
-          .cs-title-text {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #1a1a1a;
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-          .cs-loc {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 4px;
-          }
-          .cs-price {
-            font-weight: 600;
-            color: #0071c2;
-            font-size: 0.95rem;
-          }
-        </style>
+        <% if(currUser && typeof recentlyViewedListings !=='undefined' && recentlyViewedListings.length> 0) { %>
+          <style>
+            .continue-search-section {
+              max-width: 1300px;
+              margin: 4rem auto;
+              padding: 0 20px;
+            }
 
-        <div class="continue-search-section">
-          <div class="cs-header">
-            <h2 class="cs-title">Continue Your Search</h2>
-            <p class="cs-subtitle">Pick up where you left off.</p>
-          </div>
-          <div class="cs-scroll-container">
-            <% for(let item of recentlyViewedListings) { 
-                let rv = item.listing;
-                if(!rv) continue;
-            %>
-            <a href="/listings/<%= rv._id %>" class="cs-card">
-              <img src="<%= (rv.image && rv.image.url) ? rv.image.url : (typeof rv.image === 'string' ? rv.image : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80') %>" class="cs-img" alt="<%= rv.title %>">
-              <div class="cs-body">
-                <div class="cs-title-text"><%= rv.title %></div>
-                <div class="cs-loc"><%= rv.location %>, <%= rv.country %></div>
-                <div class="cs-price">&#8377;<%= rv.price.toLocaleString("en-IN") %></div>
-              </div>
-            </a>
-            <% } %>
-          </div>
-        </div>
-        <% } %>
+            .cs-header {
+              margin-bottom: 1.5rem;
+            }
 
-        <div class="promo-banner mt-5 mb-5 mx-auto" style="max-width: 1300px; width: 95%; margin-top: 60px !important; margin-bottom: 60px !important;">
-          <div>
-            <h3>Save 15% on your next getaway</h3>
-            <p class="mb-0">Book your dream stay before the month ends and get an exclusive discount.</p>
-          </div>
-          <a href="/offers" class="promo-btn">Explore Deals <i class="fa-solid fa-arrow-right ms-2"></i></a>
-        </div>
-        <div class="dashboard-container" style="margin-top: 60px; margin-bottom: 60px;">
-          <!-- Handpicked Collections -->
-          <div class="handpicked-section">
-            <h3>Handpicked Collections</h3>
-            <div class="handpicked-grid">
-              <% if (listings && listings.length>= 5) { %>
-                <% for(let i=0; i<5; i++) { let l=listings[i]; let idStr=l._id.toString(); let ratingScore=(8 +
-                  (idStr.charCodeAt(1) % 20) / 10).toFixed(1); let imageUrl=(l.image && l.image.url) ? l.image.url :
-                  (typeof l.image==='string' ? l.image
-                  : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80' ); %>
-                  <a href="/listings/<%= l._id %>" class="hp-card">
-                    <img src="<%= imageUrl %>" alt="<%= l.title %>"
-                      onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80';">
-                    <div class="hp-overlay">
-                      <div class="hp-title">
-                        <%= l.title %>
-                      </div>
-                      <div class="hp-rating"><i class="fa-solid fa-star"></i>
-                        <%= ratingScore %>
-                      </div>
+            .cs-title {
+              font-size: 1.75rem;
+              font-weight: 700;
+              color: #1a1a1a;
+              margin-bottom: 0.25rem;
+            }
+
+            .cs-subtitle {
+              font-size: 1rem;
+              color: #666;
+              margin-bottom: 0;
+            }
+
+            .cs-scroll-container {
+              display: flex;
+              gap: 1.25rem;
+              overflow-x: auto;
+              padding-bottom: 1rem;
+              scroll-behavior: smooth;
+            }
+
+            .cs-scroll-container::-webkit-scrollbar {
+              height: 8px;
+            }
+
+            .cs-scroll-container::-webkit-scrollbar-track {
+              background: #f1f1f1;
+              border-radius: 4px;
+            }
+
+            .cs-scroll-container::-webkit-scrollbar-thumb {
+              background: #ccc;
+              border-radius: 4px;
+            }
+
+            .cs-scroll-container::-webkit-scrollbar-thumb:hover {
+              background: #aaa;
+            }
+
+            .cs-card {
+              min-width: 280px;
+              flex: 0 0 auto;
+              display: flex;
+              background: #fff;
+              border-radius: 12px;
+              border: 1px solid #e0e0e0;
+              text-decoration: none;
+              color: inherit;
+              transition: transform 0.2s, box-shadow 0.2s;
+              overflow: hidden;
+              height: 110px;
+            }
+
+            .cs-card:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+
+            .cs-img {
+              width: 110px;
+              height: 100%;
+              object-fit: cover;
+            }
+
+            .cs-body {
+              padding: 12px;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              flex: 1;
+              overflow: hidden;
+            }
+
+            .cs-title-text {
+              font-weight: 700;
+              font-size: 1rem;
+              color: #1a1a1a;
+              margin-bottom: 4px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+
+            .cs-loc {
+              font-size: 0.85rem;
+              color: #666;
+              margin-bottom: 4px;
+            }
+
+            .cs-price {
+              font-weight: 600;
+              color: #0071c2;
+              font-size: 0.95rem;
+            }
+          </style>
+
+          <div class="continue-search-section">
+            <div class="cs-header">
+              <h2 class="cs-title">Continue Your Search</h2>
+              <p class="cs-subtitle">Pick up where you left off.</p>
+            </div>
+            <div class="cs-scroll-container">
+              <% for(let item of recentlyViewedListings) { let rv=item.listing; if(!rv) continue; %>
+                <a href="/listings/<%= rv._id %>" class="cs-card">
+                  <img
+                    src="<%= (rv.image && rv.image.url) ? rv.image.url : (typeof rv.image === 'string' ? rv.image : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80') %>"
+                    class="cs-img" alt="<%= rv.title %>">
+                  <div class="cs-body">
+                    <div class="cs-title-text">
+                      <%= rv.title %>
                     </div>
-                  </a>
-                  <% } %>
-                    <% } %>
+                    <div class="cs-loc">
+                      <%= rv.location %>, <%= rv.country %>
+                    </div>
+                    <div class="cs-price">&#8377;<%= rv.price.toLocaleString("en-IN") %>
+                    </div>
+                  </div>
+                </a>
+                <% } %>
             </div>
           </div>
+          <% } %>
 
-          <!-- Right Column -->
-          <div class="right-dashboard">
-            <!-- Global Explorer -->
-            <div class="global-explorer">
-              <div class="ge-content">
-                <h3>Global Explorer</h3>
-                <p>Interactive map (preview regions).</p>
-                <button class="ge-btn">Explore Map</button>
+            <div class="promo-banner mt-5 mb-5 mx-auto"
+              style="max-width: 1300px; width: 95%; margin-top: 60px !important; margin-bottom: 60px !important;">
+              <div>
+                <h3>Save 15% on your next getaway</h3>
+                <p class="mb-0">Book your dream stay before the month ends and get an exclusive discount.</p>
               </div>
-              <img src="/images/global_map.png" alt="World Map" class="ge-map-bg">
+              <a href="/offers" class="promo-btn">Explore Deals <i class="fa-solid fa-arrow-right ms-2"></i></a>
             </div>
-
-            <!-- Trending Now -->
-            <div class="trending-now">
-              <h3>Trending Now</h3>
-              <div class="trending-scroll">
-                <% if (listings && listings.length> 5) { %>
-                  <% let maxTrending=Math.min(listings.length, 25); %>
-                    <% for(let i=5; i<maxTrending; i++) { let l=listings[i]; let idStr=l._id.toString(); let
-                      ratingScore=(8 + (idStr.charCodeAt(1) % 20) / 10).toFixed(1); let imageUrl=(l.image &&
-                      l.image.url) ? l.image.url : (typeof l.image==='string' ? l.image
+            <div class="dashboard-container" style="margin-top: 60px; margin-bottom: 60px;">
+              <!-- Handpicked Collections -->
+              <div class="handpicked-section">
+                <h3>Handpicked Collections</h3>
+                <div class="handpicked-grid">
+                  <% if (listings && listings.length>= 5) { %>
+                    <% for(let i=0; i<5; i++) { let l=listings[i]; let idStr=l._id.toString(); let ratingScore=(8 +
+                      (idStr.charCodeAt(1) % 20) / 10).toFixed(1); let imageUrl=(l.image && l.image.url) ? l.image.url :
+                      (typeof l.image==='string' ? l.image
                       : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80'
                       ); %>
-                      <a href="/listings/<%= l._id %>" class="tn-card">
+                      <a href="/listings/<%= l._id %>" class="hp-card">
                         <img src="<%= imageUrl %>" alt="<%= l.title %>"
                           onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80';">
-                        <div class="tn-overlay">
-                          <div class="tn-title">
+                        <div class="hp-overlay">
+                          <div class="hp-title">
                             <%= l.title %>
                           </div>
-                          <div class="tn-price-rating">
-                            <span class="tn-price">&#8377;<%= l.price.toLocaleString("en-IN") %> /avg</span>
-                            <span class="tn-rating"><i class="fa-solid fa-star"></i>
-                              <%= ratingScore %>
-                            </span>
+                          <div class="hp-rating"><i class="fa-solid fa-star"></i>
+                            <%= ratingScore %>
                           </div>
                         </div>
                       </a>
                       <% } %>
                         <% } %>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <% } %>
 
-          <div class="row mt-4">
-            <!-- Sidebar Filters -->
-            <div class="col-lg-3 d-none d-lg-block">
-              <form class="sidebar-filter sticky-top" style="top: 20px; z-index: 1;" action="/listings/search" method="GET" id="filterForm">
-                <% if(typeof searchParams !=='undefined' && searchParams) { %>
-                  <% for(let key in searchParams) { %>
-                    <% if(!['category', 'stars', 'rating', 'amenity', 'priceMin', 'priceMax', 'page'].includes(key)) { %>
-                      <input type="hidden" name="<%= key %>" value="<%= searchParams[key] %>">
-                    <% } %>
-                  <% } %>
-                <% } %>
-
-                <div class="filter-section">
-                  <h4 class="filter-title">Property Type</h4>
-                  <% const sidebarTypes=["Trending", "Beaches" , "Mountains" , "Forests" , "Castles" , "Pools"
-                    , "Campings" , "Farms" , "Arctic" ]; %>
-                    <% for(let type of sidebarTypes) { %>
-                      <label class="custom-checkbox">
-                        <input type="checkbox" name="category" class="sidebar-chk" value="<%= type %>"
-                          <%= (typeof searchParams !== 'undefined' && searchParams && searchParams.category && (Array.isArray(searchParams.category) ? searchParams.category.includes(type) : searchParams.category === type)) || (!(typeof searchParams !== 'undefined' && searchParams && searchParams.category) && selectedCategory === type) ? 'checked' : '' %>>
-                        <div class="checkmark"></div>
-                        <span class="checkbox-label">
-                          <%= type %>
-                        </span>
-                      </label>
-                      <% } %>
+              <!-- Right Column -->
+              <div class="right-dashboard">
+                <!-- Global Explorer -->
+                <div class="global-explorer">
+                  <div class="ge-content">
+                    <h3>Global Explorer</h3>
+                    <p>Interactive map (preview regions).</p>
+                    <button class="ge-btn">Explore Map</button>
+                  </div>
+                  <img src="/images/global_map.png" alt="World Map" class="ge-map-bg">
                 </div>
 
-                <div class="filter-section">
-                  <h4 class="filter-title">Price Range</h4>
-                  <div class="price-inputs">
-                    <input type="number" name="priceMin" id="sidebarPriceMin" placeholder="Min ₹" min="0" value="<%= typeof searchParams !== 'undefined' && searchParams && searchParams.priceMin ? searchParams.priceMin : '' %>">
-                    <input type="number" name="priceMax" id="sidebarPriceMax" placeholder="Max ₹" min="0" value="<%= typeof searchParams !== 'undefined' && searchParams && searchParams.priceMax ? searchParams.priceMax : '' %>">
+                <!-- Trending Now -->
+                <div class="trending-now">
+                  <h3>Trending Now</h3>
+                  <div class="trending-scroll">
+                    <% if (listings && listings.length> 5) { %>
+                      <% let maxTrending=Math.min(listings.length, 25); %>
+                        <% for(let i=5; i<maxTrending; i++) { let l=listings[i]; let idStr=l._id.toString(); let
+                          ratingScore=(8 + (idStr.charCodeAt(1) % 20) / 10).toFixed(1); let imageUrl=(l.image &&
+                          l.image.url) ? l.image.url : (typeof l.image==='string' ? l.image
+                          : 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80'
+                          ); %>
+                          <a href="/listings/<%= l._id %>" class="tn-card">
+                            <img src="<%= imageUrl %>" alt="<%= l.title %>"
+                              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80';">
+                            <div class="tn-overlay">
+                              <div class="tn-title">
+                                <%= l.title %>
+                              </div>
+                              <div class="tn-price-rating">
+                                <span class="tn-price">&#8377;<%= l.price.toLocaleString("en-IN") %> /avg</span>
+                                <span class="tn-rating"><i class="fa-solid fa-star"></i>
+                                  <%= ratingScore %>
+                                </span>
+                              </div>
+                            </div>
+                          </a>
+                          <% } %>
+                            <% } %>
                   </div>
                 </div>
-
-                <div class="filter-section">
-                  <h4 class="filter-title">Star Rating</h4>
-                  <% const starChecks = [5, 4, 3]; %>
-                  <% for(let s of starChecks) { %>
-                  <label class="custom-checkbox">
-                    <input type="checkbox" name="stars" class="sidebar-chk" value="<%= s %>"
-                      <%= typeof searchParams !== 'undefined' && searchParams && searchParams.stars && (Array.isArray(searchParams.stars) ? searchParams.stars.includes(s.toString()) : searchParams.stars === s.toString()) ? 'checked' : '' %>>
-                    <div class="checkmark"></div>
-                    <span class="checkbox-label"><i class="fa-solid fa-star text-warning"></i> <%= s %> Stars</span>
-                  </label>
-                  <% } %>
-                </div>
-
-                <div class="filter-section">
-                  <h4 class="filter-title">Guest Rating</h4>
-                  <% const ratingChecks = [{val: 9, label: 'Superb: 9+'}, {val: 8, label: 'Fabulous: 8+'}, {val: 7, label: 'Very Good: 7+'}]; %>
-                  <% for(let r of ratingChecks) { %>
-                  <label class="custom-checkbox">
-                    <input type="checkbox" name="rating" class="sidebar-chk" value="<%= r.val %>"
-                      <%= typeof searchParams !== 'undefined' && searchParams && searchParams.rating && (Array.isArray(searchParams.rating) ? searchParams.rating.includes(r.val.toString()) : searchParams.rating === r.val.toString()) ? 'checked' : '' %>>
-                    <div class="checkmark"></div>
-                    <span class="checkbox-label"><%= r.label %></span>
-                  </label>
-                  <% } %>
-                </div>
-
-                <div class="filter-section">
-                  <h4 class="filter-title">Amenities</h4>
-                  <% const amenitiesList = [{val: 'wifi', label: 'Free WiFi'}, {val: 'breakfast', label: 'Breakfast Included'}, {val: 'pool', label: 'Swimming Pool'}, {val: 'cancel', label: 'Free Cancellation'}]; %>
-                  <% for(let am of amenitiesList) { %>
-                  <label class="custom-checkbox">
-                    <input type="checkbox" name="amenity" class="sidebar-chk" value="<%= am.val %>"
-                      <%= typeof searchParams !== 'undefined' && searchParams && searchParams.amenity && (Array.isArray(searchParams.amenity) ? searchParams.amenity.includes(am.val) : searchParams.amenity === am.val) ? 'checked' : '' %>>
-                    <div class="checkmark"></div>
-                    <span class="checkbox-label"><%= am.label %></span>
-                  </label>
-                  <% } %>
-                </div>
-
-              </form>
-              <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                  const filterForm = document.getElementById('filterForm');
-                  if (filterForm) {
-                    const filterInputs = filterForm.querySelectorAll('.sidebar-chk');
-                    let debounceTimer;
-
-                    filterInputs.forEach(input => {
-                      input.addEventListener('change', () => {
-                        filterForm.submit();
-                      });
-                    });
-
-                    const priceInputs = filterForm.querySelectorAll('input[type="number"]');
-                    priceInputs.forEach(input => {
-                      input.addEventListener('input', () => {
-                        clearTimeout(debounceTimer);
-                        debounceTimer = setTimeout(() => {
-                          filterForm.submit();
-                        }, 1000);
-                      });
-                    });
-                  }
-                });
-              </script>
+              </div>
             </div>
+            <% } %>
 
-            <!-- Listings Grid -->
-            <div class="col-lg-9">
-              <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-                <h2 class="section-title mb-0">Featured Hotels</h2>
+              <div class="row mt-4">
+                <!-- Sidebar Filters -->
+                <div class="col-lg-3 d-none d-lg-block">
+                  <form class="sidebar-filter sticky-top" style="top: 20px; z-index: 1;" action="/listings/search"
+                    method="GET" id="filterForm">
+                    <% if(typeof searchParams !=='undefined' && searchParams) { %>
+                      <% for(let key in searchParams) { %>
+                        <% if(!['category', 'stars' , 'rating' , 'amenity' , 'priceMin' , 'priceMax' , 'page'
+                          ].includes(key)) { %>
+                          <input type="hidden" name="<%= key %>" value="<%= searchParams[key] %>">
+                          <% } %>
+                            <% } %>
+                              <% } %>
 
-                <div class="d-flex gap-3 align-items-center">
-                  <!-- 
+                                <div class="filter-section">
+                                  <h4 class="filter-title">Property Type</h4>
+                                  <% const sidebarTypes=["Trending", "Beaches" , "Mountains" , "Forests" , "Castles"
+                                    , "Pools" , "Campings" , "Farms" , "Arctic" ]; %>
+                                    <% for(let type of sidebarTypes) { %>
+                                      <label class="custom-checkbox">
+                                        <input type="checkbox" name="category" class="sidebar-chk" value="<%= type %>"
+                                          <%=(typeof searchParams !=='undefined' && searchParams &&
+                                          searchParams.category && (Array.isArray(searchParams.category) ?
+                                          searchParams.category.includes(type) : searchParams.category===type)) ||
+                                          (!(typeof searchParams !=='undefined' && searchParams &&
+                                          searchParams.category) && selectedCategory===type) ? 'checked' : '' %>>
+                                        <div class="checkmark"></div>
+                                        <span class="checkbox-label">
+                                          <%= type %>
+                                        </span>
+                                      </label>
+                                      <% } %>
+                                </div>
+
+                                <div class="filter-section">
+                                  <h4 class="filter-title">Price Range</h4>
+                                  <div class="price-inputs">
+                                    <input type="number" name="priceMin" id="sidebarPriceMin" placeholder="Min ₹"
+                                      min="0"
+                                      value="<%= typeof searchParams !== 'undefined' && searchParams && searchParams.priceMin ? searchParams.priceMin : '' %>">
+                                    <input type="number" name="priceMax" id="sidebarPriceMax" placeholder="Max ₹"
+                                      min="0"
+                                      value="<%= typeof searchParams !== 'undefined' && searchParams && searchParams.priceMax ? searchParams.priceMax : '' %>">
+                                  </div>
+                                </div>
+
+                                <div class="filter-section">
+                                  <h4 class="filter-title">Star Rating</h4>
+                                  <% const starChecks=[5, 4, 3]; %>
+                                    <% for(let s of starChecks) { %>
+                                      <label class="custom-checkbox">
+                                        <input type="checkbox" name="stars" class="sidebar-chk" value="<%= s %>"
+                                          <%=typeof searchParams !=='undefined' && searchParams && searchParams.stars &&
+                                          (Array.isArray(searchParams.stars) ? searchParams.stars.includes(s.toString())
+                                          : searchParams.stars===s.toString()) ? 'checked' : '' %>>
+                                        <div class="checkmark"></div>
+                                        <span class="checkbox-label"><i class="fa-solid fa-star text-warning"></i>
+                                          <%= s %> Stars
+                                        </span>
+                                      </label>
+                                      <% } %>
+                                </div>
+
+                                <div class="filter-section">
+                                  <h4 class="filter-title">Guest Rating</h4>
+                                  <% const ratingChecks=[{val: 9, label: 'Superb: 9+' }, {val: 8, label: 'Fabulous: 8+'
+                                    }, {val: 7, label: 'Very Good: 7+' }]; %>
+                                    <% for(let r of ratingChecks) { %>
+                                      <label class="custom-checkbox">
+                                        <input type="checkbox" name="rating" class="sidebar-chk" value="<%= r.val %>"
+                                          <%=typeof searchParams !=='undefined' && searchParams && searchParams.rating
+                                          && (Array.isArray(searchParams.rating) ?
+                                          searchParams.rating.includes(r.val.toString()) :
+                                          searchParams.rating===r.val.toString()) ? 'checked' : '' %>>
+                                        <div class="checkmark"></div>
+                                        <span class="checkbox-label">
+                                          <%= r.label %>
+                                        </span>
+                                      </label>
+                                      <% } %>
+                                </div>
+
+                                <div class="filter-section">
+                                  <h4 class="filter-title">Amenities</h4>
+                                  <% const amenitiesList=[{val: 'wifi' , label: 'Free WiFi' }, {val: 'breakfast' ,
+                                    label: 'Breakfast Included' }, {val: 'pool' , label: 'Swimming Pool' },
+                                    {val: 'cancel' , label: 'Free Cancellation' }]; %>
+                                    <% for(let am of amenitiesList) { %>
+                                      <label class="custom-checkbox">
+                                        <input type="checkbox" name="amenity" class="sidebar-chk" value="<%= am.val %>"
+                                          <%=typeof searchParams !=='undefined' && searchParams && searchParams.amenity
+                                          && (Array.isArray(searchParams.amenity) ?
+                                          searchParams.amenity.includes(am.val) : searchParams.amenity===am.val)
+                                          ? 'checked' : '' %>>
+                                        <div class="checkmark"></div>
+                                        <span class="checkbox-label">
+                                          <%= am.label %>
+                                        </span>
+                                      </label>
+                                      <% } %>
+                                </div>
+
+                  </form>
+                  <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                      const filterForm = document.getElementById('filterForm');
+                      if (filterForm) {
+                        const filterInputs = filterForm.querySelectorAll('.sidebar-chk');
+                        let debounceTimer;
+
+                        filterInputs.forEach(input => {
+                          input.addEventListener('change', () => {
+                            filterForm.submit();
+                          });
+                        });
+
+                        // const priceInputs = filterForm.querySelectorAll('input[type="number"]');
+                        const priceInputs = [
+                          document.getElementById("sidebarPriceMin"),
+                          document.getElementById("sidebarPriceMax")
+                        ];
+                        priceInputs.forEach(input => {
+                          input.addEventListener('input', () => {
+                            clearTimeout(debounceTimer);
+                            debounceTimer = setTimeout(() => {
+                              filterForm.submit();
+                            }, 1000);
+                          });
+                        });
+                      }
+                    });
+                  </script>
+                </div>
+
+                <!-- Listings Grid -->
+                <div class="col-lg-9">
+                  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                    <h2 class="section-title mb-0">Featured Hotels</h2>
+
+                    <div class="d-flex gap-3 align-items-center">
+                      <!-- 
             * SORTING DROPDOWN:
             * This form submits a GET request to /listings when an option is selected.
             * It preserves any existing search parameters (like destination, category) by dynamically
             * creating hidden input fields for them. This ensures filters and sort work together!
           -->
-                  <div class="sort-container">
-                    <form action="/listings" method="GET" id="sortForm" class="d-flex align-items-center m-0">
-                      <% if(typeof searchParams !=='undefined' ) { %>
-                        <% for(let key in searchParams) { %>
-                          <% if(key !=='sort' ) { %>
-                            <input type="hidden" name="<%= key %>" value="<%= searchParams[key] %>">
-                            <% } %>
-                              <% } %>
+                      <div class="sort-container">
+                        <form action="/listings" method="GET" id="sortForm" class="d-flex align-items-center m-0">
+                          <% if(typeof searchParams !=='undefined' ) { %>
+                            <% for(let key in searchParams) { %>
+                              <% if(key !=='sort' ) { %>
+                                <input type="hidden" name="<%= key %>" value="<%= searchParams[key] %>">
                                 <% } %>
-                                  <select name="sort" class="form-select form-select-sm sort-dropdown"
-                                    onchange="document.getElementById('sortForm').submit();"
-                                    style="border-radius: 20px; font-weight: 500; cursor: pointer; padding: 0.4rem 1.5rem 0.4rem 1rem; border: 1px solid #ddd; background-color: #f8f9fa;">
-                                    <option value="newest" <%=typeof searchParams !=='undefined' &&
-                                      searchParams.sort==='newest' ? 'selected' : '' %>>Newly Added</option>
-                                    <option value="priceLow" <%=typeof searchParams !=='undefined' &&
-                                      searchParams.sort==='priceLow' ? 'selected' : '' %>>Price: Low to High</option>
-                                    <option value="priceHigh" <%=typeof searchParams !=='undefined' &&
-                                      searchParams.sort==='priceHigh' ? 'selected' : '' %>>Price: High to Low</option>
-                                    <option value="highestRated" <%=typeof searchParams !=='undefined' &&
-                                      searchParams.sort==='highestRated' ? 'selected' : '' %>>Highest Rated</option>
-                                    <option value="mostReviewed" <%=typeof searchParams !=='undefined' &&
-                                      searchParams.sort==='mostReviewed' ? 'selected' : '' %>>Most Reviewed</option>
-                                    <option value="alphabetical" <%=typeof searchParams !=='undefined' &&
-                                      searchParams.sort==='alphabetical' ? 'selected' : '' %>>Alphabetical (A-Z)
-                                    </option>
-                                  </select>
-                    </form>
-                  </div>
+                                  <% } %>
+                                    <% } %>
+                                      <select name="sort" class="form-select form-select-sm sort-dropdown"
+                                        onchange="document.getElementById('sortForm').submit();"
+                                        style="border-radius: 20px; font-weight: 500; cursor: pointer; padding: 0.4rem 1.5rem 0.4rem 1rem; border: 1px solid #ddd; background-color: #f8f9fa;">
+                                        <option value="newest" <%=typeof searchParams !=='undefined' &&
+                                          searchParams.sort==='newest' ? 'selected' : '' %>>Newly Added</option>
+                                        <option value="priceLow" <%=typeof searchParams !=='undefined' &&
+                                          searchParams.sort==='priceLow' ? 'selected' : '' %>>Price: Low to High
+                                        </option>
+                                        <option value="priceHigh" <%=typeof searchParams !=='undefined' &&
+                                          searchParams.sort==='priceHigh' ? 'selected' : '' %>>Price: High to Low
+                                        </option>
+                                        <option value="highestRated" <%=typeof searchParams !=='undefined' &&
+                                          searchParams.sort==='highestRated' ? 'selected' : '' %>>Highest Rated</option>
+                                        <option value="mostReviewed" <%=typeof searchParams !=='undefined' &&
+                                          searchParams.sort==='mostReviewed' ? 'selected' : '' %>>Most Reviewed</option>
+                                        <option value="alphabetical" <%=typeof searchParams !=='undefined' &&
+                                          searchParams.sort==='alphabetical' ? 'selected' : '' %>>Alphabetical (A-Z)
+                                        </option>
+                                      </select>
+                        </form>
+                      </div>
 
-                  <div class="view-toggle btn-group bg-white border" style="border-radius: 20px; overflow: hidden; padding: 2px;">
-                    <button class="btn btn-sm active" id="btn-grid-view" style="border-radius: 18px; padding: 4px 12px; font-weight: 500; border: none; background: #003580; color: white;">
-                      <i class="fa-solid fa-table-cells-large"></i> Grid
-                    </button>
-                    <button class="btn btn-sm" id="btn-list-view" style="border-radius: 18px; padding: 4px 12px; font-weight: 500; border: none; color: #555; background: transparent;">
-                      <i class="fa-solid fa-list"></i> List
-                    </button>
-                  </div>
+                      <div class="view-toggle btn-group bg-white border"
+                        style="border-radius: 20px; overflow: hidden; padding: 2px;">
+                        <button class="btn btn-sm active" id="btn-grid-view"
+                          style="border-radius: 18px; padding: 4px 12px; font-weight: 500; border: none; background: #003580; color: white;">
+                          <i class="fa-solid fa-table-cells-large"></i> Grid
+                        </button>
+                        <button class="btn btn-sm" id="btn-list-view"
+                          style="border-radius: 18px; padding: 4px 12px; font-weight: 500; border: none; color: #555; background: transparent;">
+                          <i class="fa-solid fa-list"></i> List
+                        </button>
+                      </div>
 
-                  <div class="tax-toggle mb-0" style="margin-left: 0;">
-                    <div class="form-check form-switch mb-0">
-                      <input class="form-check-input" type="checkbox" id="switchCheckDefault">
-                      <label class="form-check-label" for="switchCheckDefault">Display Total After Taxes</label>
+                      <div class="tax-toggle mb-0" style="margin-left: 0;">
+                        <div class="form-check form-switch mb-0">
+                          <input class="form-check-input" type="checkbox" id="switchCheckDefault">
+                          <label class="form-check-label" for="switchCheckDefault">Display Total After Taxes</label>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              <!-- 
+                  <!-- 
         * NO RESULTS FOUND UI:
         * This block of code checks if the 'listings' array passed from the controller is empty.
         * If it is empty (listings.length === 0), it displays a modern "No Results Found" section.
         * We show an icon, a clear message, and a button to clear the search filters and view all listings.
       -->
-              <% if (listings.length===0) { %>
-                <div class="no-results-container text-center py-5 mt-4"
-                  style="background: #f8f9fa; border-radius: 16px; border: 1px dashed #ced4da; margin-bottom: 2rem;">
-                  <div class="mb-3">
-                    <i class="fa-solid fa-magnifying-glass-location" style="font-size: 4rem; color: #adb5bd;"></i>
-                  </div>
-                  <h3 style="font-family: 'Playfair Display', serif; font-weight: 700; color: #343a40;">No Results Found
-                  </h3>
-                  <p class="text-muted mb-4" style="font-size: 1.05rem;">We couldn't find any properties matching your
-                    advanced search criteria. <br> Try adjusting your destination, dates, or filters.</p>
-                  <a href="/listings" class="btn btn-dark px-4 py-2"
-                    style="border-radius: 30px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Clear Search
-                    & Explore All</a>
-                </div>
-                <% } %>
+                  <% if (listings.length===0) { %>
+                    <div class="no-results-container text-center py-5 mt-4"
+                      style="background: #f8f9fa; border-radius: 16px; border: 1px dashed #ced4da; margin-bottom: 2rem;">
+                      <div class="mb-3">
+                        <i class="fa-solid fa-magnifying-glass-location" style="font-size: 4rem; color: #adb5bd;"></i>
+                      </div>
+                      <h3 style="font-family: 'Playfair Display', serif; font-weight: 700; color: #343a40;">No Results
+                        Found
+                      </h3>
+                      <p class="text-muted mb-4" style="font-size: 1.05rem;">We couldn't find any properties matching
+                        your
+                        advanced search criteria. <br> Try adjusting your destination, dates, or filters.</p>
+                      <a href="/listings" class="btn btn-dark px-4 py-2"
+                        style="border-radius: 30px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Clear
+                        Search
+                        & Explore All</a>
+                    </div>
+                    <% } %>
 
-                  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-2 row-cols-1 g-4" id="listings-grid">
-                    <% for(let listing of listings) { let idStr=listing._id.toString(); let starCount=listing.avgRating
-                      ? Math.round(listing.avgRating) : 5; let ratingScore=listing.avgRating ?
-                      listing.avgRating.toFixed(1) : "New" ; let reviewCount=listing.reviewCount || 0; let
-                      originalPrice=Math.round(listing.price * 1.2); let ratingWord=listing.avgRating>= 4.5 ? "Superb" :
-                      (listing.avgRating >= 4.0 ? "Fabulous" : (listing.avgRating ? "Good" : "No Reviews"));
-                      let hasFreeCancel = (idStr.charCodeAt(3) % 2) === 0;
-                      let hasPool = (idStr.charCodeAt(4) % 2) === 0;
-                      let amenitiesArr = ["wifi", "breakfast"];
-                      if (hasFreeCancel) amenitiesArr.push("cancel");
-                      if (hasPool) amenitiesArr.push("pool");
-                      let amenitiesStr = amenitiesArr.join(",");
-                      %>
-                      <div class="col listing-card-wrapper" data-category="<%= listing.category %>"
-                        data-price="<%= listing.price %>" data-stars="<%= starCount %>" data-rating="<%= ratingScore %>"
-                        data-amenities="<%= amenitiesStr %>">
-                        <a href="/listings/<%= listing._id %>" class="listing-link text-decoration-none">
-                          <div class="booking-card h-100">
-                            <div class="booking-card-img-container skeleton-loading">
-                              <img src="<%= listing.image.url %>" class="booking-card-img" alt="listing_image">
-                              <% if(hasFreeCancel) { %>
-                                <div class="badge-cancel">Free Cancellation</div>
-                                <% } %>
+                      <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-2 row-cols-1 g-4" id="listings-grid">
+                        <% for(let listing of listings) { let idStr=listing._id.toString(); let
+                          starCount=listing.avgRating ? Math.round(listing.avgRating) : 5; let
+                          ratingScore=listing.avgRating ? listing.avgRating.toFixed(1) : "New" ; let
+                          reviewCount=listing.reviewCount || 0; let originalPrice=Math.round(listing.price * 1.2); let
+                          ratingWord=listing.avgRating>= 4.5 ? "Superb" :
+                          (listing.avgRating >= 4.0 ? "Fabulous" : (listing.avgRating ? "Good" : "No Reviews"));
+                          let hasFreeCancel = (idStr.charCodeAt(3) % 2) === 0;
+                          let hasPool = (idStr.charCodeAt(4) % 2) === 0;
+                          let amenitiesArr = ["wifi", "breakfast"];
+                          if (hasFreeCancel) amenitiesArr.push("cancel");
+                          if (hasPool) amenitiesArr.push("pool");
+                          let amenitiesStr = amenitiesArr.join(",");
+                          %>
+                          <div class="col listing-card-wrapper" data-category="<%= listing.category %>"
+                            data-price="<%= listing.price %>" data-stars="<%= starCount %>"
+                            data-rating="<%= ratingScore %>" data-amenities="<%= amenitiesStr %>">
+                            <a href="/listings/<%= listing._id %>" class="listing-link text-decoration-none">
+                              <div class="booking-card h-100">
+                                <div class="booking-card-img-container skeleton-loading">
+                                  <img src="<%= listing.image.url %>" class="booking-card-img" alt="listing_image">
+                                  <% if(hasFreeCancel) { %>
+                                    <div class="badge-cancel">Free Cancellation</div>
+                                    <% } %>
 
-                                  <!-- Heart Dropdown Container -->
-                                  <div class="dropdown"
-                                    style="position: absolute; top: 10px; right: 10px; z-index: 10;">
-                                    <div class="badge-heart m-0" style="position: relative;" data-bs-toggle="dropdown"
-                                      aria-expanded="false" onclick="event.preventDefault(); event.stopPropagation();">
-                                      <% if(currUser && currUser.wishlist && currUser.wishlist.includes(listing._id)) {
-                                        %>
-                                        <i class="fa-solid fa-heart text-danger"></i>
-                                        <% } else { %>
-                                          <i class="fa-regular fa-heart"></i>
-                                          <% } %>
-                                    </div>
-                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0"
-                                      onclick="event.preventDefault(); event.stopPropagation();">
-                                      <% if(!currUser) { %>
-                                        <li><a class="dropdown-item" href="/login">Log in to save</a></li>
-                                        <% } else { %>
-                                          <li>
-                                            <form action="/wishlist/<%= listing._id %>" method="POST" class="m-0">
-                                              <button type="submit" class="dropdown-item fw-bold"
-                                                onclick="event.stopPropagation();">
-                                                <% if(currUser.wishlist && currUser.wishlist.includes(listing._id)) { %>
-                                                  Remove from Wishlist
-                                                  <% } else { %>
-                                                    Save to Wishlist
-                                                    <% } %>
-                                              </button>
-                                            </form>
-                                          </li>
-                                          <% if (currUser.collections && currUser.collections.length> 0) { %>
-                                            <li>
-                                              <hr class="dropdown-divider">
-                                            </li>
-                                            <li>
-                                              <h6 class="dropdown-header">Save to Collection</h6>
-                                            </li>
-                                            <% for(let col of currUser.collections) { %>
+                                      <!-- Heart Dropdown Container -->
+                                      <div class="dropdown"
+                                        style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+                                        <div class="badge-heart m-0" style="position: relative;"
+                                          data-bs-toggle="dropdown" aria-expanded="false"
+                                          onclick="event.preventDefault(); event.stopPropagation();">
+                                          <% if(currUser && currUser.wishlist &&
+                                            currUser.wishlist.includes(listing._id)) { %>
+                                            <i class="fa-solid fa-heart text-danger"></i>
+                                            <% } else { %>
+                                              <i class="fa-regular fa-heart"></i>
+                                              <% } %>
+                                        </div>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0"
+                                          onclick="event.preventDefault(); event.stopPropagation();">
+                                          <% if(!currUser) { %>
+                                            <li><a class="dropdown-item" href="/login">Log in to save</a></li>
+                                            <% } else { %>
                                               <li>
-                                                <form
-                                                  action="/wishlist/collections/<%= col._id %>/add/<%= listing._id %>"
-                                                  method="POST" class="m-0">
-                                                  <button type="submit" class="dropdown-item"
+                                                <form action="/wishlist/<%= listing._id %>" method="POST" class="m-0">
+                                                  <button type="submit" class="dropdown-item fw-bold"
                                                     onclick="event.stopPropagation();">
-                                                    <i class="fa-regular fa-folder me-2 text-muted"></i>
-                                                    <%= col.name %>
+                                                    <% if(currUser.wishlist && currUser.wishlist.includes(listing._id))
+                                                      { %>
+                                                      Remove from Wishlist
+                                                      <% } else { %>
+                                                        Save to Wishlist
+                                                        <% } %>
                                                   </button>
                                                 </form>
                                               </li>
-                                              <% } %>
-                                                <% } %>
+                                              <% if (currUser.collections && currUser.collections.length> 0) { %>
+                                                <li>
+                                                  <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                  <h6 class="dropdown-header">Save to Collection</h6>
+                                                </li>
+                                                <% for(let col of currUser.collections) { %>
+                                                  <li>
+                                                    <form
+                                                      action="/wishlist/collections/<%= col._id %>/add/<%= listing._id %>"
+                                                      method="POST" class="m-0">
+                                                      <button type="submit" class="dropdown-item"
+                                                        onclick="event.stopPropagation();">
+                                                        <i class="fa-regular fa-folder me-2 text-muted"></i>
+                                                        <%= col.name %>
+                                                      </button>
+                                                    </form>
+                                                  </li>
                                                   <% } %>
-                                    </ul>
+                                                    <% } %>
+                                                      <% } %>
+                                        </ul>
+                                      </div>
+                                      <!-- End Heart Dropdown Container -->
+                                </div>
+                                <div class="booking-card-body">
+                                  <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                      <h5 class="booking-card-title">
+                                        <%= listing.title %>
+                                      </h5>
+                                      <div class="booking-card-stars">
+                                        <% for(let i=0; i<starCount; i++) { %>
+                                          <i class="fa-solid fa-star"></i>
+                                          <% } %>
+                                      </div>
+                                    </div>
                                   </div>
-                                  <!-- End Heart Dropdown Container -->
-                            </div>
-                            <div class="booking-card-body">
-                              <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                  <h5 class="booking-card-title">
-                                    <%= listing.title %>
-                                  </h5>
-                                  <div class="booking-card-stars">
-                                    <% for(let i=0; i<starCount; i++) { %>
-                                      <i class="fa-solid fa-star"></i>
+                                  <div class="booking-card-location">
+                                    <a href="#" class="text-decoration-underline text-primary"
+                                      style="color: #0071c2 !important;">
+                                      <%= listing.location %>, <%= listing.country %>
+                                    </a>
+                                  </div>
+
+                                  <div class="booking-rating">
+                                    <div class="rating-badge">
+                                      <%= ratingScore %>
+                                    </div>
+                                    <div>
+                                      <div class="rating-text">
+                                        <%= ratingWord %>
+                                      </div>
+                                      <div class="review-count">
+                                        <%= reviewCount %> reviews
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div class="booking-amenities">
+                                    <i class="fa-solid fa-mug-hot me-1"></i> Breakfast included <br>
+                                    <i class="fa-solid fa-wifi me-1"></i> Free WiFi
+                                    <% if(hasPool) { %>
+                                      <br><i class="fa-solid fa-water-ladder me-1"></i> Swimming Pool
                                       <% } %>
                                   </div>
-                                </div>
-                              </div>
-                              <div class="booking-card-location">
-                                <a href="#" class="text-decoration-underline text-primary"
-                                  style="color: #0071c2 !important;">
-                                  <%= listing.location %>, <%= listing.country %>
-                                </a>
-                              </div>
 
-                              <div class="booking-rating">
-                                <div class="rating-badge">
-                                  <%= ratingScore %>
-                                </div>
-                                <div>
-                                  <div class="rating-text">
-                                    <%= ratingWord %>
-                                  </div>
-                                  <div class="review-count">
-                                    <%= reviewCount %> reviews
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="booking-amenities">
-                                <i class="fa-solid fa-mug-hot me-1"></i> Breakfast included <br>
-                                <i class="fa-solid fa-wifi me-1"></i> Free WiFi
-                                <% if(hasPool) { %>
-                                  <br><i class="fa-solid fa-water-ladder me-1"></i> Swimming Pool
-                                  <% } %>
-                              </div>
-
-                              <div class="booking-price-section">
-                                <div>
-                                  <span class="price-original">&#8377;<%= originalPrice.toLocaleString("en-IN") %>
+                                  <div class="booking-price-section">
+                                    <div>
+                                      <span class="price-original">&#8377;<%= originalPrice.toLocaleString("en-IN") %>
                                       </span>
-                                  <span class="price-current">&#8377;<%= listing.price.toLocaleString("en-IN") %></span>
+                                      <span class="price-current">&#8377;<%= listing.price.toLocaleString("en-IN") %>
+                                      </span>
+                                    </div>
+                                    <div class="price-tax tax-info" style="display: none;">
+                                      + &#8377;<%= Math.round(listing.price * 0.18).toLocaleString("en-IN") %> taxes and
+                                        charges
+                                    </div>
+                                    <div class="price-tax" style="color: #666;">Per night</div>
+                                  </div>
                                 </div>
-                                <div class="price-tax tax-info" style="display: none;">
-                                  + &#8377;<%= Math.round(listing.price * 0.18).toLocaleString("en-IN") %> taxes and
-                                    charges
-                                </div>
-                                <div class="price-tax" style="color: #666;">Per night</div>
                               </div>
-                            </div>
+                            </a>
                           </div>
-                        </a>
+                          <% } %>
                       </div>
-                      <% } %>
-                  </div>
-            </div>
-          </div>
+                </div>
+              </div>
 
               <script>
                 const taxSwitch = document.getElementById("switchCheckDefault");
@@ -1870,24 +1956,24 @@
                   const btnGrid = document.getElementById('btn-grid-view');
                   const btnList = document.getElementById('btn-list-view');
                   const gridContainer = document.getElementById('listings-grid');
-          
+
                   if (!btnGrid || !btnList || !gridContainer) return;
 
                   const currentView = localStorage.getItem('wanderlust_view_preference') || 'grid';
-                  if(currentView === 'list') {
+                  if (currentView === 'list') {
                     enableListView();
                   }
-          
+
                   btnGrid.addEventListener('click', (e) => {
                     e.preventDefault();
                     enableGridView();
                   });
-          
+
                   btnList.addEventListener('click', (e) => {
                     e.preventDefault();
                     enableListView();
                   });
-          
+
                   function enableListView() {
                     gridContainer.classList.add('list-view-active');
                     btnList.classList.add('active');
@@ -1898,7 +1984,7 @@
                     btnGrid.style.color = '#555';
                     localStorage.setItem('wanderlust_view_preference', 'list');
                   }
-          
+
                   function enableGridView() {
                     gridContainer.classList.remove('list-view-active');
                     btnGrid.classList.add('active');
@@ -1947,5 +2033,36 @@
                       if (selectedDates.length > 0) updateDayText(selectedDates, "checkOutDay");
                     }
                   });
+                });
+
+                document.addEventListener("DOMContentLoaded", () => {
+
+                  const filterForm = document.getElementById("filterForm");
+
+                  const minInput = document.getElementById("sidebarPriceMin");
+
+                  const maxInput = document.getElementById("sidebarPriceMax");
+
+                  function applyFilter() {
+
+                    const min = minInput.value.trim();
+
+                    const max = maxInput.value.trim();
+
+                    if (
+                      min !== "" ||
+                      max !== ""
+                    ) {
+
+                      filterForm.submit();
+
+                    }
+
+                  }
+
+                  minInput.addEventListener("change", applyFilter);
+
+                  maxInput.addEventListener("change", applyFilter);
+
                 });
               </script>

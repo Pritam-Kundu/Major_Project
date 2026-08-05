@@ -26,6 +26,7 @@
     "mongoose": "^8.14.1",
     "multer": "^2.0.1",
     "multer-storage-cloudinary": "^4.0.0",
+    "nodemailer": "^9.0.4",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",

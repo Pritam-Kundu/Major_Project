@@ -1,0 +1,303 @@
+<% layout("layouts/boilerplate") %>
+
+    <style>
+        .auth-container {
+
+            min-height: 80vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            background: #f8f9fc;
+
+            padding: 40px;
+
+        }
+
+        .verify-card {
+
+            background: white;
+
+            width: 100%;
+
+            max-width: 520px;
+
+            padding: 50px;
+
+            border-radius: 20px;
+
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .08);
+
+            text-align: center;
+
+        }
+
+        .verify-card h1 {
+
+            font-size: 2.4rem;
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+        }
+
+        .verify-card p {
+
+            color: #666;
+
+            margin-bottom: 35px;
+
+            line-height: 1.8;
+
+        }
+
+        .otp-container {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 12px;
+
+            margin-bottom: 35px;
+
+        }
+
+        .otp-box {
+
+            width: 55px;
+
+            height: 60px;
+
+            border: 2px solid #ddd;
+
+            border-radius: 12px;
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            text-align: center;
+
+            outline: none;
+
+            transition: .3s;
+
+        }
+
+        .otp-box:focus {
+
+            border-color: #2f80ed;
+
+            box-shadow: 0 0 10px rgba(47, 128, 237, .25);
+
+        }
+
+        .verify-btn {
+
+            width: 100%;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #2f80ed;
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: 600;
+
+            transition: .3s;
+
+        }
+
+        .verify-btn:hover {
+
+            background: #1d6fd4;
+
+        }
+
+        .timer {
+
+            margin-top: 25px;
+
+            font-size: 17px;
+
+            font-weight: 600;
+
+            color: #dc3545;
+
+        }
+
+        .resend {
+
+            margin-top: 20px;
+
+        }
+
+        .resend a {
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+        }
+    </style>
+
+    <div class="auth-container">
+
+        <div class="verify-card">
+
+            <h1>
+
+                Verify Email
+
+            </h1>
+
+            <p>
+
+                We've sent a 6-digit verification code to your email.
+
+            </p>
+
+            <form action="/verify-otp" method="POST">
+
+                <input type="hidden" id="otp" name="otp">
+
+                <div class="otp-container">
+
+                    <input class="otp-box" maxlength="1">
+
+                    <input class="otp-box" maxlength="1">
+
+                    <input class="otp-box" maxlength="1">
+
+                    <input class="otp-box" maxlength="1">
+
+                    <input class="otp-box" maxlength="1">
+
+                    <input class="otp-box" maxlength="1">
+
+                </div>
+
+                <button class="verify-btn" type="submit">
+
+                    Verify OTP
+
+                </button>
+
+            </form>
+
+            <div class="timer">
+
+                05:00
+
+            </div>
+
+            <div class="resend">
+
+                <a href="/resend-otp">
+
+                    Resend OTP
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+        const inputs = document.querySelectorAll(".otp-box");
+        const hidden = document.getElementById("otp");
+
+        // Handle typing
+        inputs.forEach((input, index) => {
+
+            input.addEventListener("input", () => {
+
+                // Allow only numbers
+                input.value = input.value.replace(/\D/g, "");
+
+                if (input.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+
+                hidden.value = [...inputs].map(i => i.value).join("");
+
+            });
+
+            // Handle backspace
+            input.addEventListener("keydown", (e) => {
+
+                if (e.key === "Backspace" && input.value === "" && index > 0) {
+                    inputs[index - 1].focus();
+                }
+
+            });
+
+        });
+
+        // Handle paste
+        inputs[0].addEventListener("paste", (e) => {
+
+            e.preventDefault();
+
+            const data = e.clipboardData.getData("text").trim();
+
+            if (/^\d{6}$/.test(data)) {
+
+                data.split("").forEach((digit, i) => {
+
+                    inputs[i].value = digit;
+
+                });
+
+                hidden.value = data;
+
+                inputs[5].focus();
+
+            }
+
+        });
+
+        // Focus first box
+        inputs[0].focus();
+
+    </script>
+
+    <script>
+
+        let seconds = 300;
+
+        const timer = document.querySelector(".timer");
+
+        setInterval(() => {
+
+            if (seconds <= 0) return;
+
+            seconds--;
+
+            const m = Math.floor(seconds / 60);
+
+            const s = seconds % 60;
+
+            timer.innerHTML =
+
+                `${m}:${s.toString().padStart(2, '0')}`;
+
+        }, 1000);
+
+    </script>
