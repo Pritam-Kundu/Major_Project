@@ -566,8 +566,7 @@
             <li><a class="dropdown-item" href="/bookings"><i class="fa-solid fa-plane-departure"></i> Trips</a></li>
             <li><a class="dropdown-item" href="/listings/my-properties"><i class="fa-solid fa-house-user"></i> Manage
                 Properties</a></li>
-            <li><a class="dropdown-item" href="/import"><i class="fa-solid fa-map-location-dot"></i> Import Hotels</a>
-            </li>
+
             <li>
               <a class="dropdown-item" href="/help">
                 <i class="fa-solid fa-circle-question"></i>
@@ -582,6 +581,9 @@
             </li>
             <% if(currUser.isAdmin){ %>
 
+              <li>
+                <a class="dropdown-item" href="/import"><i class="fa-solid fa-map-location-dot"></i> Import Hotels</a>
+              </li>
               <li>
 
                 <a class="dropdown-item" href="/help/admin">

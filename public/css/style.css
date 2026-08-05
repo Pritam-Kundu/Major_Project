@@ -21,7 +21,6 @@ body {
 
 .navbar {
     height: 5rem;
-    left: 2rem;
     background-color: white;
 }
 
@@ -310,4 +309,101 @@ body {
 html,
 body {
     overflow-x: hidden;
+}
+
+/* =========================================
+   Global Responsiveness & Mobile Adjustments
+========================================= */
+
+@media (max-width: 1200px) {
+    .container, .container-fluid {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+}
+
+@media (max-width: 992px) {
+    /* Tablet Adjustments */
+    .hero-content h1 {
+        font-size: 2.8rem !important;
+    }
+    
+    .section-title {
+        font-size: 1.6rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mobile General Layout */
+    .hero-content h1 {
+        font-size: 2.2rem !important;
+    }
+    .hero-content p {
+        font-size: 1rem !important;
+    }
+    
+    /* Ensure forms take full width */
+    .form-control, .form-select, .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .btn-search, .btn-reserve {
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
+
+    /* Stacking for columns that might not have standard bootstrap classes */
+    .d-flex.flex-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+    .d-flex.flex-row > * {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        margin-bottom: 1rem;
+    }
+    
+    /* Navbar specific mobile fixes */
+    .modern-dropdown {
+        width: 90vw !important;
+        max-width: 350px !important;
+        left: auto !important;
+        right: 0 !important;
+    }
+    
+    /* Dropdown notification fix for mobile */
+    .notification-dropdown {
+        width: 90vw !important;
+        max-width: 380px !important;
+        right: -10px !important;
+    }
+    
+    /* Tables */
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Extra Small Devices (Phones) */
+    .hero-section {
+        height: 400px !important;
+    }
+    .hero-search-container {
+        padding: 10px !important;
+        border-radius: 12px !important;
+    }
+    .section-title {
+        font-size: 1.4rem !important;
+    }
+    .card-img-top {
+        border-radius: 0.8rem !important;
+    }
+    .badge-rating {
+        font-size: 1rem !important;
+        padding: 4px 8px !important;
+    }
 }

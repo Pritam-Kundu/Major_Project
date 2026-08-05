@@ -1013,14 +1013,17 @@
         color: #666;
       }
 
-      /* Modern Sidebar Filters */
       .sidebar-filter {
         background: #fff;
         border-radius: 12px;
         padding: 1.5rem;
-        border: 1px solid #e0e0e0;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        margin-bottom: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        border: 1px solid #eee;
+      }
+      @media(max-width: 991px) {
+        .sidebar-filter.sticky-top {
+          position: static !important;
+        }
       }
 
       .filter-section {
