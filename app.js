@@ -96,6 +96,9 @@ app.use((req, res, next) => {
   next()
 })
 
+app.get("/", (req, res) => {
+  res.redirect("/listings");
+});
 
 app.use("/listings", listingRouter)         //Rest code is in routes->listing.js
 app.use("/listings/:id/reviews", reviewRouter)
@@ -128,6 +131,8 @@ app.use((err, req, res, next) => {
 
 
 
-app.listen(8080, () => {
-  console.log("Server is listening to port 8080");
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
 });
