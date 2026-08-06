@@ -10,4 +10,7 @@ router.get("/", wrapAsync(offerController.renderOffers));
 // POST /offers/:id/claim - Claim an offer
 router.post("/:id/claim", isLoggedIn, wrapAsync(offerController.claimOffer));
 
+// POST /offers/:id/unclaim - Unclaim an offer
+router.post("/:id/unclaim", isLoggedIn, wrapAsync(offerController.unclaimOffer));
+
 module.exports = router;

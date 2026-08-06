@@ -56,3 +56,34 @@ module.exports.claimOffer = async (req, res) => {
     return res.status(500).json({ success: false, message: "Something went wrong." });
   }
 };
+
+module.exports.unclaimOffer = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user._id;
+
+    const offer = await Offer.findById(id);
+    if (!offer) {
+      return res.status(400).json({ success: false, message: "Offer not found." });
+    }
+
+    const user = await User.findById(userId);
+    
+    // Check if user has claimed
+    if (!user.claimedOffers.includes(id)) {
+      return res.status(400).json({ success: false, message: "You have not claimed this offer." });
+    }
+
+    // Remove offer from user and user from offer
+    user.claimedOffers.pull(id);
+    await user.save();
+
+    offer.claimedUsers.pull(userId);
+    await offer.save();
+
+    return res.json({ success: true, message: "Offer successfully unclaimed!" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: "Something went wrong." });
+  }
+};

@@ -327,13 +327,13 @@
         <div class="auth-label-row">
           <label for="username" class="auth-label">Username</label>
         </div>
-        <input type="text" name="username" id="username" class="auth-input form-control" required />
+        <input type="text" name="username" id="username" class="auth-input form-control" required / autocomplete="username">
         <div class="invalid-feedback">Please enter a valid username.</div>
 
         <div class="auth-label-row">
           <label for="email" class="auth-label">Email Address</label>
         </div>
-        <input type="email" name="email" id="email" class="auth-input form-control" required />
+        <input type="email" name="email" id="email" class="auth-input form-control" required / autocomplete="email">
         <div class="invalid-feedback">Please provide a valid email.</div>
 
         <!-- Password -->
@@ -346,7 +346,7 @@
 
         <div class="position-relative mb-3">
 
-          <input type="password" name="password" id="password" class="auth-input form-control pe-5" required>
+          <input type="password" name="password" id="password" class="auth-input form-control pe-5" required autocomplete="new-password">
 
           <i id="togglePassword" class="fa-solid fa-eye password-toggle position-absolute"
             style="right:18px; top:50%; transform:translateY(-50%); cursor:pointer; color:#666;">
@@ -408,7 +408,7 @@
         <div class="position-relative mb-3">
 
           <input type="password" id="confirmPassword" name="confirmPassword" class="auth-input form-control pe-5"
-            placeholder="Re-enter your password" required>
+            placeholder="Re-enter your password" required autocomplete="new-password">
 
           <i id="toggleConfirmPassword" class="fa-solid fa-eye password-toggle position-absolute"
             style="right:18px; top:50%; transform:translateY(-50%); cursor:pointer; color:#666;">
@@ -428,7 +428,7 @@
 
         <button id="googleLogin" type="button" class="auth-btn-google">
 
-          <img src="https://developers.google.com/identity/images/g-logo.png" width="18">
+          <img src="https://developers.google.com/identity/images/g-logo.png" width="18" alt="Google Logo">
 
           Continue with Google
 

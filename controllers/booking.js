@@ -1,5 +1,7 @@
 const Booking = require("../models/booking");
 const Listing = require("../models/listing");
+const User = require("../models/user");
+const Offer = require("../models/offer");
 const { createNotification } = require("./notification");
 const sendCancellationEmail = require("../utils/sendCancellationEmail");
 
@@ -263,6 +265,18 @@ module.exports.renderPaymentPage = async (req, res) => {
     const listing = await Listing.findById(req.params.id);
     const { checkIn, checkOut, guests, rooms } = req.query;
     
+    const user = await User.findById(req.user._id).populate({
+        path: 'claimedOffers',
+        match: { isActive: true, expiryDate: { $gt: new Date() } }
+    });
+    const claimedOffers = user.claimedOffers;
+    
+    const availableOffers = await Offer.find({
+        isActive: true,
+        expiryDate: { $gt: new Date() },
+        _id: { $nin: user.claimedOffers.map(o => o._id) }
+    });
+    
     if (!checkIn || !checkOut) {
         req.flash("error", "Please select check-in and check-out dates.");
         return res.redirect(`/listings/${listing._id}`);
@@ -296,13 +310,15 @@ module.exports.renderPaymentPage = async (req, res) => {
         gst,
         totalPrice,
         extraGuestCharge,
-        pricePerNight
+        pricePerNight,
+        claimedOffers,
+        availableOffers
     });
 };
 
 module.exports.processPayment = async (req, res) => {
     const listing = await Listing.findById(req.params.id);
-    const { checkIn, checkOut, guests, paymentMethod } = req.body;
+    const { checkIn, checkOut, guests, paymentMethod, appliedOffer } = req.body;
     
     const parsedGuests = parseInt(guests) || 1;
 
@@ -329,8 +345,25 @@ module.exports.processPayment = async (req, res) => {
 
     const pricePerNight = listing.price + extraGuestCharge; // Note: rooms aren't saved in schema, so we stick to listing price logic or adjust if needed.
     const subtotal = days * pricePerNight;
-    const gst = subtotal * 0.18;
-    const totalPrice = subtotal + gst;
+    
+    let discountAmount = 0;
+    if (appliedOffer) {
+        const offer = await Offer.findById(appliedOffer);
+        if (offer && offer.isActive && offer.expiryDate > new Date()) {
+            // Calculate discount
+            if (offer.discount.includes('%')) {
+                const percent = parseInt(offer.discount);
+                if (!isNaN(percent)) discountAmount = (subtotal * percent) / 100;
+            } else if (offer.discount.includes('₹') || offer.discount.includes('OFF')) {
+                const flat = parseInt(offer.discount.replace(/\D/g, ''));
+                if (!isNaN(flat)) discountAmount = flat;
+            }
+        }
+    }
+    
+    const discountedSubtotal = Math.max(0, subtotal - discountAmount);
+    const gst = discountedSubtotal * 0.18;
+    const totalPrice = discountedSubtotal + gst;
     const cancellationDeadline = new Date(new Date(checkIn).getTime() - (48 * 60 * 60 * 1000));
 
     // Simulate Payment Success

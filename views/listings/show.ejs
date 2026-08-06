@@ -535,9 +535,11 @@
     <div class="modal fade" id="allPhotosModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
-          <div class="modal-header border-0 pb-0">
-            <h5 class="modal-title ms-3 mt-2 fw-bold">All photos</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-header border-0 pb-3 pt-3 position-sticky top-0 bg-white d-flex align-items-center" style="z-index: 1050; box-shadow: 0 2px 8px rgba(0,0,0,0.1); justify-content: flex-start;">
+            <div type="button" class="d-flex align-items-center justify-content-center rounded-circle hover-bg-light ms-3" data-bs-dismiss="modal" style="width: 40px; height: 40px; background: #f8f9fa; border: 1px solid #ddd; cursor: pointer; transition: all 0.2s;">
+              <i class="fa-solid fa-xmark fs-4 text-dark"></i>
+            </div>
+            <h5 class="modal-title fw-bold mb-0 ms-4">All photos</h5>
           </div>
           <div class="modal-body px-5">
             <div class="row g-3">
@@ -556,8 +558,8 @@
     <div class="modal fade" id="imageZoomModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-fullscreen">
         <div class="modal-content bg-dark">
-          <div class="modal-header border-0 pb-0">
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-header border-0 pb-0 position-absolute top-0 end-0 p-4" style="z-index: 1050;">
+            <button type="button" class="btn-close btn-close-white fs-4" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body d-flex align-items-center justify-content-center position-relative" style="overflow: hidden;">
             <img id="zoomedImage" src="" alt="Zoomed" style="max-height: 90vh; max-width: 100%; object-fit: contain; transition: transform 0.15s ease-out; cursor: grab;">

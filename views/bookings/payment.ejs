@@ -386,6 +386,40 @@
 
         </div>
 
+        <!-- Offers & Promos -->
+        <div class="payment-section">
+          <div class="d-flex justify-content-between align-items-center mb-3 payment-section-title" style="padding-bottom: 0.5rem; border-bottom: 1px solid #ebebeb; margin-bottom: 1.5rem;">
+            <h3 class="m-0" style="font-size: 1.25rem; font-weight: 700; color: #222;">Offers & Promos</h3>
+            <% if (availableOffers && availableOffers.length > 0) { %>
+              <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#availableOffersModal" style="border-radius: 20px; font-weight: 600;">
+                Browse Offers
+              </button>
+            <% } %>
+          </div>
+          
+          <div id="offersDropdownContainer" style="<%= (claimedOffers && claimedOffers.length > 0) ? 'display: block;' : 'display: none;' %>">
+            <div class="mb-3">
+              <label class="form-label text-muted" style="font-weight: 600; font-size: 0.9rem;">Select a Claimed Offer</label>
+              <select class="form-select" id="appliedOffer" name="appliedOffer" style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 10px 15px; font-weight: 600;">
+                <option value="">No Offer</option>
+                <% if(claimedOffers && claimedOffers.length > 0) { %>
+                  <% claimedOffers.forEach(offer => { %>
+                    <option value="<%= offer._id %>" data-discount="<%= offer.discount %>"><%= offer.title %> - <%= offer.discount %></option>
+                  <% }) %>
+                <% } %>
+              </select>
+            </div>
+          </div>
+          
+          <div id="noOffersMessage" style="<%= (!claimedOffers || claimedOffers.length === 0) ? 'display: block;' : 'display: none;' %>">
+            <p class="text-muted small m-0">You don't have any claimed offers yet. 
+              <% if (availableOffers && availableOffers.length > 0) { %>
+                <a href="#" class="text-decoration-underline fw-bold" data-bs-toggle="modal" data-bs-target="#availableOffersModal" style="color: #0071c2;">Browse available offers</a>
+              <% } %>
+            </p>
+          </div>
+        </div>
+
         <!-- Booking Policies -->
         <div class="payment-section">
           <h3 class="payment-section-title">Booking Policies & Agreement</h3>
@@ -447,14 +481,20 @@
                 <div>₹<%= extraGuestCharge.toLocaleString('en-IN') %></div>
               </div>
             <% } %>
+
+            <div class="price-row text-success" id="offerDiscountRow" style="display: none; font-weight: 600;">
+              <div>Offer Discount</div>
+              <div>-₹<span id="offerDiscountAmount">0</span></div>
+            </div>
+
             <div class="price-row">
               <div>Taxes & GST (18%)</div>
-              <div>₹<%= gst.toLocaleString('en-IN') %></div>
+              <div>₹<span id="gstAmount"><%= gst.toLocaleString('en-IN', { maximumFractionDigits: 0 }) %></span></div>
             </div>
             
             <div class="price-total">
               <div>Total Amount</div>
-              <div>₹<%= totalPrice.toLocaleString('en-IN') %></div>
+              <div>₹<span id="grandTotal"><%= totalPrice.toLocaleString('en-IN', { maximumFractionDigits: 0 }) %></span></div>
             </div>
           </div>
 
@@ -478,6 +518,46 @@
       </div>
     </div>
   </form>
+</div>
+
+<!-- Available Offers Modal -->
+<div class="modal fade" id="availableOffersModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content border-0 shadow" style="border-radius: 12px; overflow: hidden;">
+      <div class="modal-header border-bottom pb-3 pt-3 px-4 position-relative">
+        <button type="button" class="btn-close position-absolute" style="left: 20px; top: 20px; font-size: 0.8rem;" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title fw-bold w-100 text-center" style="font-size: 1.1rem; color: #222;">Available Offers</h5>
+      </div>
+      <div class="modal-body p-4 bg-white">
+        <% if (availableOffers && availableOffers.length > 0) { %>
+          <div class="d-flex flex-column gap-0 border rounded-4 overflow-hidden" style="border-color: #dddddd !important;">
+            <% availableOffers.forEach((offer, index) => { %>
+              <div class="d-flex p-3 align-items-center <%= index !== availableOffers.length - 1 ? 'border-bottom' : '' %>" id="avail-offer-<%= offer._id %>" style="border-color: #dddddd !important; background: #fff;">
+                <div class="me-3">
+                  <img src="<%= offer.image %>" alt="<%= offer.title %>" style="width: 64px; height: 64px; object-fit: cover; border-radius: 8px;">
+                </div>
+                <div class="flex-grow-1" style="min-width: 0;">
+                  <h6 class="mb-1 text-truncate" style="color: #222; font-weight: 600; font-size: 1rem;"><%= offer.title %></h6>
+                  <p class="text-muted small mb-1 text-truncate"><%= offer.description %></p>
+                  <div class="d-flex align-items-center">
+                    <span style="color: #008a05; font-weight: 600; font-size: 0.85rem;"><i class="fa-solid fa-tag me-1"></i><%= offer.discount %></span>
+                  </div>
+                </div>
+                <div class="ms-3">
+                  <button type="button" class="btn btn-sm px-3 py-2 claim-apply-btn text-white" style="background: linear-gradient(90deg, #e61e4d 0%, #e31c5f 50%, #d70466 100%); font-weight: 600; border-radius: 8px; border: none;" onclick="claimAndApplyOffer('<%= offer._id %>', '<%= offer.title %>', '<%= offer.discount %>', this)">Apply</button>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="text-center my-5">
+            <i class="fa-solid fa-tags fs-1 mb-3 opacity-25 d-block text-muted"></i>
+            <p class="text-muted m-0" style="font-weight: 500;">No new offers available right now.</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -538,4 +618,113 @@
       }, 2500);
     }
   }, false);
+
+  // Handle Offer Selection
+  const offerSelect = document.getElementById('appliedOffer');
+  const baseSubtotal = <%= subtotal %>;
+  
+  if (offerSelect) {
+    offerSelect.addEventListener('change', function() {
+      const selectedOption = this.options[this.selectedIndex];
+      const discountText = selectedOption.getAttribute('data-discount') || "";
+      
+      let discountAmount = 0;
+      if (discountText.includes('%')) {
+          const percent = parseInt(discountText);
+          if (!isNaN(percent)) discountAmount = (baseSubtotal * percent) / 100;
+      } else if (discountText.includes('₹') || discountText.includes('OFF')) {
+          const flat = parseInt(discountText.replace(/\D/g, ''));
+          if (!isNaN(flat)) discountAmount = flat;
+      }
+      
+      const offerDiscountRow = document.getElementById('offerDiscountRow');
+      if (discountAmount > 0) {
+        offerDiscountRow.style.display = 'flex';
+        document.getElementById('offerDiscountAmount').innerText = discountAmount.toLocaleString('en-IN');
+      } else {
+        offerDiscountRow.style.display = 'none';
+      }
+      
+      const discountedSubtotal = Math.max(0, baseSubtotal - discountAmount);
+      const newGst = discountedSubtotal * 0.18;
+      const newTotal = discountedSubtotal + newGst;
+      
+      document.getElementById('gstAmount').innerText = newGst.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+      document.getElementById('grandTotal').innerText = newTotal.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+    });
+  }
+
+  // Claim and Apply Offer inline
+  async function claimAndApplyOffer(offerId, offerTitle, offerDiscount, btnElement) {
+    if (btnElement.disabled) return; // Prevent double-clicks
+    
+    btnElement.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+    btnElement.disabled = true;
+
+    try {
+      const res = await fetch(`/offers/${offerId}/claim`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
+      const data = await res.json();
+      
+      if(data.success) {
+        try {
+          // Add to dropdown
+          const select = document.getElementById('appliedOffer');
+          if (select) {
+            // Check if option already exists to prevent duplicates
+            let exists = Array.from(select.options).some(opt => opt.value === offerId);
+            if (!exists) {
+              const option = document.createElement('option');
+              option.value = offerId;
+              option.setAttribute('data-discount', offerDiscount);
+              option.text = `${offerTitle} - ${offerDiscount}`;
+              select.appendChild(option);
+            }
+            // Select it
+            select.value = offerId;
+            // Trigger change event to update price
+            select.dispatchEvent(new Event('change'));
+          }
+          
+          // Update UI states
+          const container = document.getElementById('offersDropdownContainer');
+          if (container) container.style.display = 'block';
+          const msg = document.getElementById('noOffersMessage');
+          if (msg) msg.style.display = 'none';
+          
+          // Hide the claimed offer from modal
+          const card = document.getElementById(`avail-offer-${offerId}`);
+          if(card) card.style.display = 'none';
+          
+          // Close Modal safely using the close button
+          const modalEl = document.getElementById('availableOffersModal');
+          if (modalEl) {
+            const closeBtn = modalEl.querySelector('.btn-close');
+            if (closeBtn) closeBtn.click();
+          }
+        } catch (domErr) {
+          console.error("DOM update error:", domErr);
+        }
+        
+        // Reset button state just in case modal doesn't close
+        btnElement.innerHTML = 'Apply';
+        btnElement.disabled = false;
+        
+      } else {
+        alert(data.message || 'Failed to claim offer');
+        btnElement.innerHTML = 'Apply';
+        btnElement.disabled = false;
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Network error. Please try again.');
+      btnElement.innerHTML = 'Apply';
+      btnElement.disabled = false;
+    }
+  }
 </script>

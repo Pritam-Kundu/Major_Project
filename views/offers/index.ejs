@@ -229,8 +229,19 @@
 
   .claim-btn.claimed {
     background: #4caf50;
-    pointer-events: none;
     box-shadow: none;
+  }
+  .claim-btn.claimed:hover {
+    background: #e53935;
+  }
+  .claim-btn.claimed:hover .text-claimed {
+    display: none;
+  }
+  .claim-btn.claimed:hover .text-unclaim {
+    display: inline;
+  }
+  .text-unclaim {
+    display: none;
   }
 
   .terms-link {
@@ -371,12 +382,14 @@
               </div>
               
               <% if(hasClaimed) { %>
-                <button class="claim-btn claimed" onclick="event.stopPropagation();">
-                  <i class="fa-solid fa-check-circle me-1"></i> Claimed
+                <button class="claim-btn claimed btn-claim-action" data-id="<%= offer._id %>" onclick="event.stopPropagation(); toggleClaimOffer('<%= offer._id %>', this, true)">
+                  <span class="text-claimed"><i class="fa-solid fa-check-circle me-1"></i> Claimed</span>
+                  <span class="text-unclaim"><i class="fa-solid fa-times-circle me-1"></i> Unclaim</span>
                 </button>
               <% } else { %>
-                <button class="claim-btn btn-claim-action" data-id="<%= offer._id %>" onclick="event.stopPropagation(); claimOffer('<%= offer._id %>', this)">
-                  Claim Offer <i class="fa-solid fa-arrow-right ms-2"></i>
+                <button class="claim-btn btn-claim-action" data-id="<%= offer._id %>" onclick="event.stopPropagation(); toggleClaimOffer('<%= offer._id %>', this, false)">
+                  <span class="text-claimed">Claim Offer <i class="fa-solid fa-arrow-right ms-2"></i></span>
+                  <span class="text-unclaim"><i class="fa-solid fa-times-circle me-1"></i> Unclaim</span>
                 </button>
               <% } %>
               
@@ -430,7 +443,7 @@
           <span class="countdown-text" id="modalTimer"></span>
         </div>
 
-        <button id="modalClaimBtn" class="claim-btn w-100 py-3 fs-5" onclick="claimModalOffer()">Claim Offer</button>
+        <button id="modalClaimBtn" class="claim-btn w-100 py-3 fs-5" onclick="toggleModalClaim(false)">Claim Offer</button>
         
         <div class="text-start mt-4 pt-3 border-top">
           <h6 class="fw-bold fs-6">Eligibility & Terms:</h6>
@@ -491,10 +504,10 @@
   setInterval(updateTimers, 60000); // update every minute
   document.addEventListener('DOMContentLoaded', updateTimers);
 
-  // Claim Offer AJAX function
+  // Toggle Claim Offer AJAX function
   let currentModalOfferId = null;
 
-  async function claimOffer(id, btnElement) {
+  async function toggleClaimOffer(id, btnElement, isCurrentlyClaimed) {
     <% if(!currUser) { %>
       window.location.href = '/login';
       return;
@@ -505,8 +518,10 @@
     btnElement.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
     btnElement.style.pointerEvents = 'none';
 
+    const url = isCurrentlyClaimed ? `/offers/${id}/unclaim` : `/offers/${id}/claim`;
+
     try {
-      const res = await fetch(`/offers/${id}/claim`, {
+      const res = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -516,25 +531,31 @@
       const data = await res.json();
       
       if(data.success) {
-        // Change button to claimed
-        btnElement.innerHTML = '<i class="fa-solid fa-check-circle me-1"></i> Claimed';
-        btnElement.classList.add('claimed');
-        
-        // Update hidden data so modal knows it's claimed
-        document.getElementById(`offer-data-${id}`).setAttribute('data-claimed', 'true');
-        
-        // Show Toast
-        showToast("Offer successfully claimed! View it in your account.", "bg-success");
+        if (isCurrentlyClaimed) {
+          // Changed to Unclaimed state
+          btnElement.innerHTML = '<span class="text-claimed">Claim Offer <i class="fa-solid fa-arrow-right ms-2"></i></span><span class="text-unclaim"><i class="fa-solid fa-times-circle me-1"></i> Unclaim</span>';
+          btnElement.classList.remove('claimed');
+          btnElement.setAttribute('onclick', `event.stopPropagation(); toggleClaimOffer('${id}', this, false)`);
+          document.getElementById(`offer-data-${id}`).setAttribute('data-claimed', 'false');
+          showToast("Offer successfully unclaimed.", "bg-info");
+        } else {
+          // Changed to Claimed state
+          btnElement.innerHTML = '<span class="text-claimed"><i class="fa-solid fa-check-circle me-1"></i> Claimed</span><span class="text-unclaim"><i class="fa-solid fa-times-circle me-1"></i> Unclaim</span>';
+          btnElement.classList.add('claimed');
+          btnElement.setAttribute('onclick', `event.stopPropagation(); toggleClaimOffer('${id}', this, true)`);
+          document.getElementById(`offer-data-${id}`).setAttribute('data-claimed', 'true');
+          showToast("Offer successfully claimed! View it in your account.", "bg-success");
+        }
       } else {
         btnElement.innerHTML = originalText;
-        btnElement.style.pointerEvents = 'auto';
-        showToast(data.message || "Failed to claim offer.", "bg-danger");
+        showToast(data.message || "Failed to process request.", "bg-danger");
       }
     } catch(err) {
       console.error(err);
       btnElement.innerHTML = originalText;
-      btnElement.style.pointerEvents = 'auto';
       showToast("Network error. Please try again.", "bg-danger");
+    } finally {
+      btnElement.style.pointerEvents = 'auto';
     }
   }
 
@@ -577,13 +598,13 @@
     const claimBtn = document.getElementById('modalClaimBtn');
     
     if(isClaimed) {
-      claimBtn.innerHTML = '<i class="fa-solid fa-check-circle me-1"></i> Claimed';
+      claimBtn.innerHTML = '<span class="text-claimed"><i class="fa-solid fa-check-circle me-1"></i> Claimed</span><span class="text-unclaim"><i class="fa-solid fa-times-circle me-1"></i> Unclaim</span>';
       claimBtn.classList.add('claimed');
-      claimBtn.disabled = true;
+      claimBtn.setAttribute('onclick', `toggleModalClaim(true)`);
     } else {
-      claimBtn.innerHTML = 'Claim Offer <i class="fa-solid fa-arrow-right ms-2"></i>';
+      claimBtn.innerHTML = '<span class="text-claimed">Claim Offer <i class="fa-solid fa-arrow-right ms-2"></i></span><span class="text-unclaim"><i class="fa-solid fa-times-circle me-1"></i> Unclaim</span>';
       claimBtn.classList.remove('claimed');
-      claimBtn.disabled = false;
+      claimBtn.setAttribute('onclick', `toggleModalClaim(false)`);
     }
     
     updateTimers(); // force update modal timer
@@ -592,24 +613,26 @@
     modal.show();
   }
 
-  function claimModalOffer() {
+  function toggleModalClaim(isCurrentlyClaimed) {
     if(!currentModalOfferId) return;
     const claimBtn = document.getElementById('modalClaimBtn');
-    // Find the corresponding button on the grid to update it too
     const gridBtn = document.querySelector(`.btn-claim-action[data-id="${currentModalOfferId}"]`);
     
-    // Simulate clicking the grid button to reuse logic
     if(gridBtn) {
       claimBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
-      claimOffer(currentModalOfferId, gridBtn).then(() => {
+      claimBtn.style.pointerEvents = 'none';
+      toggleClaimOffer(currentModalOfferId, gridBtn, isCurrentlyClaimed).then(() => {
         // Update modal button after grid logic finishes
         if(gridBtn.classList.contains('claimed')) {
-           claimBtn.innerHTML = '<i class="fa-solid fa-check-circle me-1"></i> Claimed';
+           claimBtn.innerHTML = '<span class="text-claimed"><i class="fa-solid fa-check-circle me-1"></i> Claimed</span><span class="text-unclaim"><i class="fa-solid fa-times-circle me-1"></i> Unclaim</span>';
            claimBtn.classList.add('claimed');
-           claimBtn.disabled = true;
+           claimBtn.setAttribute('onclick', `toggleModalClaim(true)`);
         } else {
-           claimBtn.innerHTML = 'Claim Offer <i class="fa-solid fa-arrow-right ms-2"></i>';
+           claimBtn.innerHTML = '<span class="text-claimed">Claim Offer <i class="fa-solid fa-arrow-right ms-2"></i></span><span class="text-unclaim"><i class="fa-solid fa-times-circle me-1"></i> Unclaim</span>';
+           claimBtn.classList.remove('claimed');
+           claimBtn.setAttribute('onclick', `toggleModalClaim(false)`);
         }
+        claimBtn.style.pointerEvents = 'auto';
       });
     }
   }
