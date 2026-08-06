@@ -111,6 +111,30 @@ const bookingSchema = new Schema({
     cancellationDeadline: {
         type: Date,
     },
+
+    bookingReference: {
+        type: String,
+        unique: true,
+        sparse: true,
+    },
+
+    confirmationEmailSent: {
+        type: Boolean,
+        default: false,
+    },
+
+    confirmationEmailSentAt: {
+        type: Date,
+    },
+});
+
+bookingSchema.pre('save', function (next) {
+    if (!this.bookingReference) {
+        const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+        const randomStr = Math.random().toString(16).substr(2, 6).toUpperCase();
+        this.bookingReference = `HMG-${dateStr}-${randomStr}`;
+    }
+    next();
 });
 
 module.exports = mongoose.model("Booking", bookingSchema);

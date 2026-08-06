@@ -223,12 +223,6 @@
                     <button type="button" class="btn btn-outline-danger w-100 py-2 fw-bold text-uppercase" style="letter-spacing: 1px; border-radius: 8px;"
                       data-bs-toggle="modal" data-bs-target="#cancelModal"
                       data-booking-id="<%= booking._id %>"
-                      data-property-name="<%= booking.listing.title %>"
-                      data-booking-amount="₹<%= grandTotal.toLocaleString('en-IN') %>"
-                      data-refund-amount="₹<%= booking.computedCancellation.refundAmount.toLocaleString('en-IN') %>"
-                      data-refund-percentage="<%= booking.computedCancellation.refundPercentage %>%"
-                      data-deduction="₹<%= booking.computedCancellation.deductionAmount.toLocaleString('en-IN') %>"
-                      data-policy="<%= booking.computedCancellation.cancellationMessage %>"
                       >
                       Cancel Trip
                     </button>
@@ -255,10 +249,42 @@
         <h5 class="modal-title fw-bold" id="cancelModalLabel"><i class="fa-solid fa-triangle-exclamation me-2"></i>Cancel Booking</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form id="cancelForm" method="POST" action="">
+      
+      <div id="modalLoading" class="text-center p-5">
+        <div class="spinner-border text-danger" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3 text-muted">Calculating cancellation refund...</p>
+      </div>
+
+      <form id="cancelForm" method="POST" action="" class="d-none">
         <div class="modal-body p-4">
-          <h5 class="fw-bold mb-3" id="modalPropertyName">Property Name</h5>
+          <!-- Property Header -->
+          <div class="d-flex align-items-center mb-3">
+            <img id="modalPropertyImage" src="" alt="Property" class="rounded" style="width: 70px; height: 70px; object-fit: cover; margin-right: 15px;">
+            <div>
+              <h5 class="fw-bold mb-1" id="modalPropertyName">Property Name</h5>
+              <p class="text-muted mb-0 small" id="modalPropertyLocation"><i class="fa-solid fa-location-dot me-1"></i>Location</p>
+            </div>
+          </div>
+
+          <!-- Trip Details -->
+          <div class="d-flex justify-content-between mb-3 bg-light p-2 rounded">
+            <div class="text-center flex-fill border-end">
+              <div class="small text-muted text-uppercase fw-bold">Check-in</div>
+              <div id="modalCheckIn" class="fw-bold">--</div>
+            </div>
+            <div class="text-center flex-fill border-end">
+              <div class="small text-muted text-uppercase fw-bold">Check-out</div>
+              <div id="modalCheckOut" class="fw-bold">--</div>
+            </div>
+            <div class="text-center flex-fill">
+              <div class="small text-muted text-uppercase fw-bold">Guests</div>
+              <div id="modalGuests" class="fw-bold">--</div>
+            </div>
+          </div>
           
+          <!-- Financial Details -->
           <div class="bg-light p-3 rounded-3 mb-3 border">
             <div class="d-flex justify-content-between mb-2">
               <span class="text-muted">Booking Amount:</span>
@@ -266,7 +292,7 @@
             </div>
             <div class="d-flex justify-content-between mb-2">
               <span class="text-muted">Cancellation Date:</span>
-              <span class="fw-bold"><%= new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
+              <span class="fw-bold" id="modalCancelDate"><%= new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
             </div>
             <div class="d-flex justify-content-between mb-2 text-danger">
               <span class="text-muted">Deduction:</span>
@@ -274,13 +300,16 @@
             </div>
             <hr class="my-2">
             <div class="d-flex justify-content-between align-items-center">
-              <span class="text-muted">Refund Amount <span id="modalRefundPercentage" class="badge bg-success ms-1">100%</span></span>
+              <span class="text-muted">Refund Amount <span id="modalRefundPercentage" class="badge bg-success ms-1">0%</span></span>
               <span class="fw-bold fs-5 text-success" id="modalRefundAmount">₹0</span>
             </div>
           </div>
 
-          <div class="alert alert-warning py-2 px-3" style="font-size: 0.85rem;">
-            <strong>Policy Applied:</strong> <span id="modalPolicyMessage"></span>
+          <!-- Policy Box -->
+          <div class="border border-warning rounded p-3 bg-opacity-10 bg-warning mb-3">
+            <h6 class="fw-bold text-dark mb-1">Policy Applied</h6>
+            <div id="modalPolicyTitle" class="fw-bold text-warning-emphasis mb-1">--</div>
+            <div id="modalPolicyMessage" class="small text-muted">--</div>
           </div>
 
           <div class="mb-3">
@@ -316,33 +345,61 @@
   document.addEventListener('DOMContentLoaded', () => {
     const cancelModal = document.getElementById('cancelModal');
     if (cancelModal) {
-      cancelModal.addEventListener('show.bs.modal', event => {
-        const button = event.relatedTarget;
-        
-        const bookingId = button.getAttribute('data-booking-id');
-        const propertyName = button.getAttribute('data-property-name');
-        const bookingAmount = button.getAttribute('data-booking-amount');
-        const refundAmount = button.getAttribute('data-refund-amount');
-        const refundPercentage = button.getAttribute('data-refund-percentage');
-        const deduction = button.getAttribute('data-deduction');
-        const policy = button.getAttribute('data-policy');
-        
-        document.getElementById('cancelForm').action = \`/bookings/\${bookingId}/cancel?_method=PUT\`;
-        document.getElementById('modalPropertyName').textContent = propertyName;
-        document.getElementById('modalBookingAmount').textContent = bookingAmount;
-        document.getElementById('modalRefundAmount').textContent = refundAmount;
-        document.getElementById('modalRefundPercentage').textContent = refundPercentage;
-        document.getElementById('modalDeduction').textContent = deduction;
-        document.getElementById('modalPolicyMessage').textContent = policy;
-        
-        document.getElementById('cancellationReason').value = "";
-        document.getElementById('confirmCancelCheck').checked = false;
-        document.getElementById('confirmCancelBtn').disabled = true;
-      });
-
+      const form = document.getElementById('cancelForm');
+      const loading = document.getElementById('modalLoading');
       const reasonSelect = document.getElementById('cancellationReason');
       const confirmCheck = document.getElementById('confirmCancelCheck');
       const confirmBtn = document.getElementById('confirmCancelBtn');
+
+      function formatCurrency(amount) {
+        return '₹' + Number(amount).toLocaleString('en-IN');
+      }
+
+      function formatDate(dateStr) {
+        return new Date(dateStr).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+      }
+
+      cancelModal.addEventListener('show.bs.modal', async (event) => {
+        const button = event.relatedTarget;
+        const bookingId = button.getAttribute('data-booking-id');
+        
+        // Reset and show loading
+        form.classList.add('d-none');
+        loading.classList.remove('d-none');
+        reasonSelect.value = "";
+        confirmCheck.checked = false;
+        confirmBtn.disabled = true;
+
+        try {
+          const response = await fetch(`/bookings/${bookingId}/cancellation-data`);
+          if (!response.ok) throw new Error('Failed to fetch data');
+          const data = await response.json();
+
+          form.action = `/bookings/${bookingId}/cancel?_method=PUT`;
+          document.getElementById('modalPropertyName').textContent = data.propertyName;
+          document.getElementById('modalPropertyLocation').innerHTML = `<i class="fa-solid fa-location-dot me-1"></i>${data.location}`;
+          document.getElementById('modalPropertyImage').src = data.propertyImage;
+
+          document.getElementById('modalCheckIn').textContent = formatDate(data.checkIn);
+          document.getElementById('modalCheckOut').textContent = formatDate(data.checkOut);
+          document.getElementById('modalGuests').textContent = data.guests;
+
+          document.getElementById('modalBookingAmount').textContent = formatCurrency(data.bookingAmount);
+          document.getElementById('modalRefundAmount').textContent = formatCurrency(data.refundAmount);
+          document.getElementById('modalRefundPercentage').textContent = `${data.refundPercentage}%`;
+          document.getElementById('modalDeduction').textContent = formatCurrency(data.deductionAmount);
+          
+          document.getElementById('modalPolicyTitle').textContent = data.policyText;
+          document.getElementById('modalPolicyMessage').textContent = data.cancellationMessage;
+
+          // Data loaded, show form
+          loading.classList.add('d-none');
+          form.classList.remove('d-none');
+        } catch (err) {
+          console.error("Error loading cancellation data:", err);
+          loading.innerHTML = '<div class="alert alert-danger m-3">Failed to load cancellation data. Please try again.</div>';
+        }
+      });
 
       function validateForm() {
         if (reasonSelect.value !== "" && confirmCheck.checked) {

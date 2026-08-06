@@ -582,7 +582,7 @@
     <div class="col-lg-8 pe-lg-4">
       <div class="hotel-description">
         <p><%= listing.description %></p>
-        <p>Owned by <strong><%= listing.owner ? listing.owner.username : "Unknown Owner" %></strong>, this property offers excellent facilities, a great location, and a memorable stay for all guests.</p>
+        <p>Owned by <strong><%= listing.owner ? (listing.owner.firstName && listing.owner.lastName ? listing.owner.firstName + ' ' + listing.owner.lastName : listing.owner.username) : "Property Owner" %></strong>, this property offers excellent facilities, a great location, and a memorable stay for all guests.</p>
       </div>
 
       <h3 class="section-title">What this place offers</h3>

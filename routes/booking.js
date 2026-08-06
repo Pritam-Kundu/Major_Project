@@ -20,6 +20,6 @@ router.get("/:id/success/:bookingId", isLoggedIn, bookingController.renderSucces
 router.post("/:id", isLoggedIn, bookingController.createBooking);
 
 router.put("/:id/cancel", isLoggedIn, bookingController.cancelBooking);
-
+router.get("/:id/cancellation-data", isLoggedIn, bookingController.getCancellationData);
 
 module.exports = router;
