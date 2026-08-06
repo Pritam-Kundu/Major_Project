@@ -83,6 +83,16 @@
         z-index: 100;
         border: 1px solid #eee;
     }
+    @media(max-width: 576px) {
+        .import-controls {
+            flex-direction: column;
+            gap: 10px;
+            border-radius: 20px;
+        }
+        .import-controls form, .import-controls button {
+            width: 100%;
+        }
+    }
     #loadingSpinner {
         display: none;
     }

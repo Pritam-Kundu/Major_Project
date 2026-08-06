@@ -16,7 +16,12 @@ module.exports.listingSchema = Joi.object({
         lastUpdated: Joi.date().allow(null),
         website: Joi.string().allow("", null),
         phone: Joi.string().allow("", null)
-    }).required()
+    }).required(),
+    coverImage: Joi.string().allow("", null),
+    deleteImages: Joi.alternatives().try(
+        Joi.string(),
+        Joi.array().items(Joi.string())
+    ).allow(null)
 })
 
 

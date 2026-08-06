@@ -1,190 +1,207 @@
 <% layout("layouts/boilerplate") %>
 
-<div class="container mt-5">
+<style>
+  .help-container {
+    background-color: #fbfaf8;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    margin: 2rem auto 4rem auto;
+    padding: 3rem 2rem;
+    max-width: 900px;
+  }
 
-    <div class="text-center mb-5">
+  @media (min-width: 768px) {
+    .help-container {
+      padding: 4rem 5rem;
+    }
+  }
 
-        <h1>
-            Help Center
-        </h1>
+  .auth-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 3rem;
+    color: #111;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
 
-        <p class="text-muted">
+  .auth-subtitle {
+    color: #555;
+    font-size: 1.05rem;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
 
-            How can we help you today?
+  .help-card {
+    background: transparent;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
 
-        </p>
+  .help-card:hover {
+    border-color: #222;
+    background: #fff;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  }
 
+  .help-card i {
+    color: #222 !important;
+  }
+
+  .help-card h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 0.5rem;
+  }
+
+  .help-card p {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 0;
+  }
+
+  .faq-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2rem;
+    color: #111;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .accordion-item {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #c4c4c4;
+  }
+
+  .accordion-button {
+    background-color: transparent !important;
+    color: #222 !important;
+    font-weight: 600;
+    padding: 1.5rem 0;
+    box-shadow: none !important;
+  }
+
+  .accordion-button:not(.collapsed) {
+    color: #000 !important;
+  }
+
+  .accordion-body {
+    padding: 0 0 1.5rem 0;
+    color: #555;
+  }
+
+  .auth-btn-dark {
+    width: auto;
+    min-width: 200px;
+    background: #000;
+    color: #fff;
+    border: 1px solid #000;
+    padding: 16px 32px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 2px;
+    text-decoration: none;
+  }
+
+  .auth-btn-dark:hover {
+    background: #333;
+    color: #fff;
+  }
+</style>
+
+<div class="help-container">
+    <div class="text-center">
+        <h1 class="auth-title">Help Center</h1>
+        <p class="auth-subtitle">How can we help you today?</p>
     </div>
 
-    <div class="row g-4">
-
+    <div class="row g-4 mb-5">
         <div class="col-md-4">
-
-            <div class="card h-100 shadow">
-
-                <div class="card-body text-center">
-
-                    <i class="fa-solid fa-calendar-check fa-3x text-primary mb-3"></i>
-
+            <div class="card h-100 help-card">
+                <div class="card-body text-center p-4">
+                    <i class="fa-solid fa-calendar-check fa-3x mb-3"></i>
                     <h4>Booking Help</h4>
-
-                    <p>
-
-                        Learn how to make, modify and cancel bookings.
-
-                    </p>
-
+                    <p>Learn how to make, modify and cancel bookings.</p>
                 </div>
-
             </div>
-
         </div>
-
         <div class="col-md-4">
-
-            <div class="card h-100 shadow">
-
-                <div class="card-body text-center">
-
-                    <i class="fa-solid fa-credit-card fa-3x text-success mb-3"></i>
-
+            <div class="card h-100 help-card">
+                <div class="card-body text-center p-4">
+                    <i class="fa-solid fa-credit-card fa-3x mb-3"></i>
                     <h4>Payments</h4>
-
-                    <p>
-
-                        GST, refunds and payment information.
-
-                    </p>
-
+                    <p>GST, refunds and payment information.</p>
                 </div>
-
             </div>
-
         </div>
-
         <div class="col-md-4">
-
-            <div class="card h-100 shadow">
-
-                <div class="card-body text-center">
-
-                    <i class="fa-solid fa-house fa-3x text-danger mb-3"></i>
-
+            <div class="card h-100 help-card">
+                <div class="card-body text-center p-4">
+                    <i class="fa-solid fa-house fa-3x mb-3"></i>
                     <h4>Hosting</h4>
-
-                    <p>
-
-                        Learn how to list and manage properties.
-
-                    </p>
-
+                    <p>Learn how to list and manage properties.</p>
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
-    <hr class="my-5">
-
-    <h3 class="mb-4">
-
-        Frequently Asked Questions
-
-    </h3>
-
-    <div class="accordion" id="faqAccordion">
-
-        <div class="accordion-item">
-
-            <h2 class="accordion-header">
-
-                <button class="accordion-button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#one">
-
-                    How do I book a property?
-
-                </button>
-
-            </h2>
-
-            <div id="one" class="accordion-collapse collapse show">
-
-                <div class="accordion-body">
-
-                    Open any listing, select dates, choose guests and click Reserve.
-
+    <div class="mt-5 pt-4 border-top" style="border-top-color: #e0e0e0 !important;">
+        <h3 class="faq-title">Frequently Asked Questions</h3>
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#one">
+                        How do I book a property?
+                    </button>
+                </h2>
+                <div id="one" class="accordion-collapse collapse show">
+                    <div class="accordion-body">
+                        Open any listing, select dates, choose guests and click Reserve.
+                    </div>
                 </div>
-
             </div>
-
-        </div>
-
-        <div class="accordion-item">
-
-            <h2 class="accordion-header">
-
-                <button class="accordion-button collapsed"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#two">
-
-                    How do I cancel a booking?
-
-                </button>
-
-            </h2>
-
-            <div id="two" class="accordion-collapse collapse">
-
-                <div class="accordion-body">
-
-                    Go to My Bookings and click Cancel Booking.
-
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#two">
+                        How do I cancel a booking?
+                    </button>
+                </h2>
+                <div id="two" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        Go to My Bookings and click Cancel Booking.
+                    </div>
                 </div>
-
             </div>
-
-        </div>
-
-        <div class="accordion-item">
-
-            <h2 class="accordion-header">
-
-                <button class="accordion-button collapsed"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#three">
-
-                    How do I contact support?
-
-                </button>
-
-            </h2>
-
-            <div id="three" class="accordion-collapse collapse">
-
-                <div class="accordion-body">
-
-                    Click the Contact Support button below.
-
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#three">
+                        How do I contact support?
+                    </button>
+                </h2>
+                <div id="three" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        Click the Contact Support button below.
+                    </div>
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
-    <div class="text-center mt-5">
-
-        <a href="/help/contact"
-           class="btn btn-danger btn-lg">
-
-            Contact Support
-
+    <div class="text-center mt-5 pt-4">
+        <a href="/help/contact" class="auth-btn-dark">
+            Contact Support <i class="fa-solid fa-headset"></i>
         </a>
-
     </div>
-
 </div>

@@ -1,67 +1,133 @@
 <% layout("layouts/boilerplate") %>
 
-    <div class="container mt-5">
+<style>
+  .tickets-container {
+    background-color: #fbfaf8;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    margin: 2rem auto 4rem auto;
+    padding: 3rem 2rem;
+    max-width: 900px;
+  }
 
-        <h2>
+  @media (min-width: 768px) {
+    .tickets-container {
+      padding: 4rem 5rem;
+    }
+  }
 
-            My Support Tickets
+  .auth-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 3rem;
+    color: #111;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
 
-        </h2>
+  /* Elegant Table Styling */
+  .custom-table {
+    width: 100%;
+    margin-top: 1rem;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
 
-        <table class="table table-bordered mt-4">
+  .custom-table th {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #555;
+    padding: 1rem 1.5rem;
+    border-bottom: 2px solid #e0e0e0;
+    text-align: left;
+  }
 
+  .custom-table td {
+    padding: 1.2rem 1.5rem;
+    vertical-align: middle;
+    color: #333;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 0.95rem;
+  }
+
+  .custom-table tbody tr {
+    transition: background-color 0.2s ease;
+  }
+
+  .custom-table tbody tr:hover {
+    background-color: #fff;
+  }
+
+  .status-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .status-open {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+  }
+  
+  .status-inprogress {
+    background-color: #fff3e0;
+    color: #e65100;
+  }
+
+  .status-resolved {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+    font-style: italic;
+  }
+</style>
+
+<div class="tickets-container">
+    <h1 class="auth-title">My Support Tickets</h1>
+
+    <% if(tickets && tickets.length > 0) { %>
+    <div class="table-responsive">
+        <table class="custom-table">
             <thead>
-
                 <tr>
-
                     <th>Subject</th>
-
                     <th>Category</th>
-
                     <th>Status</th>
-
                     <th>Date</th>
-
                 </tr>
-
             </thead>
-
             <tbody>
-
-                <% tickets.forEach(ticket=>{ %>
-
+                <% tickets.forEach(ticket => { %>
                     <tr>
-
+                        <td class="fw-semibold"><%= ticket.subject %></td>
+                        <td><%= ticket.category %></td>
                         <td>
-                            <%= ticket.subject %>
-                        </td>
-
-                        <td>
-                            <%= ticket.category %>
-                        </td>
-
-                        <td>
-
-                            <span class="badge bg-primary">
-
+                            <span class="status-badge 
+                                <%= ticket.status === 'Open' ? 'status-open' : '' %>
+                                <%= ticket.status === 'In Progress' ? 'status-inprogress' : '' %>
+                                <%= ticket.status === 'Resolved' ? 'status-resolved' : '' %>
+                            ">
                                 <%= ticket.status %>
-
                             </span>
-
                         </td>
-
-                        <td>
-
-                            <%= ticket.createdAt.toDateString() %>
-
-                        </td>
-
+                        <td class="text-muted"><%= ticket.createdAt.toDateString() %></td>
                     </tr>
-
-                    <% }) %>
-
+                <% }) %>
             </tbody>
-
         </table>
-
     </div>
+    <% } else { %>
+        <div class="empty-state">
+            <p>You have no support tickets at the moment.</p>
+        </div>
+    <% } %>
+</div>

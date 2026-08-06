@@ -295,6 +295,10 @@
         gap: 30px;
       }
 
+      .dashboard-container > div {
+        min-width: 0;
+      }
+
       /* Handpicked Collections */
       .handpicked-section h3 {
         font-family: 'Playfair Display', serif;
@@ -519,7 +523,7 @@
 
       @media(max-width: 1024px) {
         .dashboard-container {
-          grid-template-columns: 1fr;
+          grid-template-columns: minmax(0, 1fr);
         }
 
         .global-explorer {
@@ -538,6 +542,23 @@
 
         .hp-card:nth-child(4) {
           grid-column: span 1;
+        }
+
+        .global-explorer {
+          flex-direction: column;
+          text-align: center;
+          padding: 20px 15px;
+        }
+
+        .ge-content {
+          max-width: 100%;
+          margin-bottom: 20px;
+        }
+      }
+
+      @media(max-width: 576px) {
+        .handpicked-grid {
+          grid-template-columns: 1fr;
         }
       }
 
@@ -1030,6 +1051,22 @@
         border: 1px solid #e0e0e0;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         margin-bottom: 2rem;
+        /* Removed max-height and overflow-y to eliminate internal scrollbar */
+      }
+      
+      /* 
+       * STICKY FILTER SIDEBAR
+       * Applied to the parent column (.col-lg-3) so the entire block sticks naturally.
+       * 'align-self: flex-start' prevents the column from stretching to full row height,
+       * which is mandatory for position: sticky to work inside a flex container!
+       */
+      @media(min-width: 992px) {
+        .filter-sidebar-container {
+          position: sticky;
+          top: 85px; /* Offset for the glassmorphism navbar */
+          align-self: flex-start;
+          z-index: 10;
+        }
       }
 
       .filter-section {
@@ -1579,9 +1616,24 @@
 
               <div class="row mt-4">
                 <!-- Sidebar Filters -->
-                <div class="col-lg-3 d-none d-lg-block">
-                  <form class="sidebar-filter sticky-top" style="top: 20px; z-index: 1;" action="/listings/search"
-                    method="GET" id="filterForm">
+                <!-- Added filter-sidebar-container to apply sticky logic at the correct flex level -->
+                <div class="col-lg-3 mb-4 filter-sidebar-container">
+                  <!-- 
+                    Responsive Offcanvas Wrapper for Sidebar Filters
+                    - 'offcanvas-lg': This Bootstrap 5 class keeps the element as a standard block on large screens (desktops), but transforms it into a hidden slide-in drawer on small screens (mobile/tablets).
+                    - 'offcanvas-start': Means the drawer slides in from the left side of the screen.
+                  -->
+                  <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="offcanvasFilters" aria-labelledby="offcanvasFiltersLabel">
+                    <div class="offcanvas-header d-lg-none border-bottom">
+                      <h5 class="offcanvas-title" id="offcanvasFiltersLabel" style="font-weight: 700; color: #003580;">
+                        <i class="fa-solid fa-filter"></i> Filters
+                      </h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasFilters" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body p-3 p-lg-0">
+                      <!-- Removed sticky-top and custom top/z-index styles because sticky behavior is now handled cleanly by the parent container -->
+                      <form class="sidebar-filter w-100" action="/listings/search"
+                        method="GET" id="filterForm">
                     <% if(typeof searchParams !=='undefined' && searchParams) { %>
                       <% for(let key in searchParams) { %>
                         <% if(!['category', 'stars' , 'rating' , 'amenity' , 'priceMin' , 'priceMax' , 'page'
@@ -1660,26 +1712,168 @@
                                 </div>
 
                                 <div class="filter-section">
-                                  <h4 class="filter-title">Amenities</h4>
-                                  <% const amenitiesList=[{val: 'wifi' , label: 'Free WiFi' }, {val: 'breakfast' ,
-                                    label: 'Breakfast Included' }, {val: 'pool' , label: 'Swimming Pool' },
-                                    {val: 'cancel' , label: 'Free Cancellation' }]; %>
-                                    <% for(let am of amenitiesList) { %>
-                                      <label class="custom-checkbox">
-                                        <input type="checkbox" name="amenity" class="sidebar-chk" value="<%= am.val %>"
-                                          <%=typeof searchParams !=='undefined' && searchParams && searchParams.amenity
-                                          && (Array.isArray(searchParams.amenity) ?
-                                          searchParams.amenity.includes(am.val) : searchParams.amenity===am.val)
-                                          ? 'checked' : '' %>>
-                                        <div class="checkmark"></div>
-                                        <span class="checkbox-label">
-                                          <%= am.label %>
-                                        </span>
-                                      </label>
-                                      <% } %>
+                                  <h4 class="filter-title">Room Type</h4>
+                                  <% const roomTypes = ['Standard Room', 'Deluxe Room', 'Executive Room', 'Family Room', 'Suite', 'Presidential Suite']; %>
+                                  <% for(let r of roomTypes) { %>
+                                    <label class="custom-checkbox">
+                                      <input type="checkbox" name="roomType" class="sidebar-chk" value="<%= r %>"
+                                        <%=typeof searchParams !=='undefined' && searchParams && searchParams.roomType && (Array.isArray(searchParams.roomType) ? searchParams.roomType.includes(r) : searchParams.roomType === r) ? 'checked' : '' %>>
+                                      <div class="checkmark"></div>
+                                      <span class="checkbox-label"><%= r %></span>
+                                    </label>
+                                  <% } %>
                                 </div>
 
+                                <div class="filter-section">
+                                  <h4 class="filter-title">Booking Options</h4>
+                                  <% const bookingOpts = ['Free Cancellation', 'Pay at Hotel', 'Instant Confirmation', 'Limited Rooms Left']; %>
+                                  <% for(let opt of bookingOpts) { %>
+                                    <label class="custom-checkbox">
+                                      <input type="checkbox" name="bookingOptions" class="sidebar-chk" value="<%= opt %>"
+                                        <%=typeof searchParams !=='undefined' && searchParams && searchParams.bookingOptions && (Array.isArray(searchParams.bookingOptions) ? searchParams.bookingOptions.includes(opt) : searchParams.bookingOptions === opt) ? 'checked' : '' %>>
+                                      <div class="checkmark"></div>
+                                      <span class="checkbox-label"><%= opt %></span>
+                                    </label>
+                                  <% } %>
+                                </div>
+
+                                <div class="filter-section">
+                                  <h4 class="filter-title">Meal Plans</h4>
+                                  <% const mealPlans = ['Breakfast Included', 'Lunch Included', 'Dinner Included', 'All Meals Included']; %>
+                                  <% for(let plan of mealPlans) { %>
+                                    <label class="custom-checkbox">
+                                      <input type="checkbox" name="mealPlans" class="sidebar-chk" value="<%= plan %>"
+                                        <%=typeof searchParams !=='undefined' && searchParams && searchParams.mealPlans && (Array.isArray(searchParams.mealPlans) ? searchParams.mealPlans.includes(plan) : searchParams.mealPlans === plan) ? 'checked' : '' %>>
+                                      <div class="checkmark"></div>
+                                      <span class="checkbox-label"><%= plan %></span>
+                                    </label>
+                                  <% } %>
+                                </div>
+
+                                <div class="filter-section">
+                                  <h4 class="filter-title">Amenities</h4>
+                                  <% const amenitiesList=[
+                                    {val: 'wifi' , label: 'Free WiFi' }, {val: 'breakfast' , label: 'Breakfast Included' }, 
+                                    {val: 'pool' , label: 'Swimming Pool' }, {val: 'cancel' , label: 'Free Cancellation'},
+                                    {val: 'Air Conditioning', label: 'Air Conditioning'}, {val: 'Parking', label: 'Parking'},
+                                    {val: 'Restaurant', label: 'Restaurant'}, {val: 'Gym', label: 'Gym'}, 
+                                    {val: 'Spa', label: 'Spa'}, {val: 'Pet Friendly', label: 'Pet Friendly'}, 
+                                    {val: 'Family Friendly', label: 'Family Friendly'}, {val: 'Room Service', label: 'Room Service'}, 
+                                    {val: 'Bar', label: 'Bar'}, {val: 'Airport Shuttle', label: 'Airport Shuttle'},
+                                    {val: 'Laundry Service', label: 'Laundry Service'}, {val: 'Balcony', label: 'Balcony'}, 
+                                    {val: 'Kitchen', label: 'Kitchen'}, {val: 'Elevator', label: 'Elevator'}, 
+                                    {val: 'Wheelchair Accessible', label: 'Wheelchair Accessible'}, {val: '24×7 Reception', label: '24×7 Reception'}
+                                  ]; %>
+                                  <% for(let am of amenitiesList) { %>
+                                    <label class="custom-checkbox">
+                                      <input type="checkbox" name="amenity" class="sidebar-chk" value="<%= am.val %>"
+                                        <%=typeof searchParams !=='undefined' && searchParams && searchParams.amenity && (Array.isArray(searchParams.amenity) ? searchParams.amenity.includes(am.val) : searchParams.amenity===am.val) ? 'checked' : '' %>>
+                                      <div class="checkmark"></div>
+                                      <span class="checkbox-label"><%= am.label %></span>
+                                    </label>
+                                  <% } %>
+                                </div>
+
+                                <div class="filter-section">
+                                  <h4 class="filter-title">Location Features</h4>
+                                  <% const locationFeatures = ['Near City Center', 'Near Airport', 'Near Railway Station', 'Near Metro', 'Beachfront', 'Mountain View', 'Lake View', 'River View']; %>
+                                  <% for(let loc of locationFeatures) { %>
+                                    <label class="custom-checkbox">
+                                      <input type="checkbox" name="locationFeatures" class="sidebar-chk" value="<%= loc %>"
+                                        <%=typeof searchParams !=='undefined' && searchParams && searchParams.locationFeatures && (Array.isArray(searchParams.locationFeatures) ? searchParams.locationFeatures.includes(loc) : searchParams.locationFeatures === loc) ? 'checked' : '' %>>
+                                      <div class="checkmark"></div>
+                                      <span class="checkbox-label"><%= loc %></span>
+                                    </label>
+                                  <% } %>
+                                </div>
+
+                                <div class="filter-section">
+                                  <h4 class="filter-title">Offers</h4>
+                                  <% const offers = ['Special Discount', 'Best Seller', 'Flash Sale', 'Couple Friendly', 'Business Friendly', 'Newly Added', 'Early Bird Offer', 'Last Minute Deal', 'Weekend Special', 'Long Stay Discount', 'Holiday Special', 'Festive Offer']; %>
+                                  <% for(let offer of offers) { %>
+                                    <label class="custom-checkbox">
+                                      <input type="checkbox" name="offers" class="sidebar-chk" value="<%= offer %>"
+                                        <%=typeof searchParams !=='undefined' && searchParams && searchParams.offers && (Array.isArray(searchParams.offers) ? searchParams.offers.includes(offer) : searchParams.offers === offer) ? 'checked' : '' %>>
+                                      <div class="checkmark"></div>
+                                      <span class="checkbox-label"><%= offer %></span>
+                                    </label>
+                                  <% } %>
+                                </div>
+
+                                <div class="filter-section">
+                                  <h4 class="filter-title">Property Features</h4>
+                                  <% const propertyFeatures = ['Luxury Stay', 'Budget Stay', 'Eco Friendly', 'Popular Choice', 'Family Stay', 'Business Stay']; %>
+                                  <% for(let pf of propertyFeatures) { %>
+                                    <label class="custom-checkbox">
+                                      <input type="checkbox" name="propertyFeatures" class="sidebar-chk" value="<%= pf %>"
+                                        <%=typeof searchParams !=='undefined' && searchParams && searchParams.propertyFeatures && (Array.isArray(searchParams.propertyFeatures) ? searchParams.propertyFeatures.includes(pf) : searchParams.propertyFeatures === pf) ? 'checked' : '' %>>
+                                      <div class="checkmark"></div>
+                                      <span class="checkbox-label"><%= pf %></span>
+                                    </label>
+                                  <% } %>
+                                </div>
+
+                                <div class="filter-section">
+                                  <h4 class="filter-title">Payment Options</h4>
+                                  <% const paymentOptions = ['Online Payment Available', 'Pay at Hotel', 'EMI Available']; %>
+                                  <% for(let po of paymentOptions) { %>
+                                    <label class="custom-checkbox">
+                                      <input type="checkbox" name="paymentOptions" class="sidebar-chk" value="<%= po %>"
+                                        <%=typeof searchParams !=='undefined' && searchParams && searchParams.paymentOptions && (Array.isArray(searchParams.paymentOptions) ? searchParams.paymentOptions.includes(po) : searchParams.paymentOptions === po) ? 'checked' : '' %>>
+                                      <div class="checkmark"></div>
+                                      <span class="checkbox-label"><%= po %></span>
+                                    </label>
+                                  <% } %>
+                                </div>
+
+                                <div class="filter-section">
+                                  <h4 class="filter-title">Safety</h4>
+                                  <% const safety = ['Sanitized Rooms', '24×7 Security', 'CCTV', 'Contactless Check-in']; %>
+                                  <% for(let s of safety) { %>
+                                    <label class="custom-checkbox">
+                                      <input type="checkbox" name="safety" class="sidebar-chk" value="<%= s %>"
+                                        <%=typeof searchParams !=='undefined' && searchParams && searchParams.safety && (Array.isArray(searchParams.safety) ? searchParams.safety.includes(s) : searchParams.safety === s) ? 'checked' : '' %>>
+                                      <div class="checkmark"></div>
+                                      <span class="checkbox-label"><%= s %></span>
+                                    </label>
+                                  <% } %>
+                                </div>
+
+                                <div class="filter-section">
+                                  <h4 class="filter-title">Host Features</h4>
+                                  <% const hostFeatures = ['Verified Host', 'Super Host', 'Highly Rated Host']; %>
+                                  <% for(let hf of hostFeatures) { %>
+                                    <label class="custom-checkbox">
+                                      <input type="checkbox" name="hostFeatures" class="sidebar-chk" value="<%= hf %>"
+                                        <%=typeof searchParams !=='undefined' && searchParams && searchParams.hostFeatures && (Array.isArray(searchParams.hostFeatures) ? searchParams.hostFeatures.includes(hf) : searchParams.hostFeatures === hf) ? 'checked' : '' %>>
+                                      <div class="checkmark"></div>
+                                      <span class="checkbox-label"><%= hf %></span>
+                                    </label>
+                                  <% } %>
+                                </div>
+
+                                <div class="filter-section">
+                                  <h4 class="filter-title">Accessibility</h4>
+                                  <% const accessibility = ['Wheelchair Accessible', 'Lift Available', 'Ground Floor Room']; %>
+                                  <% for(let acc of accessibility) { %>
+                                    <label class="custom-checkbox">
+                                      <input type="checkbox" name="accessibility" class="sidebar-chk" value="<%= acc %>"
+                                        <%=typeof searchParams !=='undefined' && searchParams && searchParams.accessibility && (Array.isArray(searchParams.accessibility) ? searchParams.accessibility.includes(acc) : searchParams.accessibility === acc) ? 'checked' : '' %>>
+                                      <div class="checkmark"></div>
+                                      <span class="checkbox-label"><%= acc %></span>
+                                    </label>
+                                  <% } %>
+                                </div>
+
+                                <!-- Clear Filters Button anchored at bottom -->
+                                <div class="mt-4 pt-3 border-top">
+                                  <a href="/listings" class="btn btn-outline-danger w-100" style="border-radius: 8px; font-weight: 600;">
+                                    <i class="fa-solid fa-trash-can me-2"></i> Clear Filters
+                                  </a>
+                                </div>
                   </form>
+                    </div>
+                  </div>
                   <script>
                     document.addEventListener('DOMContentLoaded', () => {
                       const filterForm = document.getElementById('filterForm');
@@ -1716,7 +1910,11 @@
                   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
                     <h2 class="section-title mb-0">Featured Hotels</h2>
 
-                    <div class="d-flex gap-3 align-items-center">
+                    <div class="d-flex gap-3 align-items-center flex-wrap">
+                      <!-- Mobile Filters Toggle -->
+                      <button class="btn btn-outline-dark d-lg-none d-flex align-items-center gap-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFilters" aria-controls="offcanvasFilters" style="border-radius: 20px; font-weight: 600; padding: 0.4rem 1.2rem;">
+                        <i class="fa-solid fa-filter"></i> Filters
+                      </button>
                       <!-- 
             * SORTING DROPDOWN:
             * This form submits a GET request to /listings when an option is selected.
@@ -1732,25 +1930,43 @@
                                 <% } %>
                                   <% } %>
                                     <% } %>
-                                      <select name="sort" class="form-select form-select-sm sort-dropdown"
-                                        onchange="document.getElementById('sortForm').submit();"
-                                        style="border-radius: 20px; font-weight: 500; cursor: pointer; padding: 0.4rem 1.5rem 0.4rem 1rem; border: 1px solid #ddd; background-color: #f8f9fa;">
-                                        <option value="newest" <%=typeof searchParams !=='undefined' &&
-                                          searchParams.sort==='newest' ? 'selected' : '' %>>Newly Added</option>
-                                        <option value="priceLow" <%=typeof searchParams !=='undefined' &&
-                                          searchParams.sort==='priceLow' ? 'selected' : '' %>>Price: Low to High
-                                        </option>
-                                        <option value="priceHigh" <%=typeof searchParams !=='undefined' &&
-                                          searchParams.sort==='priceHigh' ? 'selected' : '' %>>Price: High to Low
-                                        </option>
-                                        <option value="highestRated" <%=typeof searchParams !=='undefined' &&
-                                          searchParams.sort==='highestRated' ? 'selected' : '' %>>Highest Rated</option>
-                                        <option value="mostReviewed" <%=typeof searchParams !=='undefined' &&
-                                          searchParams.sort==='mostReviewed' ? 'selected' : '' %>>Most Reviewed</option>
-                                        <option value="alphabetical" <%=typeof searchParams !=='undefined' &&
-                                          searchParams.sort==='alphabetical' ? 'selected' : '' %>>Alphabetical (A-Z)
-                                        </option>
-                                      </select>
+                                      <%
+                                        let currentSort = typeof searchParams !== 'undefined' && searchParams.sort ? searchParams.sort : 'ourTopPicks';
+                                        let sortLabels = {
+                                          'ourTopPicks': 'Our top picks',
+                                          'homesFirst': 'Homes & apartments first',
+                                          'priceLow': 'Price (lowest first)',
+                                          'priceHigh': 'Price (highest first)',
+                                          'bestReviewedLowestPrice': 'Best reviewed and lowest price',
+                                          'highestRated': 'Property rating (high to low)',
+                                          'lowestRated': 'Property rating (low to high)',
+                                          'ratingAndPrice': 'Property rating and price',
+                                          'distanceFromCityCentre': 'Distance from city centre',
+                                          'mostReviewed': 'Top reviewed',
+                                          'alphabetical': 'Alphabetical (A-Z)',
+                                          'newest': 'Newly Added'
+                                        };
+                                        let displaySort = sortLabels[currentSort] || 'Our top picks';
+                                      %>
+                                      
+                                      <!-- Custom Dropdown for Sorting -->
+                                      <div class="dropdown custom-sort-dropdown">
+                                        <button class="btn dropdown-toggle d-flex align-items-center gap-2" type="button" id="sortDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 20px; border: 1px solid #777; background: #f8f9fa; font-weight: 500; color: #333; padding: 0.4rem 1.2rem; font-size: 0.95rem;">
+                                          <i class="fa-solid fa-arrow-down-up-across-line text-muted"></i> Sort by: <%= displaySort %>
+                                        </button>
+                                        <ul class="dropdown-menu shadow border-0 mt-2 py-2" aria-labelledby="sortDropdownBtn" style="border-radius: 12px; min-width: 260px; font-size: 0.95rem;">
+                                          <% for(let key in sortLabels) { %>
+                                            <li>
+                                              <button type="button" class="dropdown-item py-2 px-3 <%= currentSort === key ? 'active' : '' %>" 
+                                                      onclick="document.getElementById('hiddenSort').value = '<%= key %>'; document.getElementById('sortForm').submit();" 
+                                                      style="<%= currentSort === key ? 'background-color: #f0f4f8; color: #003580; font-weight: 600; border-left: 3px solid #003580;' : 'border-left: 3px solid transparent; color: #444;' %>">
+                                                <%= sortLabels[key] %>
+                                              </button>
+                                            </li>
+                                          <% } %>
+                                        </ul>
+                                      </div>
+                                      <input type="hidden" name="sort" id="hiddenSort" value="<%= currentSort %>">
                         </form>
                       </div>
 
@@ -1774,6 +1990,75 @@
                       </div>
                     </div>
                   </div>
+
+                  <!-- 
+                  * ACTIVE FILTER CHIPS:
+                  * Iterates over all active searchParams (except page and sort) and generates a removable chip for each.
+                  * The 'removeUrl' reconstructs the URL without the specific key-value pair, allowing users to remove filters individually.
+                  -->
+                  <% 
+                    let activeFilters = [];
+                    const excludedKeys = ['page', 'sort']; 
+                    if(typeof searchParams !== 'undefined' && searchParams) {
+                      for(let key in searchParams) {
+                        if(!excludedKeys.includes(key) && searchParams[key] !== '') {
+                          let values = Array.isArray(searchParams[key]) ? searchParams[key] : [searchParams[key]];
+                          values.forEach(val => {
+                            if(val) {
+                              let qsParts = [];
+                              for(let k in searchParams) {
+                                if(searchParams[k] !== '') {
+                                  let kVals = Array.isArray(searchParams[k]) ? searchParams[k] : [searchParams[k]];
+                                  kVals.forEach(kV => {
+                                    if(!(k === key && kV === val)) {
+                                      qsParts.push(encodeURIComponent(k) + '=' + encodeURIComponent(kV));
+                                    }
+                                  });
+                                }
+                              }
+                              let removeUrl = '/listings?' + qsParts.join('&');
+                              if(qsParts.length === 0) removeUrl = '/listings';
+                              
+                              let displayLabel = val;
+                              if(key === 'priceMin') displayLabel = 'Min ₹' + val;
+                              if(key === 'priceMax') displayLabel = 'Max ₹' + val;
+                              if(key === 'stars') displayLabel = val + ' Stars';
+                              if(key === 'rating') displayLabel = val + '+ Rating';
+                              
+                              activeFilters.push({ label: displayLabel, url: removeUrl });
+                            }
+                          });
+                        }
+                      }
+                    }
+                  %>
+                  
+                  <% if(activeFilters.length > 0) { %>
+                    <div class="d-flex flex-wrap gap-2 mb-4 align-items-center">
+                      <span class="text-muted small fw-bold me-1">Active Filters:</span>
+                      <% activeFilters.forEach(f => { %>
+                        <a href="<%= f.url %>" class="badge rounded-pill bg-white text-dark border text-decoration-none py-2 px-3 shadow-sm filter-chip transition-hover" style="font-size: 0.85rem; font-weight: 600;">
+                          <%= f.label %> <i class="fa-solid fa-xmark ms-1 text-danger"></i>
+                        </a>
+                      <% }) %>
+                      <a href="/listings" class="text-danger small fw-bold text-decoration-none ms-2 hover-underline">
+                        Clear All
+                      </a>
+                    </div>
+                    <style>
+                      .filter-chip:hover {
+                        background-color: #f8f9fa !important;
+                        border-color: #dc3545 !important;
+                        transform: translateY(-2px);
+                      }
+                      .transition-hover {
+                        transition: all 0.2s ease;
+                      }
+                      .hover-underline:hover {
+                        text-decoration: underline !important;
+                      }
+                    </style>
+                  <% } %>
 
                   <!-- 
         * NO RESULTS FOUND UI:

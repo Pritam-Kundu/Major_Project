@@ -308,7 +308,7 @@ body {
 
 html,
 body {
-    overflow-x: hidden;
+    overflow-x: clip;
 }
 
 /* =========================================
@@ -342,8 +342,8 @@ body {
         font-size: 1rem !important;
     }
     
-    /* Ensure forms take full width */
-    .form-control, .form-select, .btn {
+    /* Ensure specific forms take full width */
+    .form-control, .form-select {
         width: 100%;
         margin-bottom: 0.5rem;
     }
@@ -351,17 +351,6 @@ body {
     .btn-search, .btn-reserve {
         width: 100% !important;
         margin-left: 0 !important;
-    }
-
-    /* Stacking for columns that might not have standard bootstrap classes */
-    .d-flex.flex-row {
-        flex-direction: column !important;
-        align-items: stretch !important;
-    }
-    .d-flex.flex-row > * {
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-        margin-bottom: 1rem;
     }
     
     /* Navbar specific mobile fixes */
@@ -377,6 +366,13 @@ body {
         width: 90vw !important;
         max-width: 380px !important;
         right: -10px !important;
+    }
+    
+    /* Disable sticky behaviors on mobile to prevent layout overlapping */
+    .sidebar-filter, .booking-sidebar, .booking-summary-card {
+        position: relative !important;
+        top: 0 !important;
+        margin-bottom: 2rem;
     }
     
     /* Tables */

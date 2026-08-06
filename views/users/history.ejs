@@ -1,82 +1,149 @@
 <% layout("layouts/boilerplate") %>
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap');
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background-color: #f7f9fc;
+  }
+
+  .history-header-wrapper {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    padding: 4rem 0;
+    margin-bottom: -3rem; /* Overlap effect */
+    border-radius: 0 0 40px 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    color: white;
+  }
+
   .section-title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #1a1a1a;
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
   }
 
-  .booking-card {
-    border: 1px solid #e7e7e7;
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s;
-    background: #fff;
-    display: flex;
-    flex-direction: column;
+  .section-subtitle {
+    font-size: 1.1rem;
+    font-weight: 300;
+    opacity: 0.9;
+  }
+
+  .clear-btn {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+
+  .clear-btn:hover {
+    background: #dc3545;
+    color: white;
+    border-color: #dc3545;
+    transform: translateY(-2px);
+  }
+
+  /* Horizontal Card Design */
+  .history-list {
     position: relative;
+    z-index: 5;
+    margin-top: 2rem;
   }
 
-  .booking-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-  }
-
-  .booking-card-img-container {
+  .horizontal-card {
+    display: flex;
+    flex-direction: row;
+    background: #fff;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     position: relative;
     height: 220px;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid rgba(0,0,0,0.03);
+  }
+
+  .horizontal-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+    color: inherit;
+  }
+
+  .horizontal-img-container {
+    width: 320px;
+    flex-shrink: 0;
+    position: relative;
     overflow: hidden;
   }
 
-  .booking-card-img {
+  .horizontal-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s;
+    transition: transform 0.6s ease;
   }
 
-  .booking-card:hover .booking-card-img {
-    transform: scale(1.05);
+  .horizontal-card:hover .horizontal-img {
+    transform: scale(1.08);
   }
 
   .btn-remove {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 32px;
-    height: 32px;
-    background: white;
+    top: 16px;
+    right: 16px;
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.9);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     color: #666;
     z-index: 10;
-    transition: all 0.2s;
+    transition: all 0.3s;
     border: none;
+    backdrop-filter: blur(5px);
   }
 
   .btn-remove:hover {
-    background: #f8f9fa;
-    color: #dc3545;
-    transform: scale(1.1);
+    background: #ff4757;
+    color: #fff;
+    transform: rotate(90deg) scale(1.1);
   }
 
-  .booking-card-body {
-    padding: 1rem;
+  .horizontal-body {
+    padding: 1.8rem;
     display: flex;
     flex-direction: column;
-    flex: 1;
+    flex-grow: 1;
+    justify-content: space-between;
+  }
+
+  .viewed-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #eef2ff;
+    color: #4f46e5;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    align-self: flex-start;
   }
 
   .booking-card-title {
     font-weight: 700;
-    font-size: 1.1rem;
-    color: #333;
-    margin-bottom: 0.25rem;
+    font-size: 1.4rem;
+    color: #1f2937;
+    margin-bottom: 0.4rem;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
@@ -84,91 +151,153 @@
   }
 
   .booking-card-location {
-    font-size: 0.85rem;
-    color: #666;
-    margin-bottom: 0.75rem;
-  }
-  
-  .viewed-time {
-    font-size: 0.8rem;
-    color: #888;
-    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #6b7280;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
   }
-
-  .booking-price-section {
+  
+  .booking-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
     margin-top: auto;
+    border-top: 1px dashed #e5e7eb;
     padding-top: 1rem;
-    border-top: 1px solid #eee;
   }
 
   .price-current {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #333;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #111827;
+  }
+
+  .price-label {
+    font-size: 0.85rem;
+    color: #6b7280;
+    font-weight: 400;
+  }
+
+  .view-btn {
+    background: #111827;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+
+  .horizontal-card:hover .view-btn {
+    background: #4f46e5;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
   }
 
   .empty-state {
     text-align: center;
-    padding: 4rem 1rem;
-    background: #f8f9fa;
-    border-radius: 16px;
+    padding: 5rem 2rem;
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
     margin-top: 2rem;
   }
   
   .empty-state i {
-    font-size: 4rem;
-    color: #ccc;
-    margin-bottom: 1rem;
+    font-size: 5rem;
+    color: #e5e7eb;
+    margin-bottom: 1.5rem;
+  }
+
+  @media(max-width: 991px) {
+    .horizontal-img-container {
+      width: 250px;
+    }
+    .booking-card-title {
+      font-size: 1.2rem;
+    }
+  }
+
+  @media(max-width: 768px) {
+    .horizontal-card {
+      flex-direction: column;
+      height: auto;
+    }
+    .horizontal-img-container {
+      width: 100%;
+      height: 220px;
+    }
+    .booking-card-footer {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .view-btn {
+      width: 100%;
+      text-align: center;
+    }
   }
 </style>
 
-<div class="container mt-4 mb-5">
-  <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
-    <div>
-      <h2 class="section-title mb-1">Continue Your Search</h2>
-      <p class="text-muted mb-0">Pick up where you left off. Here are the properties you recently viewed.</p>
+<!-- Header Banner -->
+<div class="history-header-wrapper">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <div>
+        <h2 class="section-title">Continue Your Search</h2>
+        <p class="section-subtitle">Pick up right where you left off. Here are your recently viewed properties.</p>
+      </div>
+      <% if(history && history.length > 0) { %>
+        <button class="btn clear-btn fw-bold px-4 rounded-pill" onclick="clearHistory()">
+          <i class="fa-solid fa-trash-can me-2"></i> Clear History
+        </button>
+      <% } %>
     </div>
-    <% if(history && history.length > 0) { %>
-      <button class="btn btn-outline-danger fw-bold px-4 rounded-pill" onclick="clearHistory()">
-        <i class="fa-solid fa-trash-can me-1"></i> Clear History
-      </button>
-    <% } %>
   </div>
+</div>
 
+<div class="container mb-5 pb-5">
   <% if(!history || history.length === 0) { %>
     <div class="empty-state">
       <i class="fa-solid fa-clock-rotate-left"></i>
-      <h4 class="fw-bold text-dark mb-2">Continue Your Search</h4>
-      <p class="text-muted mb-4">Start exploring hotels to build your viewing history.</p>
-      <a href="/listings" class="btn btn-primary rounded-pill px-4 fw-bold">Explore Hotels</a>
+      <h4 class="fw-bold text-dark mb-2 fs-3">Your history is empty</h4>
+      <p class="text-muted mb-4 fs-5">Start exploring amazing hotels to build your viewing history.</p>
+      <a href="/listings" class="btn btn-dark rounded-pill px-5 py-3 fw-bold fs-5 shadow-sm">Explore Hotels</a>
     </div>
   <% } else { %>
-    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4" id="history-container">
+    <div class="row g-4 history-list" id="history-container">
       <% for(let item of history) { 
            if(!item.listing) continue;
            let listing = item.listing; 
       %>
-        <div class="col" id="history-card-<%= listing._id %>">
-          <div class="booking-card h-100">
+        <div class="col-12" id="history-card-<%= listing._id %>">
+          <div class="position-relative">
             <button class="btn-remove" onclick="removeHistoryItem('<%= listing._id %>')" title="Remove from history">
               <i class="fa-solid fa-xmark"></i>
             </button>
-            <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark d-block h-100 d-flex flex-column">
-              <div class="booking-card-img-container">
+            <a href="/listings/<%= listing._id %>" class="horizontal-card">
+              <div class="horizontal-img-container">
                 <% let imgUrl = listing.images && listing.images.length > 0 ? listing.images[0].url : (listing.image ? listing.image.url : ''); %>
-                <img src="<%= imgUrl %>" class="booking-card-img" alt="listing_image">
+                <img src="<%= imgUrl %>" class="horizontal-img" alt="listing_image">
               </div>
-              <div class="booking-card-body">
-                <div class="viewed-time" data-time="<%= item.viewedAt.toISOString() %>">
-                  <i class="fa-regular fa-clock"></i> <span>Viewed</span>
+              <div class="horizontal-body">
+                <div>
+                  <div class="viewed-badge" data-time="<%= item.viewedAt.toISOString() %>">
+                    <i class="fa-solid fa-eye"></i> <span class="time-text">Viewed</span>
+                  </div>
+                  <h5 class="booking-card-title"><%= listing.title %></h5>
+                  <div class="booking-card-location">
+                    <i class="fa-solid fa-location-dot"></i> <%= listing.location %>, <%= listing.country %>
+                  </div>
                 </div>
-                <h5 class="booking-card-title pe-2"><%= listing.title %></h5>
-                <div class="booking-card-location"><%= listing.location %>, <%= listing.country %></div>
-                <div class="booking-price-section">
-                  <span class="price-current">&#8377;<%= listing.price.toLocaleString("en-IN") %></span> / night
+                <div class="booking-card-footer">
+                  <div>
+                    <span class="price-current">&#8377;<%= listing.price.toLocaleString("en-IN") %></span> 
+                    <span class="price-label">/ night</span>
+                  </div>
+                  <div class="view-btn">
+                    View Details <i class="fa-solid fa-arrow-right ms-1"></i>
+                  </div>
                 </div>
               </div>
             </a>
@@ -186,30 +315,20 @@
     const now = new Date();
     const secondsPast = (now.getTime() - date.getTime()) / 1000;
     
-    if (secondsPast < 60) {
-      return 'Just now';
-    }
-    if (secondsPast < 3600) {
-      return `Viewed ${parseInt(secondsPast / 60)} minutes ago`;
-    }
-    if (secondsPast <= 86400) {
-      return `Viewed ${parseInt(secondsPast / 3600)} hours ago`;
-    }
-    if (secondsPast > 86400 && secondsPast <= 172800) {
-      return 'Viewed Yesterday';
-    }
-    if (secondsPast > 172800) {
-      return `Viewed ${parseInt(secondsPast / 86400)} days ago`;
-    }
+    if (secondsPast < 60) return 'Just now';
+    if (secondsPast < 3600) return `${parseInt(secondsPast / 60)} minutes ago`;
+    if (secondsPast <= 86400) return `${parseInt(secondsPast / 3600)} hours ago`;
+    if (secondsPast > 86400 && secondsPast <= 172800) return 'Yesterday';
+    if (secondsPast > 172800) return `${parseInt(secondsPast / 86400)} days ago`;
   }
 
   // Update timestamps on page load
   document.addEventListener('DOMContentLoaded', () => {
-    const timeElements = document.querySelectorAll('.viewed-time');
+    const timeElements = document.querySelectorAll('.viewed-badge');
     timeElements.forEach(el => {
       const isoTime = el.getAttribute('data-time');
       if (isoTime) {
-        el.querySelector('span').textContent = timeAgo(isoTime);
+        el.querySelector('.time-text').textContent = 'Viewed ' + timeAgo(isoTime);
       }
     });
   });
@@ -224,38 +343,36 @@
       const data = await res.json();
       
       if (data.success) {
-        const card = document.getElementById(`history-card-${listingId}`);
-        if (card) {
-          card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-          card.style.opacity = '0';
-          card.style.transform = 'scale(0.95)';
+        const cardCol = document.getElementById(`history-card-${listingId}`);
+        if (cardCol) {
+          cardCol.style.transition = 'all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)';
+          cardCol.style.opacity = '0';
+          cardCol.style.transform = 'translateX(50px)';
           
           setTimeout(() => {
-            card.remove();
+            cardCol.remove();
             
             // Show toast
             const toastDiv = document.createElement('div');
-            toastDiv.className = 'toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 p-3 m-3';
+            toastDiv.className = 'toast align-items-center text-white bg-dark border-0 position-fixed bottom-0 end-0 p-3 m-4 shadow-lg';
             toastDiv.style.zIndex = '1100';
+            toastDiv.style.borderRadius = '12px';
             toastDiv.innerHTML = `
               <div class="d-flex">
-                <div class="toast-body"><i class="fa-solid fa-check-circle me-2"></i>Removed from history.</div>
+                <div class="toast-body fs-6"><i class="fa-solid fa-trash-can me-2 text-danger"></i> Removed from history</div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
               </div>`;
             document.body.appendChild(toastDiv);
             const toast = new bootstrap.Toast(toastDiv);
             toast.show();
             
-            // Remove toast element after hide
-            toastDiv.addEventListener('hidden.bs.toast', () => {
-              toastDiv.remove();
-            });
+            toastDiv.addEventListener('hidden.bs.toast', () => toastDiv.remove());
 
             // Reload if empty
-            if (document.querySelectorAll('#history-container .col').length === 0) {
+            if (document.querySelectorAll('#history-container .col-12').length === 0) {
               window.location.reload();
             }
-          }, 300);
+          }, 400);
         }
       }
     } catch (err) {
@@ -265,7 +382,7 @@
 
   // AJAX Clear all history
   async function clearHistory() {
-    if (confirm("Are you sure you want to clear your entire viewing history?")) {
+    if (confirm("Are you sure you want to completely clear your viewing history?")) {
       try {
         const res = await fetch(`/history`, {
           method: 'DELETE',
@@ -274,7 +391,6 @@
         const data = await res.json();
         
         if (data.success) {
-          alert("Viewing history cleared successfully.");
           window.location.reload();
         }
       } catch (err) {

@@ -1,6 +1,7 @@
 const { geocodeCity, fetchHotelsFromOSM } = require("../services/osmService");
 const Listing = require("../models/listing");
 const { createNotification } = require("./notification"); // Using existing notification logic
+const imageAssignmentService = require("../services/imageAssignmentService"); // New offline image service
 
 module.exports.renderImportDashboard = async (req, res) => {
     res.render("import/index.ejs", { hotels: null, error: null, searchParams: {} });
@@ -107,14 +108,18 @@ module.exports.saveHotels = async (req, res) => {
                     owner: req.user._id // Required by schema
                 });
 
-                // Default Image setup
-                newListing.image = {
-                    url: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60", // Default nice hotel image
-                    filename: "default_osm_hotel"
-                };
-                newListing.images = [newListing.image];
+                // 1. Determine intelligent image category based on OSM data
+                const imageCategory = imageAssignmentService.determineCategory(hotelData);
+                
+                // 2. Assign unique offline images (Cover + 6 to 10 Gallery Images)
+                const { coverImage, galleryImages } = imageAssignmentService.assignImagesToHotel(imageCategory);
+                
+                // 3. Save to Listing Schema
+                newListing.image = coverImage;
+                newListing.images = galleryImages;
 
-                // Category Assignment (Random from allowed enum)
+                // 4. Mongoose Category Enum Assignment (Random from allowed enum)
+                // Note: The schema enum category is different from the image categories
                 const categories = ["Beaches", "Mountains", "Forests", "Castles", "Pools", "Campings", "Farms", "Arctic", "House Boats", "Domes"];
                 newListing.category = categories[Math.floor(Math.random() * categories.length)];
 

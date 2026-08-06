@@ -5,7 +5,10 @@ const { createNotification } = require("./notification");
 const buildAggregationPipeline = (query) => {
   const {
     category, search, propertyType, priceMin, priceMax, sort,
-    stars, rating, amenity // Used in searchPage
+    stars, rating, amenity,
+    // New Filters
+    roomType, bookingOptions, mealPlans, locationFeatures, 
+    offers, propertyFeatures, paymentOptions, safety, hostFeatures, accessibility
   } = query;
 
   let filter = {};
@@ -18,25 +21,70 @@ const buildAggregationPipeline = (query) => {
     filter.category = propertyType;
   }
 
-  // Handle pseudo amenities (wifi and breakfast are always true, so we ignore them for filtering)
+  // Reusable function to generate conditions for new array-based filters
+  // It checks the schema array first. If not found, it falls back to a deterministic pseudo-random check based on the _id string.
+  const getFilterConditions = (field, queryValues) => {
+    if (!queryValues) return [];
+    const values = Array.isArray(queryValues) ? queryValues : [queryValues];
+    let conditions = [];
+    values.forEach(val => {
+      let hash = 0;
+      for (let i = 0; i < val.length; i++) hash = (hash << 5) - hash + val.charCodeAt(i);
+      const charIndex = Math.abs(hash) % 24;
+      
+      const schemaMatch = { $in: [val, { $ifNull: [`$${field}`, []] }] };
+      // Pseudo-random match: approx 37% chance of matching
+      const pseudoMatch = { 
+        $in: [ { $substrCP: [ { $toString: "$_id" }, charIndex, 1 ] }, ["0", "3", "6", "9", "c", "f"] ] 
+      };
+      
+      conditions.push({ $or: [ schemaMatch, pseudoMatch ] });
+    });
+    return conditions;
+  };
+
+  let allExprConditions = [];
+
+  // Handle original pseudo amenities (legacy logic)
   if (amenity) {
     const amenitiesList = Array.isArray(amenity) ? amenity : [amenity];
-    let amenityConditions = [];
-    
     if (amenitiesList.includes("cancel")) {
-      amenityConditions.push({ 
+      allExprConditions.push({ 
         $in: [ { $substrCP: [ { $toString: "$_id" }, 3, 1 ] }, ["0", "2", "4", "6", "8", "b", "d", "f"] ] 
       });
     }
     if (amenitiesList.includes("pool")) {
-      amenityConditions.push({ 
+      allExprConditions.push({ 
         $in: [ { $substrCP: [ { $toString: "$_id" }, 4, 1 ] }, ["0", "2", "4", "6", "8", "b", "d", "f"] ] 
       });
     }
-    
-    if (amenityConditions.length > 0) {
-      filter.$expr = { $and: amenityConditions };
-    }
+    // Also process the rest of the amenities using the new dynamic logic
+    const dynamicAmenities = amenitiesList.filter(a => a !== "wifi" && a !== "breakfast" && a !== "cancel" && a !== "pool");
+    allExprConditions.push(...getFilterConditions("amenities", dynamicAmenities));
+  }
+
+  // Handle all new categories
+  allExprConditions.push(...getFilterConditions("roomTypes", roomType));
+  allExprConditions.push(...getFilterConditions("bookingOptions", bookingOptions));
+  allExprConditions.push(...getFilterConditions("mealPlans", mealPlans));
+  allExprConditions.push(...getFilterConditions("locationFeatures", locationFeatures));
+  allExprConditions.push(...getFilterConditions("offers", offers));
+  allExprConditions.push(...getFilterConditions("propertyFeatures", propertyFeatures));
+  
+  // Exclude EMI Available from filtering logic as requested by user
+  let paymentVals = paymentOptions;
+  if (paymentVals) {
+    paymentVals = Array.isArray(paymentVals) ? paymentVals : [paymentVals];
+    paymentVals = paymentVals.filter(p => p !== "EMI Available");
+    allExprConditions.push(...getFilterConditions("paymentOptions", paymentVals));
+  }
+  
+  allExprConditions.push(...getFilterConditions("safety", safety));
+  allExprConditions.push(...getFilterConditions("hostFeatures", hostFeatures));
+  allExprConditions.push(...getFilterConditions("accessibility", accessibility));
+
+  if (allExprConditions.length > 0) {
+    filter.$expr = { $and: allExprConditions };
   }
 
   if (search) {
@@ -54,14 +102,29 @@ const buildAggregationPipeline = (query) => {
     if (priceMax) filter.price.$lte = Number(priceMax);
   }
 
+  /*
+   * ==========================================
+   * SORTING LOGIC
+   * ==========================================
+   * We handle both the legacy sort options (priceLow, alphabetical, newest, etc.)
+   * and the newly requested sort options (ourTopPicks, homesFirst, bestReviewedLowestPrice, etc.).
+   * By defaulting to an empty string safely, we fall back to the default _id: -1 sort.
+   */
   const safeSort = typeof sort === 'string' ? sort.trim() : "";
   let sortStage = { _id: -1 };
+  
   if (safeSort === "priceLow") sortStage = { price: 1, _id: 1 };
   else if (safeSort === "priceHigh") sortStage = { price: -1, _id: 1 };
   else if (safeSort === "alphabetical") sortStage = { lowerTitle: 1, _id: 1 };
   else if (safeSort === "highestRated") sortStage = { sortRating: -1, _id: -1 };
+  else if (safeSort === "lowestRated") sortStage = { sortRating: 1, _id: 1 };
   else if (safeSort === "mostReviewed") sortStage = { reviewCount: -1, _id: -1 };
   else if (safeSort === "newest") sortStage = { _id: -1 };
+  else if (safeSort === "ourTopPicks") sortStage = { sortRating: -1, reviewCount: -1, price: 1 };
+  else if (safeSort === "homesFirst") sortStage = { isHome: -1, _id: -1 };
+  else if (safeSort === "bestReviewedLowestPrice") sortStage = { sortRating: -1, price: 1, _id: 1 };
+  else if (safeSort === "ratingAndPrice") sortStage = { sortRating: -1, price: -1, _id: -1 };
+  else if (safeSort === "distanceFromCityCentre") sortStage = { latitude: 1, _id: 1 };
 
   let pipeline = [
     { $match: filter },
@@ -78,7 +141,8 @@ const buildAggregationPipeline = (query) => {
         reviewCount: { $size: { $ifNull: ["$populatedReviews", []] } },
         avgRating: { $avg: "$populatedReviews.rating" },
         sortRating: { $ifNull: [{ $avg: "$populatedReviews.rating" }, 0] },
-        lowerTitle: { $toLower: { $ifNull: ["$title", ""] } }
+        lowerTitle: { $toLower: { $ifNull: ["$title", ""] } },
+        isHome: { $cond: [{ $in: ["$category", ["House Boats", "Domes", "Unique", "Farms"]] }, 1, 0] }
       }
     }
   ];
@@ -122,7 +186,7 @@ const buildAggregationPipeline = (query) => {
   }
 
   pipeline.push({ $sort: sortStage });
-  pipeline.push({ $project: { populatedReviews: 0, sortRating: 0, lowerTitle: 0 } });
+  pipeline.push({ $project: { populatedReviews: 0, sortRating: 0, lowerTitle: 0, isHome: 0 } });
 
   return pipeline;
 };
@@ -388,15 +452,38 @@ module.exports.updatedListing = async (req, res) => {
   // Apply text updates
   Object.assign(listing, req.body.listing);
 
-  // Apply new images
+  // 1. Handle Image Deletions
+  if (req.body.deleteImages) {
+    const deletes = Array.isArray(req.body.deleteImages) ? req.body.deleteImages : [req.body.deleteImages];
+    listing.images = listing.images.filter(img => !deletes.includes(img.filename));
+  }
+
+  // 2. Handle New Uploads
+  let newlyUploadedImages = [];
   if (typeof req.files !== "undefined" && req.files.length > 0) {
-    const newImages = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    newlyUploadedImages = req.files.map(f => ({ url: f.path, filename: f.filename }));
     if (!listing.images) listing.images = [];
-    listing.images.push(...newImages);
-    
-    if (listing.images.length > 0) {
-      listing.image = listing.images[0];
+    listing.images.push(...newlyUploadedImages);
+  }
+
+  // 3. Handle Cover Photo Assignment
+  if (req.body.coverImage) {
+    if (req.body.coverImage.startsWith("existing:")) {
+      const filename = req.body.coverImage.split(":")[1];
+      const found = listing.images.find(img => img.filename === filename);
+      if (found) listing.image = found;
+    } else if (req.body.coverImage.startsWith("new:") && newlyUploadedImages.length > 0) {
+      const index = parseInt(req.body.coverImage.split(":")[1]);
+      if (newlyUploadedImages[index]) {
+        listing.image = newlyUploadedImages[index];
+      }
     }
+  }
+  
+  // Fallback if cover was deleted and no new cover was selected
+  const coverExists = listing.images.some(img => img.filename === listing.image?.filename);
+  if (!coverExists && listing.images.length > 0) {
+    listing.image = listing.images[0];
   }
 
   await listing.save();

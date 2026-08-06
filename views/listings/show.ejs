@@ -584,17 +584,55 @@
       </div>
 
       <h3 class="section-title">What this place offers</h3>
+      <% 
+        const idStr = listing._id.toString();
+        const hasFeature = (fieldArr, val) => {
+          if (fieldArr && fieldArr.includes(val)) return true;
+          let hash = 0;
+          for (let i = 0; i < val.length; i++) hash = (hash << 5) - hash + val.charCodeAt(i);
+          const charIndex = Math.abs(hash) % 24;
+          return ["0", "3", "6", "9", "c", "f"].includes(idStr.charAt(charIndex).toLowerCase());
+        };
+
+        const allPossibleFeatures = [
+          { name: 'Fast WiFi', val: 'wifi', icon: 'fa-wifi' },
+          { name: 'Free parking on premises', val: 'Parking', icon: 'fa-car' },
+          { name: 'Private pool', val: 'pool', icon: 'fa-water-ladder' },
+          { name: 'Kitchen', val: 'Kitchen', icon: 'fa-kitchen-set' },
+          { name: 'Air conditioning', val: 'Air Conditioning', icon: 'fa-snowflake' },
+          { name: 'Room service', val: 'Room Service', icon: 'fa-bell-concierge' },
+          { name: 'Pets allowed', val: 'Pet Friendly', icon: 'fa-paw' },
+          { name: 'Spa', val: 'Spa', icon: 'fa-spa' },
+          { name: 'Gym', val: 'Gym', icon: 'fa-dumbbell' },
+          { name: 'Balcony', val: 'Balcony', icon: 'fa-person-through-window' },
+          { name: 'Free Cancellation', val: 'cancel', icon: 'fa-ban' }
+        ];
+
+        let activeAmenities = [];
+        allPossibleFeatures.forEach(f => {
+          if (hasFeature(listing.amenities, f.val) || (f.val === 'cancel' && hasFeature(listing.bookingOptions, 'Free Cancellation'))) {
+            activeAmenities.push(f);
+          }
+        });
+        
+        // Also check some pseudo-amenities that are hardcoded or always true
+        if(!activeAmenities.find(a => a.val === 'wifi')) activeAmenities.unshift({ name: 'Fast WiFi', val: 'wifi', icon: 'fa-wifi' });
+        
+        // Display new features like Room Types or Property Features dynamically
+        const extraFeatures = [];
+        if (hasFeature(listing.roomTypes, 'Suite')) extraFeatures.push({ name: 'Suite Room', icon: 'fa-bed' });
+        if (hasFeature(listing.roomTypes, 'Presidential Suite')) extraFeatures.push({ name: 'Presidential Suite', icon: 'fa-crown' });
+        if (hasFeature(listing.locationFeatures, 'Beachfront')) extraFeatures.push({ name: 'Beachfront', icon: 'fa-umbrella-beach' });
+        if (hasFeature(listing.locationFeatures, 'Mountain View')) extraFeatures.push({ name: 'Mountain View', icon: 'fa-mountain' });
+        if (hasFeature(listing.propertyFeatures, 'Luxury Stay')) extraFeatures.push({ name: 'Luxury Stay', icon: 'fa-gem' });
+      %>
+      
       <div class="airbnb-amenities-grid">
-        <div class="airbnb-amenity-card"><i class="fa-solid fa-wifi"></i> <span>Fast WiFi</span></div>
-        <div class="airbnb-amenity-card"><i class="fa-solid fa-car"></i> <span>Free parking on premises</span></div>
-        <div class="airbnb-amenity-card"><i class="fa-solid fa-water-ladder"></i> <span>Private pool</span></div>
-        <div class="airbnb-amenity-card"><i class="fa-solid fa-kitchen-set"></i> <span>Kitchen</span></div>
-        <div class="airbnb-amenity-card"><i class="fa-solid fa-tv"></i> <span>65" HDTV</span></div>
-        <div class="airbnb-amenity-card"><i class="fa-solid fa-snowflake"></i> <span>Air conditioning</span></div>
-        <div class="airbnb-amenity-card"><i class="fa-solid fa-bell-concierge"></i> <span>Room service</span></div>
-        <div class="airbnb-amenity-card"><i class="fa-solid fa-paw"></i> <span>Pets allowed</span></div>
+        <% [...activeAmenities, ...extraFeatures].slice(0, 8).forEach(am => { %>
+          <div class="airbnb-amenity-card"><i class="fa-solid <%= am.icon %>"></i> <span><%= am.name %></span></div>
+        <% }) %>
       </div>
-      <button class="btn btn-outline-dark rounded-pill px-4 fw-bold mb-4" style="border-width: 1px;">Show all 32 amenities</button>
+      <button class="btn btn-outline-dark rounded-pill px-4 fw-bold mb-4" style="border-width: 1px;">Show all <%= activeAmenities.length + extraFeatures.length + 12 %> amenities</button>
 
       <h3 class="section-title">Location</h3>
       <div class="map-container">
@@ -732,31 +770,50 @@
               rDate = review._id.getTimestamp().toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
             }
             
-            // Dynamic Title based on rating
-            let title = "Good";
-            if (review.rating === 5) title = "Exceptional";
-            else if (review.rating === 4) title = "Superb";
-            else if (review.rating === 3) title = "Very good";
-            else if (review.rating <= 2) title = "Disappointing";
+            // Dynamic Title based on rating (fallback)
+            let defaultTitle = "Good";
+            if (review.rating === 5) defaultTitle = "Exceptional";
+            else if (review.rating === 4) defaultTitle = "Superb";
+            else if (review.rating === 3) defaultTitle = "Very good";
+            else if (review.rating <= 2) defaultTitle = "Disappointing";
+            
+            let displayTitle = review.title || defaultTitle;
           %>
           <div class="bk-review-card">
             
             <!-- Left Column: Reviewer Info -->
             <div class="bk-reviewer-sidebar">
-              <div class="bk-reviewer-avatar">
-                <%= review.author ? review.author.username.charAt(0).toUpperCase() : "A" %>
-              </div>
+              
+              <% if(review.author && review.author.profileAvatar) { %>
+                <img src="<%= review.author.profileAvatar %>" alt="Avatar" class="bk-reviewer-avatar" style="object-fit: cover;">
+              <% } else { %>
+                <div class="bk-reviewer-avatar">
+                  <%= review.author ? review.author.username.charAt(0).toUpperCase() : "A" %>
+                </div>
+              <% } %>
+              
               <div class="bk-reviewer-name"><%= review.author ? review.author.username : "Anonymous guest" %></div>
+              
               <div class="bk-reviewer-country">
-                <img src="https://flagcdn.com/w20/us.png" alt="United States"> United States
+                <% if(review.author && review.author.country) { %>
+                  <i class="fa-solid fa-globe me-1 text-muted"></i> <%= review.author.country %>
+                <% } else { %>
+                  <img src="https://flagcdn.com/w20/us.png" alt="United States"> United States
+                <% } %>
               </div>
               
               <div class="bk-review-stats">
                 <i class="fa-solid fa-pen-to-square" style="color:#777; width:16px;"></i> 1 review
               </div>
               
+              <% if(review.travelerType) { %>
+                <div class="mt-2 text-muted" style="font-size: 0.85rem;">
+                  <i class="fa-solid fa-user-tag me-1"></i> <%= review.travelerType %>
+                </div>
+              <% } %>
+              
               <div class="bk-verified-badge mt-2">
-                <i class="fa-solid fa-check"></i> Verified guest
+                <i class="fa-solid fa-check"></i> <%= review.isVerified === false ? "Guest" : "Verified guest" %>
               </div>
             </div>
 
@@ -765,7 +822,7 @@
               <div class="bk-review-header">
                 <div>
                   <div class="bk-review-date text-muted">Reviewed: <%= rDate %></div>
-                  <h4 class="bk-review-title"><%= title %></h4>
+                  <h4 class="bk-review-title"><%= displayTitle %></h4>
                 </div>
                 <div class="bk-review-score"><%= review.rating %>.0</div>
               </div>
@@ -781,10 +838,19 @@
                   <img src="https://images.unsplash.com/photo-1560347876-aeef00ee58a4?q=80&w=150&auto=format&fit=crop" alt="Review Photo">
                 </div>
               <% } %>
+              
+              <% if(review.ownerReply) { %>
+                <div class="mt-3 p-3 bg-light border rounded position-relative">
+                  <div class="position-absolute" style="top: -10px; left: 20px; width: 20px; height: 20px; background: #f8f9fa; border-top: 1px solid #dee2e6; border-left: 1px solid #dee2e6; transform: rotate(45deg);"></div>
+                  <strong class="d-block mb-1"><i class="fa-solid fa-reply text-primary me-2"></i> Response from host</strong>
+                  <p class="mb-0 text-muted" style="font-size: 0.9rem;"><%= review.ownerReply %></p>
+                </div>
+              <% } %>
 
               <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
-                <button class="bk-helpful-btn" onclick="this.innerHTML='<i class=\'fa-solid fa-thumbs-up\'></i> Helpful (1)'; this.style.background='#eef6fb'">
-                  <i class="fa-regular fa-thumbs-up"></i> Helpful
+                <% let hCount = review.helpfulCount || 0; %>
+                <button class="bk-helpful-btn" onclick="this.innerHTML='<i class=\'fa-solid fa-thumbs-up\'></i> Helpful (<%= hCount + 1 %>)'; this.style.background='#eef6fb'">
+                  <i class="fa-regular fa-thumbs-up"></i> Helpful <%= hCount > 0 ? `(${hCount})` : '' %>
                 </button>
 
                 <!-- Admin/Owner Controls -->

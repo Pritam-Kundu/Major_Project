@@ -103,6 +103,48 @@
   background: #0071c2;
   transform: translateY(-3px);
 }
+
+/* Back to Top Button Styling */
+#backToTopBtn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1050;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #5f788b; /* Homigo theme color */
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.2s ease, background-color 0.2s ease;
+}
+#backToTopBtn:hover {
+  background-color: #d59d8c; /* Homigo secondary accent */
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+#backToTopBtn.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  #backToTopBtn {
+    bottom: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    font-size: 1rem;
+  }
+}
 </style>
 
 <footer class="footer">
@@ -191,3 +233,35 @@
     </div>
   </div>
 </footer>
+
+<!-- Back to Top Button HTML -->
+<button id="backToTopBtn" aria-label="Back to top" title="Back to top">
+  <i class="fa-solid fa-arrow-up"></i>
+</button>
+
+<!-- Back to Top Button JavaScript -->
+<script>
+  // Wait for the DOM to fully load
+  document.addEventListener("DOMContentLoaded", () => {
+    const backToTopBtn = document.getElementById("backToTopBtn");
+    
+    // Listen for scroll events to show/hide the button
+    window.addEventListener("scroll", () => {
+      // If user scrolls down more than 500px, show the button
+      if (window.scrollY > 500) {
+        backToTopBtn.classList.add("show");
+      } else {
+        // Otherwise, hide it
+        backToTopBtn.classList.remove("show");
+      }
+    });
+
+    // When the button is clicked, smoothly scroll to the top of the page
+    backToTopBtn.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  });
+</script>

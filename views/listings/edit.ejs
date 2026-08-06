@@ -123,31 +123,43 @@
   .was-validated .form-control:valid ~ .valid-feedback {
     display: block;
   }
+
+  /* Gallery Styling */
+  .image-gallery-item {
+    transition: all 0.2s ease;
+  }
+  .image-gallery-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .form-check-label {
+    user-select: none;
+  }
 </style>
 
 <div class="listing-container">
   <a href="/listings" class="auth-brand" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px;">
-          <svg class="homigo-logo-icon" viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
-  <defs>
-    <clipPath id="homigo-pin-clip">
-      <path d="M 50 95 C 50 95 95 65 95 45 A 45 45 0 0 0 5 45 C 5 65 50 95 50 95 Z" />
-    </clipPath>
-  </defs>
-  <g clip-path="url(#homigo-pin-clip)">
-    <rect x="0" y="0" width="100" height="100" fill="#d59d8c" />
-    <polygon points="0,65 50,25 100,65 100,100 0,100" fill="#5f788b" />
-    <rect x="70" y="25" width="8" height="20" fill="#ffffff" />
-    <polyline points="-10,72 50,25 110,72" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
-  </g>
-  <g fill="#ffffff">
-    <rect x="41" y="48" width="7" height="7" rx="1" />
-    <rect x="52" y="48" width="7" height="7" rx="1" />
-    <rect x="41" y="59" width="7" height="7" rx="1" />
-    <rect x="52" y="59" width="7" height="7" rx="1" />
-  </g>
-</svg>
-          <span style="font-family: 'Nunito', sans-serif; color: #5f788b; font-weight:800; font-size: 2rem; text-transform:none; letter-spacing:0;">Homigo</span>
-        </a>
+    <svg class="homigo-logo-icon" viewBox="0 0 100 100" width="36" height="36" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+      <defs>
+        <clipPath id="homigo-pin-clip">
+          <path d="M 50 95 C 50 95 95 65 95 45 A 45 45 0 0 0 5 45 C 5 65 50 95 50 95 Z" />
+        </clipPath>
+      </defs>
+      <g clip-path="url(#homigo-pin-clip)">
+        <rect x="0" y="0" width="100" height="100" fill="#d59d8c" />
+        <polygon points="0,65 50,25 100,65 100,100 0,100" fill="#5f788b" />
+        <rect x="70" y="25" width="8" height="20" fill="#ffffff" />
+        <polyline points="-10,72 50,25 110,72" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+      </g>
+      <g fill="#ffffff">
+        <rect x="41" y="48" width="7" height="7" rx="1" />
+        <rect x="52" y="48" width="7" height="7" rx="1" />
+        <rect x="41" y="59" width="7" height="7" rx="1" />
+        <rect x="52" y="59" width="7" height="7" rx="1" />
+      </g>
+    </svg>
+    <span style="font-family: 'Nunito', sans-serif; color: #5f788b; font-weight:800; font-size: 2rem; text-transform:none; letter-spacing:0;">Homigo</span>
+  </a>
   <h1 class="auth-title">Edit Property</h1>
   <p class="auth-subtitle">Update the details of your property to keep it looking great.</p>
   
@@ -187,12 +199,46 @@
     <div class="invalid-feedback">Please enter a short description</div>
 
     <div class="auth-label-row">
-      <label class="auth-label">Original Images</label>
+      <label class="auth-label">Image Gallery Management</label>
     </div>
-    <div class="d-flex flex-wrap gap-3 mb-4">
-      <% for(let imgUrl of originalImageUrls) { %>
-        <img src="<%= imgUrl %>" alt="Listing Image" style="width: 150px; height: 100px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;">
+    <div class="d-flex flex-wrap gap-4 mb-5" id="image-gallery-container">
+      <% if(listing.images && listing.images.length > 0) { %>
+        <% listing.images.forEach((img, i) => { %>
+          <% let isCover = (listing.image && listing.image.filename === img.filename) || (i === 0 && !listing.image); %>
+          <div class="position-relative image-gallery-item" style="width: 180px; padding: 8px; border-radius: 8px; border: 2px solid <%= isCover ? '#222' : 'transparent' %>; background: <%= isCover ? '#f8f9fa' : 'transparent' %>; box-sizing: border-box;">
+            <% if(isCover) { %>
+              <div class="position-absolute bg-dark text-white px-2 py-1" style="top: -12px; left: -2px; font-size: 0.65rem; border-radius: 12px; z-index: 5; font-weight: bold; letter-spacing: 1px;">COVER PHOTO</div>
+            <% } %>
+            <img src="<%= img.url.replace('/upload', '/upload/w_250') %>" alt="Listing Image" style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; margin-bottom: 8px;">
+            
+            <div class="d-flex flex-column gap-2 mt-2">
+              <label class="form-check-label d-flex align-items-center gap-2" style="font-size: 0.85rem; cursor: pointer; font-weight: <%= isCover ? '700' : '500' %>; color: <%= isCover ? '#000' : '#444' %>;">
+                <input type="radio" name="coverImage" value="existing:<%= img.filename %>" class="form-check-input m-0" <%= isCover ? 'checked' : '' %>> 
+                <span>Set Cover</span>
+              </label>
+              
+              <label class="form-check-label text-danger d-flex align-items-center gap-2" style="font-size: 0.85rem; cursor: pointer; font-weight: 500;">
+                <input type="checkbox" name="deleteImages[]" value="<%= img.filename %>" class="form-check-input m-0"> 
+                <span>Delete Image</span>
+              </label>
+            </div>
+          </div>
+        <% }) %>
+      <% } else if(listing.image && listing.image.url) { %>
+        <div class="position-relative image-gallery-item" style="width: 180px; padding: 8px; border-radius: 8px; border: 2px solid #222; background: #f8f9fa; box-sizing: border-box;">
+          <div class="position-absolute bg-dark text-white px-2 py-1" style="top: -12px; left: -2px; font-size: 0.65rem; border-radius: 12px; z-index: 5; font-weight: bold; letter-spacing: 1px;">COVER PHOTO</div>
+          <img src="<%= listing.image.url.replace('/upload', '/upload/w_250') %>" alt="Listing Image" style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; margin-bottom: 8px;">
+          <div class="d-flex flex-column gap-2 mt-2">
+            <label class="form-check-label d-flex align-items-center gap-2" style="font-size: 0.85rem; cursor: pointer; font-weight: 700; color: #000;">
+              <input type="radio" name="coverImage" value="existing:<%= listing.image.filename %>" class="form-check-input m-0" checked> 
+              <span>Set Cover</span>
+            </label>
+          </div>
+        </div>
       <% } %>
+      
+      <!-- Container for Real-time Previews -->
+      <div id="new-uploads-preview" class="d-flex gap-4 flex-wrap"></div>
     </div>
 
     <div class="auth-label-row">
@@ -204,6 +250,8 @@
       id="image"
       class="auth-input form-control"
       multiple
+      accept="image/*"
+      onchange="previewNewImages(this)"
     />
 
     <div class="row">
@@ -294,3 +342,33 @@
     </button>
   </form>
 </div>
+
+<script>
+function previewNewImages(input) {
+  const previewContainer = document.getElementById('new-uploads-preview');
+  previewContainer.innerHTML = ''; 
+
+  if (input.files) {
+    Array.from(input.files).forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const itemHtml = `
+          <div class="position-relative image-gallery-item" style="width: 180px; padding: 8px; border-radius: 8px; border: 2px dashed #198754; background: #f8fff9; box-sizing: border-box;">
+            <div class="position-absolute bg-success text-white px-2 py-1" style="top: -12px; right: -2px; font-size: 0.65rem; border-radius: 12px; z-index: 5; font-weight: bold; letter-spacing: 1px;">NEW UPLOAD</div>
+            <img src="${e.target.result}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; margin-bottom: 8px;">
+            
+            <div class="d-flex flex-column gap-2 mt-2">
+              <label class="form-check-label text-success d-flex align-items-center gap-2" style="font-size: 0.85rem; cursor: pointer; font-weight: 600;">
+                <input type="radio" name="coverImage" value="new:${index}" class="form-check-input m-0"> 
+                <span>Set Cover</span>
+              </label>
+            </div>
+          </div>
+        `;
+        previewContainer.insertAdjacentHTML('beforeend', itemHtml);
+      }
+      reader.readAsDataURL(file);
+    });
+  }
+}
+</script>

@@ -32,6 +32,18 @@ const listingSchema = new Schema({
         type: String,
         enum: ["Trending", "Unique", "Beaches", "Mountains", "Forests", "Castles", "Pools", "Campings", "Farms", "Arctic", "House Boats", "Domes"]
     },
+    // New future-proof filter fields (Arrays of Strings to allow multiple selections)
+    roomTypes: [String],
+    bookingOptions: [String],
+    mealPlans: [String],
+    amenities: [String],
+    locationFeatures: [String],
+    offers: [String],
+    propertyFeatures: [String],
+    paymentOptions: [String],
+    safety: [String],
+    hostFeatures: [String],
+    accessibility: [String],
     latitude: Number,
     longitude: Number,
     source: {
