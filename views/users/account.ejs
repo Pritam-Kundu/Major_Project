@@ -181,6 +181,9 @@
     <li class="nav-item" role="presentation">
       <button class="nav-link text-success fw-bold" id="offers-tab" data-bs-toggle="tab" data-bs-target="#offers" type="button" role="tab"><i class="fa-solid fa-gift me-1"></i>My Offers</button>
     </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link text-danger fw-bold" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab"><i class="fa-solid fa-shield-halved me-1"></i>Security</button>
+    </li>
   </ul>
 
   <!-- Tab Content -->
@@ -478,6 +481,38 @@
           }
         </script>
       <% } %>
+    </div>
+
+    <!-- Security Tab -->
+    <div class="tab-pane fade" id="security" role="tabpanel">
+      <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4 p-md-5">
+          <h4 class="fw-bold mb-4">Security Settings</h4>
+          <hr class="mb-4">
+          
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+              <h5 class="fw-bold mb-1">Password</h5>
+              <% if (!hasPassword) { %>
+                <p class="text-muted mb-0">Status: <span class="badge bg-warning text-dark">Not Set</span></p>
+                <small class="text-muted">You currently sign in using Google.</small>
+              <% } else { %>
+                <p class="text-muted mb-0">Status: <span class="badge bg-success">Configured</span></p>
+                <small class="text-muted">You can sign in using your email and password.</small>
+              <% } %>
+            </div>
+            
+            <div>
+              <% if (!hasPassword) { %>
+                <a href="/account/set-password" class="btn btn-primary fw-bold px-4 rounded-pill">Set Password</a>
+              <% } else { %>
+                <a href="/forgot-password" class="btn btn-outline-dark fw-bold px-4 rounded-pill">Change Password</a>
+              <% } %>
+            </div>
+          </div>
+          
+        </div>
+      </div>
     </div>
 
   </div>

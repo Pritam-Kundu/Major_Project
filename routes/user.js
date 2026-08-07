@@ -61,6 +61,11 @@ router.get(
   isLoggedIn,
   userController.account
 );
+
+router.route("/account/set-password")
+  .get(isLoggedIn, userController.renderSetPassword)
+  .post(isLoggedIn, wrapAsync(userController.setPassword));
+
 router.get("/logout", userController.logout);
 
 router.post(

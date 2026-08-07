@@ -1,0 +1,297 @@
+/* views\pages\about.ejs */
+@media(max-width:768px) {
+
+            .about-content h1 {
+
+                font-size: 2.5rem;
+
+            }
+@media(max-width:992px) {
+
+            .team-card {
+
+                width: 100%;
+
+                max-width: 420px;
+
+            }
+@media(max-width:768px) {
+
+            .newsletter-form {
+
+                flex-direction: column;
+
+            }
+/* views\pages\accessibility.ejs */
+@media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+@media(max-width:992px) {
+
+            .website-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+@media(max-width:992px) {
+
+            .principle-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+@media(max-width:768px) {
+
+            .statement-box {
+
+                flex-direction: column;
+
+            }
+/* views\pages\blog.ejs */
+@media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.7rem;
+
+            }
+@media(max-width:768px) {
+
+            .newsletter h2 {
+
+                font-size: 2rem;
+
+            }
+/* views\pages\cancellation.ejs */
+@media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.7rem;
+
+            }
+@media(max-width:768px) {
+
+            .support-section h2 {
+
+                font-size: 2.2rem;
+
+            }
+/* views\pages\careers.ejs */
+@media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+/* views\pages\cookies.ejs */
+@media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+@media(max-width:992px) {
+
+            .management-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+@media(max-width:768px) {
+
+            .cookie-contact h2 {
+
+                font-size: 2.2rem;
+
+            }
+/* views\pages\covid.ejs */
+@media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+@media(max-width:992px) {
+
+            .checklist-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+@media(max-width:768px) {
+
+            .notice-box {
+
+                flex-direction: column;
+
+                text-align: left;
+
+            }
+/* views\pages\giftCards.ejs */
+@media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+@media(max-width:992px) {
+
+            .preview-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+@media(max-width:768px) {
+
+            .gift-cta h2 {
+
+                font-size: 2.2rem;
+
+            }
+/* views\pages\press.ejs */
+@media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+@media(max-width:768px) {
+
+            .timeline-item {
+
+                flex-direction: column;
+
+            }
+@media(max-width:768px) {
+
+            .press-contact h2 {
+
+                font-size: 2.2rem;
+
+            }
+/* views\pages\privacy.ejs */
+@media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+@media(max-width:992px) {
+
+            .sharing-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+@media(max-width:992px) {
+
+            .cookie-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+@media(max-width:768px) {
+
+            .update-box {
+
+                flex-direction: column;
+
+            }
+/* views\pages\safety.ejs */
+@media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+@media(max-width:992px) {
+
+            .payment-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+@media(max-width:992px) {
+
+            .checklist-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+@media(max-width:768px) {
+
+            .notice-box {
+
+                flex-direction: column;
+
+            }
+/* views\pages\terms.ejs */
+@media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+@media(max-width:992px) {
+
+            .payment-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+@media(max-width:992px) {
+
+            .safety-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+@media(max-width:768px) {
+
+            .changes-box {
+
+                flex-direction: column;
+
+            }
+/* views\pages\vendorTerms.ejs */
+@media(max-width:992px) {
+
+            .hero-content h1 {
+
+                font-size: 2.8rem;
+
+            }
+@media(max-width:992px) {
+
+            .payment-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+@media(max-width:992px) {
+
+            .legal-wrapper {
+
+                grid-template-columns: 1fr;
+
+            }
+@media(max-width:768px) {
+
+            .update-box {
+
+                flex-direction: column;
+
+            }

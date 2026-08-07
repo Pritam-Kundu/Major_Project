@@ -53,21 +53,14 @@ module.exports.verifyOTP = async (req, res, next) => {
   }
 
   const {
-
     username,
-
     email,
-
     password
-
   } = req.session.pendingUser;
 
   const newUser = new User({
-
     username,
-
     email
-
   });
 
   const registeredUser = await User.register(
@@ -215,13 +208,9 @@ module.exports.signup = async (req, res) => {
     // Store in Session
 
     req.session.pendingUser = {
-
       username,
-
       email,
-
       password
-
     };
 
     req.session.otp = otp;
@@ -263,8 +252,9 @@ module.exports.renderLoginForm = (req, res) => {
 
 
 module.exports.login = async (req, res) => {
+  
   req.flash("success", "Welcome back to Homigo");
-  let redirectUrl = res.locals.redirectUrl || "/listings"         //if there is not any redirectUrl then we will redirect to the /listings route
+  let redirectUrl = res.locals.redirectUrl || "/listings";
   return res.redirect(redirectUrl);
 }
 
@@ -275,8 +265,11 @@ module.exports.account = async (req, res) => {
   const userId = req.user._id;
 
   const populatedUser = await User.findById(userId)
+    .select('+hash')
     .populate("wishlist")
     .populate("claimedOffers");
+    
+  const hasPassword = !!populatedUser.hash;
   const listingsCount = await Listing.countDocuments({ owner: userId });
 
   const allBookings = await Booking.find({ user: userId }).populate("listing").sort({ checkIn: 1 });
@@ -318,7 +311,8 @@ module.exports.account = async (req, res) => {
     completedStays,
     cancelledBookings,
     userReviews: mappedReviews,
-    totalSpent
+    totalSpent,
+    hasPassword
   });
 };
 
@@ -588,7 +582,7 @@ module.exports.resetPassword = async (req, res) => {
 
 module.exports.sendResetOTP = async (req, res) => {
 
-  let { email } = req.body;
+  let { email, force } = req.body;
 
   if (!email) {
     req.flash("error", "Email is required.");
@@ -598,14 +592,15 @@ module.exports.sendResetOTP = async (req, res) => {
   email = email.trim();
 
   // Perform case-insensitive search to find the user
-  const user = await User.findOne({ email: new RegExp('^' + email + '$', 'i') });
+  const user = await User.findOne({ email: new RegExp('^' + email + '$', 'i') }).select('+hash');
 
   if (!user) {
-
     req.flash("error", "No account found with this email.");
-
     return res.redirect("/forgot-password");
+  }
 
+  if (!user.hash && force !== 'true') {
+      return res.render("users/googleAccountPrompt", { email: user.email });
   }
 
   const otp = Math.floor(
@@ -708,17 +703,11 @@ module.exports.firebaseLogin = async (req, res, next) => {
     let user = await User.findOne({ email });
 
     if (!user) {
-
       user = new User({
         username,
         email
       });
-
-      await User.register(
-        user,
-        Math.random().toString(36)
-      );
-
+      await user.save();
     }
 
     req.login(user, (err) => {
@@ -765,13 +754,16 @@ module.exports.loginWithEmail = async (req, res, next) => {
   emailInput = emailInput.trim();
 
   // Perform a case-insensitive search to find the correct user regardless of how they type their email
-  const user = await User.findOne({ email: new RegExp('^' + emailInput + '$', 'i') });
+  const user = await User.findOne({ email: new RegExp('^' + emailInput + '$', 'i') }).select('+hash');
 
   if (!user) {
-
     req.flash("error", "No account found with this email.");
-
     return res.redirect("/login");
+  }
+
+  // Intercept Google users who haven't set a password
+  if (!user.hash) {
+      return res.render("users/googleAccountPrompt", { email: user.email });
   }
 
   // Passport expects 'username'
@@ -779,4 +771,41 @@ module.exports.loginWithEmail = async (req, res, next) => {
 
   next();
 
+};
+
+module.exports.renderSetPassword = (req, res) => {
+    res.render("users/setPassword");
+};
+
+module.exports.setPassword = async (req, res) => {
+    try {
+        const { password, confirmPassword } = req.body;
+        
+        if (password !== confirmPassword) {
+            req.flash("error", "Passwords do not match.");
+            return res.redirect("/account/set-password");
+        }
+        
+        if (!validator.isStrongPassword(password, {
+            minLength: 8,
+            minUppercase: 1,
+            minLowercase: 1,
+            minNumbers: 1,
+            minSymbols: 1
+        })) {
+            req.flash("error", "Password must contain uppercase, lowercase, number and special character.");
+            return res.redirect("/account/set-password");
+        }
+        
+        const user = await User.findById(req.user._id);
+        await user.setPassword(password);
+        await user.save();
+        
+        req.flash("success", "Password configured successfully. You can now login with your email and password.");
+        res.redirect("/account");
+    } catch(err) {
+        console.error("Set password error:", err);
+        req.flash("error", "Failed to set password.");
+        res.redirect("/account/set-password");
+    }
 };

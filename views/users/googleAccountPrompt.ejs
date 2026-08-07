@@ -1,0 +1,47 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4 p-md-5 text-center">
+                    
+                    <div class="mb-4">
+                        <i class="fa-brands fa-google text-danger" style="font-size: 3.5rem;"></i>
+                    </div>
+
+                    <h3 class="fw-bold mb-3">Google Sign-In</h3>
+                    
+                    <p class="text-muted mb-4">
+                        This account (<strong><%= email %></strong>) was created using Google. You have not set a password yet.
+                    </p>
+
+                    <div class="d-grid gap-3">
+                        <button type="button" class="btn btn-outline-dark fw-bold py-3 rounded-pill d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#firebaseLoginModal">
+                            <img src="https://cdn-icons-png.flaticon.com/128/300/300221.png" alt="Google" style="width: 20px; height: 20px; margin-right: 10px;">
+                            Continue with Google
+                        </button>
+                        
+                        <div class="d-flex align-items-center my-2">
+                            <hr class="flex-grow-1 bg-secondary opacity-25">
+                            <span class="mx-3 text-muted small fw-bold">OR</span>
+                            <hr class="flex-grow-1 bg-secondary opacity-25">
+                        </div>
+
+                        <form action="/forgot-password" method="POST" class="m-0">
+                            <input type="hidden" name="email" value="<%= email %>">
+                            <input type="hidden" name="force" value="true">
+                            <button type="submit" class="btn btn-primary fw-bold w-100 py-3 rounded-pill">
+                                Create a Password
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="/login" class="text-muted text-decoration-none fw-bold"><i class="fa-solid fa-arrow-left me-2"></i>Back to Login</a>
+            </div>
+        </div>
+    </div>
+</div>
