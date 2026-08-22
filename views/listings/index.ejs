@@ -381,14 +381,13 @@
 
               <!-- Right Column -->
               <div class="right-dashboard">
-                <!-- Global Explorer -->
                 <div class="global-explorer">
-                  <div class="ge-content">
+                  <div class="ge-content" style="position: relative; pointer-events: none;">
                     <h3>Global Explorer</h3>
                     <p>Interactive map (preview regions).</p>
-                    <button class="ge-btn">Explore Map</button>
+                    <button class="ge-btn" style="pointer-events: auto;">Explore Map</button>
                   </div>
-                  <img src="/images/global_map.png" alt="World Map" class="ge-map-bg">
+                  <div id="home-map" class="ge-map-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
                 </div>
 
                 <!-- Trending Now -->
@@ -1158,5 +1157,55 @@
 
                   maxInput.addEventListener("change", applyFilter);
 
+                });
+              </script>
+
+              <!-- Leaflet CSS for Map Styling -->
+              <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+              
+              <!-- Leaflet JS for Map Functionality -->
+              <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+              
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  const mapElement = document.getElementById('home-map');
+                  if (!mapElement) return;
+
+                  // Parse all listings with valid coordinates
+                  const listingsData = <%- JSON.stringify(listings.filter(l => l.latitude && l.longitude).map(l => ({ title: l.title, lat: l.latitude, lng: l.longitude, location: l.location, url: '/listings/' + l._id }))) %>;
+                  
+                  // Initialize Leaflet map (centered on India/Global)
+                  const homeMap = L.map('home-map', {
+                      scrollWheelZoom: false, // Prevent accidental scrolling while scrolling the page
+                      dragging: true,
+                      tap: true
+                  }).setView([20.5937, 78.9629], 3); // Center around India/Asia by default
+              
+                  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                      maxZoom: 19,
+                      attribution: '&copy; OpenStreetMap'
+                  }).addTo(homeMap);
+              
+                  // Add markers for all listings
+                  listingsData.forEach(listing => {
+                      const marker = L.marker([listing.lat, listing.lng]).addTo(homeMap);
+                      marker.bindPopup(`
+                          <div style="text-align: center;">
+                              <h6 style="margin: 0; font-weight: bold; color: #003580;">${listing.title}</h6>
+                              <p style="margin: 5px 0; font-size: 0.85em; color: #555;">${listing.location}</p>
+                              <a href="${listing.url}" style="font-size: 0.9em; font-weight: bold; color: #ff385c; text-decoration: none;">View Details</a>
+                          </div>
+                      `);
+                  });
+
+                  // Make Explore button zoom into bounds if we have markers
+                  const exploreBtn = document.querySelector('.ge-btn');
+                  if (exploreBtn && listingsData.length > 0) {
+                      exploreBtn.addEventListener('click', (e) => {
+                          e.preventDefault();
+                          const bounds = L.latLngBounds(listingsData.map(l => [l.lat, l.lng]));
+                          homeMap.fitBounds(bounds, { padding: [50, 50] });
+                      });
+                  }
                 });
               </script>

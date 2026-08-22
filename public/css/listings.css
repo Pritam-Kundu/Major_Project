@@ -1368,7 +1368,14 @@ h1,
     top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0,0,0,0.1);
     border-radius: 12px;
+    pointer-events: none;
   }
+  
+  /* When Leaflet is loaded, it adds .leaflet-container. Hide the placeholder overlay. */
+  .map-container.leaflet-container::after {
+    display: none;
+  }
+
   .map-btn {
     position: relative;
     z-index: 2;
